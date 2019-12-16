@@ -37,13 +37,5 @@ dependencyManagement {
     }
 }
 
-war {
-    enabled = true
-    //archiveName "${baseName}.${extension}"
-    archiveName "sei-notify.${extension}"
-    //包存放路径
-    destinationDir = file("${rootProject.projectDir}/build/war")
-}
-
 bootJar { enabled = false }
 jar { enabled = true }
