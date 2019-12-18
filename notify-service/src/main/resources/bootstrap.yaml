@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      uri: http://10.4.208.86:8100/config-center
+      profile: DEV
+      name: sei-notify
+
+notify:
+  test-key: test_value_on_local
