@@ -7,3 +7,8 @@ spring:
 
 notify:
   test-key: test_value_on_local
+
+cxf:
+  path: /api # CXFServlet URL pattern
+  jaxrs:
+    component-scan: true

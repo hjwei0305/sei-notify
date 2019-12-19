@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-18 11:21
  */
-public class HelloServiceTest extends BaseUnitTest {
+public class HelloServiceImplTest extends BaseUnitTest {
     @Autowired
-    private HelloService service;
+    private HelloServiceImpl service;
 
     @Test
     public void sayHello() {

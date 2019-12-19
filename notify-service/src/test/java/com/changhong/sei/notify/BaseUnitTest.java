@@ -25,6 +25,6 @@ public class BaseUnitTest {
     @Before
     public void setUp(){
         System.out.println("开始进入单元测试.......");
-        System.out.println("notify.test-key:"+environment.getProperty("notify.test-key"));
+        System.out.println("CXF服务基地址:"+environment.getProperty("cxf.path"));
     }
 }
