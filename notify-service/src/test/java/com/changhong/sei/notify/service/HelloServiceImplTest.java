@@ -1,6 +1,8 @@
 package com.changhong.sei.notify.service;
 
 import com.changhong.sei.notify.BaseUnitTest;
+import com.changhong.sei.notify.dto.ResultData;
+import com.chonghong.sei.util.JsonUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +20,7 @@ public class HelloServiceImplTest extends BaseUnitTest {
     @Test
     public void sayHello() {
         String name = "王锦光";
-        String helloStr = service.sayHello(name);
-        System.out.println(helloStr);
+        ResultData result = service.sayHello(name);
+        System.out.println(JsonUtils.toJson(result));
     }
 }

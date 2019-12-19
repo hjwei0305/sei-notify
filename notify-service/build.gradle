@@ -11,7 +11,8 @@ dependencies {
     compile project(':notify-api')
 
     compile(
-            "org.springframework.boot:spring-boot-starter-web"
+            "org.springframework.boot:spring-boot-starter-web",
+            "com.changhong.sei:sei-util:$util_version"
     )
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -23,4 +24,17 @@ dependencies {
     testCompile(
             "org.springframework.boot:spring-boot-starter-test"
     )
+}
+
+//打ar包
+jar {
+    archiveName = 'sei-notify.jar'
+    enabled = true
+    manifest {
+        attributes("Manifest-Version": "4.0")
+        attributes("Created-By": "Gradle")
+        attributes("Implementation-Title": "$project.name")
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
+        attributes("Main-Class": "com.changhong.sei.notify.NotifyRestApplication")
+    }
 }

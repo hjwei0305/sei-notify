@@ -1,9 +1,11 @@
 package com.changhong.sei.notify.service;
 
 import com.changhong.sei.notify.api.HelloService;
+import com.changhong.sei.notify.dto.ResultData;
 import com.changhong.sei.notify.manager.HelloManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0.1 2019-12-16 17:22
  */
 @Service
+@RefreshScope
 public class HelloServiceImpl implements HelloService {
     @Autowired
     private HelloManager manager;
@@ -26,7 +29,13 @@ public class HelloServiceImpl implements HelloService {
      * @param name 姓名
      * @return 返回句子
      */
-    public String sayHello(String name){
-        return manager.sayHello(name, testKey);
+    public ResultData<String> sayHello(String name){
+        try {
+            String data = manager.sayHello(name, testKey);
+            return ResultData.success(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultData.fail("你好说失败了！"+e.getMessage());
+        }
     }
 }

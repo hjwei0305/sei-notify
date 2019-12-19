@@ -10,3 +10,14 @@ dependencies {
             "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonVersion"
     )
 }
+
+//打包源代码jar包
+jar {
+    enabled = true
+    manifest {
+        attributes("Manifest-Version": "4.0")
+        attributes("Created-By": "Gradle")
+        attributes("Implementation-Title": "$project.name")
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
+    }
+}

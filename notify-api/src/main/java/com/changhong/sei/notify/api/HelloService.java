@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.api;
 
+import com.changhong.sei.notify.dto.ResultData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -26,6 +27,5 @@ public interface HelloService {
     @GET
     @Path("sayHello")
     @ApiOperation("调试API接口说你好")
-    @Produces(MediaType.TEXT_PLAIN)
-    String sayHello(@QueryParam("name") String name);
+    ResultData<String> sayHello(@QueryParam("name") String name);
 }
