@@ -12,6 +12,7 @@ dependencies {
 }
 
 //打包源代码jar包
+bootJar { enabled = false }
 jar {
     enabled = true
     manifest {

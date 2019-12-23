@@ -27,7 +27,7 @@ dependencies {
 }
 
 //打ar包
-jar {
+bootJar  {
     archiveName = 'sei-notify.jar'
     enabled = true
     manifest {
