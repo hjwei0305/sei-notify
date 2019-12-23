@@ -32,9 +32,10 @@ springBoot {
     executable = true
 }
 //打ar包
+jar { enabled = true }
 bootJar  {
-    archiveName = 'sei-notify.jar'
     enabled = true
+    archiveName = 'sei-notify.jar'
     manifest {
         attributes("Manifest-Version": "4.0")
         attributes("Created-By": "Gradle")
