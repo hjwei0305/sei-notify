@@ -28,11 +28,7 @@ dependencies {
     )
 }
 
-springBoot {
-    executable = true
-}
 //打ar包
-jar { enabled = true }
 bootJar  {
     enabled = true
     archiveName = 'sei-notify.jar'
