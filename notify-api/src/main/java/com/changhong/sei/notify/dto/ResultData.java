@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-19 15:42
  */
-public class ResultData<T extends Serializable> implements Serializable {
+public class ResultData<T> implements Serializable {
     private final static String DEFAULT_SUCCESSFUL_MSG = "处理成功！";
     /**
      * 是成功的
@@ -60,7 +60,7 @@ public class ResultData<T extends Serializable> implements Serializable {
      * @param <T> 数据对象类型
      * @return 处理结果
      */
-    public static <T extends Serializable> ResultData<T> success(T data){
+    public static <T> ResultData<T> success(T data){
         return new ResultData<>(Boolean.TRUE, DEFAULT_SUCCESSFUL_MSG, data);
     }
 
@@ -71,7 +71,7 @@ public class ResultData<T extends Serializable> implements Serializable {
      * @param <T> 数据对象类型
      * @return 处理结果
      */
-    public static <T extends Serializable> ResultData<T> success(String message, T data){
+    public static <T> ResultData<T> success(String message, T data){
         return new ResultData<>(Boolean.TRUE, message, data);
     }
 
@@ -80,7 +80,7 @@ public class ResultData<T extends Serializable> implements Serializable {
      * @param message 失败的消息
      * @return 处理结果
      */
-    public static <T extends Serializable> ResultData<T> fail(String message){
+    public static <T> ResultData<T> fail(String message){
         return new ResultData<>(Boolean.FALSE, message, null);
     }
 }

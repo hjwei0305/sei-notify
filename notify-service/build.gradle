@@ -14,6 +14,7 @@ dependencies {
             "org.springframework.boot:spring-boot-starter-data-jpa",
             "org.springframework.boot:spring-boot-starter-web",
             "mysql:mysql-connector-java:$mysqlVersion",
+            "org.modelmapper:modelmapper:$modelmapperVersion",
             "com.changhong.sei:sei-util:$util_version"
     )
 
