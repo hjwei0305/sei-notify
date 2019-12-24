@@ -23,7 +23,7 @@ public class FeaturesConfig {
     @Bean("swagger2Feature")
     public Feature swagger2Feature() {
         Swagger2Feature result = new Swagger2Feature();
-        result.setTitle("SEI-Notify服务API");
+        result.setTitle("SEI Notify服务 API");
         result.setDescription("消息通知服务的API文档");
         result.setBasePath(this.basePath);
         result.setVersion(version);
