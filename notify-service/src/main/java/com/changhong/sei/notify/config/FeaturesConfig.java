@@ -17,14 +17,16 @@ import org.springframework.context.annotation.Configuration;
 public class FeaturesConfig {
     @Value("${cxf.path}")
     private String basePath;
+    @Value("${notify.version}")
+    private String version;
 
     @Bean("swagger2Feature")
     public Feature swagger2Feature() {
         Swagger2Feature result = new Swagger2Feature();
-        result.setTitle("SEI Notiy 服务 Api");
+        result.setTitle("SEI-Notify服务API");
         result.setDescription("消息通知服务的API文档");
         result.setBasePath(this.basePath);
-        result.setVersion("v1.0.1");
+        result.setVersion(version);
         result.setSchemes(new String[] { "http", "https" });
         result.setPrettyPrint(true);
         return result;

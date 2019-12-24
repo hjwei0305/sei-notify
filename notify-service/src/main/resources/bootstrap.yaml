@@ -19,6 +19,7 @@ spring:
         format_sql: true
     show-sql: true
 notify:
+  version: 4.0.0
   test-key: test_value_on_local
 
 cxf:
