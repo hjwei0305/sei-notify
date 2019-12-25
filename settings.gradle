@@ -1,4 +1,3 @@
 rootProject.name = 'sei-notify'
 include 'notify-service'
 include 'notify-api'
-
