@@ -1,6 +1,12 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
+// 所有模块的通用配置
 allprojects {
+    group GROUP
+    version VERSION
+    apply plugin: 'idea'
+}
+
+// 子模块的统一配置
+subprojects {
     group GROUP
     version VERSION
 
@@ -16,7 +22,6 @@ allprojects {
     }
 
     apply plugin: 'java'
-    apply plugin: 'idea'
     apply plugin: 'maven'
 
 // java编译的时候缺省状态下会因为中文字符而失败
