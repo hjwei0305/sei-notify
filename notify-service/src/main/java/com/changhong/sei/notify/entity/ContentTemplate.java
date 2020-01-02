@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.entity;
 
+import com.changhong.sei.core.entity.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -12,12 +13,12 @@ import javax.persistence.*;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-23 10:40
  */
-@Access(AccessType.FIELD)
 @Entity
 @Table(name = "content_template")
 @DynamicInsert
 @DynamicUpdate
-public class ContentTemplate extends BaseDaoEntity{
+public class ContentTemplate extends BaseEntity {
+    private static final long serialVersionUID = 1L;
     /**
      * 代码
      */

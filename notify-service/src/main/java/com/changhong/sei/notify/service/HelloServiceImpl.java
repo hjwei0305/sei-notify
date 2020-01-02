@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.api.HelloService;
-import com.changhong.sei.notify.dto.ResultData;
 import com.changhong.sei.notify.manager.HelloManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

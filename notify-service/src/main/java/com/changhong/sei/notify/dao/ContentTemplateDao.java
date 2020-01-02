@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.dao;
 
+import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.notify.entity.ContentTemplate;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * @version 1.0.1 2017-10-20 9:41
  */
 @Repository
-public interface ContentTemplateDao extends JpaRepository<ContentTemplate, String> {
+public interface ContentTemplateDao extends BaseEntityDao<ContentTemplate> {
     /**
      * 通过代码获取内容模板
      * @param code 代码

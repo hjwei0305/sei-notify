@@ -1,15 +1,13 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.BaseUnitTest;
 import com.changhong.sei.notify.api.ContentTemplateService;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
-import com.changhong.sei.notify.dto.ResultData;
 import com.chonghong.sei.util.JsonUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * <strong>实现功能:</strong>
@@ -47,6 +45,14 @@ public class ContentTemplateServiceImplTest extends BaseUnitTest {
     public void findOne() {
         String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
         ResultData resultData = service.findOne(id);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.getSuccessful());
+    }
+
+    @Test
+    public void delete() {
+        String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
+        ResultData resultData = service.delete(id);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.getSuccessful());
     }

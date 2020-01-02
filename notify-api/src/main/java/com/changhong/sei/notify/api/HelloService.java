@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.api;
 
-import com.changhong.sei.notify.dto.ResultData;
+import com.changhong.sei.core.dto.ResultData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 

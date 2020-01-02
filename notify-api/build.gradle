@@ -4,10 +4,11 @@ apply plugin: 'io.spring.dependency-management'
 dependencies {
 
     compile(
-            "org.apache.cxf:cxf-spring-boot-starter-jaxrs:$cxfSpringBootVersion",
-            "org.apache.cxf:cxf-rt-rs-service-description-swagger:$cxfSpringBootVersion",
-            "org.webjars:swagger-ui:$swaggerUiVersion",
-            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonVersion"
+//            "org.apache.cxf:cxf-spring-boot-starter-jaxrs:$cxfSpringBootVersion",
+//            "org.apache.cxf:cxf-rt-rs-service-description-swagger:$cxfSpringBootVersion",
+//            "org.webjars:swagger-ui:$swaggerUiVersion",
+//            "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:$jacksonVersion"
+            "com.changhong.sei:core-api:$sei_version"
     )
 }
 

@@ -27,9 +27,11 @@ spring:
     redis:
       time-to-live: 20s
 
-  #redis:
-  #  port: 6379
-  #  password: ZmkDbgaua3Rso33T
+  redis:
+    host: 10.4.208.132
+    port: 6379
+    password: ZmkDbgaua3Rso33T
+    database: 0
 notify:
   version: 4.0.0
   test-key: test_value_on_local
