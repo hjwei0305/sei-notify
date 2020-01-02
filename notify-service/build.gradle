@@ -15,7 +15,7 @@ dependencies {
             "org.springframework.boot:spring-boot-starter-web",
             "mysql:mysql-connector-java:$mysqlVersion",
             "org.modelmapper:modelmapper:$modelmapperVersion",
-            "com.changhong.sei:sei-util:$util_version"
+            "com.changhong.sei:core-service:$sei_version"
     )
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'

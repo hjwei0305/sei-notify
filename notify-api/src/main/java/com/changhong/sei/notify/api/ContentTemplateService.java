@@ -1,14 +1,13 @@
 package com.changhong.sei.notify.api;
 
-import com.changhong.sei.notify.dto.ResultData;
+import com.changhong.sei.core.api.BaseEntityService;
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
-
 /**
  * <strong>实现功能:</strong>
  * <p>内容模板API接口</p>
@@ -20,16 +19,16 @@ import java.util.List;
 @Api(value = "ContentTemplateService", tags = "内容模板API接口")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public interface ContentTemplateService {
-    /**
-     * 获取所有数据
-     *
-     * @return 应用模块清单
-     */
-    @GET
-    @Path("findAll")
-    @ApiOperation("获取所有内容模板")
-    ResultData<List<ContentTemplateDto>> findAll();
+public interface ContentTemplateService extends BaseEntityService<ContentTemplateDto> {
+//    /**
+//     * 获取所有数据
+//     *
+//     * @return 应用模块清单
+//     */
+//    @GET
+//    @Path("findAll")
+//    @ApiOperation("获取所有内容模板")
+//    ResultData<List<ContentTemplateDto>> findAll();
 
     /**
      * 保存内容模板
