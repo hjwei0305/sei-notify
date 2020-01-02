@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +28,6 @@ import java.util.Objects;
 public class ContentTemplateServiceImpl extends BaseEntityServiceImpl<ContentTemplate, ContentTemplateDto> implements ContentTemplateService {
     @Autowired
     private ContentTemplateManager manager;
-    @Autowired
-    private ModelMapper modelMapper;
     @Autowired
     private CacheUtil<String,Object> cacheUtil;
 
@@ -157,10 +154,12 @@ public class ContentTemplateServiceImpl extends BaseEntityServiceImpl<ContentTem
      * @return 内容模板
      */
     @Override
+    @Cacheable(cacheNames = {"ContentTemplate"})
     public ResultData<ContentTemplateDto> findByCode(String code) {
         ContentTemplate template;
         try {
             template = manager.findByCode(code);
+            cacheUtil.set("ContentTemplate:" + code, template);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultData.fail("通过代码获取内容模板，发生异常！"+e.getMessage());
