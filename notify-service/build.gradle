@@ -13,9 +13,16 @@ dependencies {
     compile(
             "org.springframework.boot:spring-boot-starter-data-jpa",
             "org.springframework.boot:spring-boot-starter-web",
+            //redis缓存
+            "org.springframework.boot:spring-boot-starter-data-redis",
+            //caffeine缓存
+            //"com.github.ben-manes.caffeine:caffeine",
+            //ehcache缓存
+            //"net.sf.ehcache:ehcache",
             "mysql:mysql-connector-java:$mysqlVersion",
             "org.modelmapper:modelmapper:$modelmapperVersion",
-            "com.changhong.sei:sei-util:$util_version"
+            "com.changhong.sei:sei-util:$util_version",
+            "com.changhong.sei:sei-cache-starter:$sei_version"
     )
 
     implementation 'org.springframework.cloud:spring-cloud-starter-config'

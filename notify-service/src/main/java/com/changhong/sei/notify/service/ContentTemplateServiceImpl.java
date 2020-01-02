@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.cache.CacheUtil;
 import com.changhong.sei.notify.api.ContentTemplateService;
 import com.changhong.sei.notify.dto.ResultData;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
@@ -10,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,12 +32,16 @@ public class ContentTemplateServiceImpl implements ContentTemplateService {
     private ContentTemplateManager manager;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private CacheUtil<String,Object> cacheUtil;
+
     /**
      * 获取所有数据
      *
      * @return 应用模块清单
      */
     @Override
+    @Cacheable(cacheNames = {"ContentTemplate"})
     public ResultData<List<ContentTemplateDto>> findAll() {
         List<ContentTemplate> templates = manager.findAll();
         // 转换为DTO
@@ -51,6 +58,7 @@ public class ContentTemplateServiceImpl implements ContentTemplateService {
      * @return 操作结果
      */
     @Override
+    @CacheEvict(cacheNames = {"ContentTemplate"})
     public ResultData<ContentTemplateDto> save(ContentTemplateDto contentTemplateDto) {
         if (Objects.isNull(contentTemplateDto)){
             return ResultData.fail("输入的内容模板为空，禁止保存！");
@@ -67,6 +75,7 @@ public class ContentTemplateServiceImpl implements ContentTemplateService {
         ContentTemplate template;
         try {
             template = manager.save(convertToEntity(contentTemplateDto));
+            cacheUtil.set("ContentTemplate:"+contentTemplateDto.getCode(),convertToEntity(contentTemplateDto));
         } catch (Exception e) {
             e.printStackTrace();
             return ResultData.fail("保存内容模板发生异常！"+e.getMessage());
@@ -81,6 +90,7 @@ public class ContentTemplateServiceImpl implements ContentTemplateService {
      * @return 内容模板
      */
     @Override
+    @Cacheable(cacheNames = {"ContentTemplate"})
     public ResultData<ContentTemplateDto> findOne(String id) {
         ContentTemplate template;
         try {
@@ -99,6 +109,7 @@ public class ContentTemplateServiceImpl implements ContentTemplateService {
      * @return 内容模板
      */
     @Override
+    @Cacheable(cacheNames = {"ContentTemplate"})
     public ResultData<ContentTemplateDto> findByCode(String code) {
         ContentTemplate template;
         try {

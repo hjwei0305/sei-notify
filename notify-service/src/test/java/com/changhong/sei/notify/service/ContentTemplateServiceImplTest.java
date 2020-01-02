@@ -26,6 +26,9 @@ public class ContentTemplateServiceImplTest extends BaseUnitTest {
     public void findAll() {
         ResultData<List<ContentTemplateDto>> resultData = service.findAll();
         System.out.println(JsonUtils.toJson(resultData));
+        //测试缓存是否生效
+        resultData = service.findAll();
+        System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.getSuccessful());
     }
 
