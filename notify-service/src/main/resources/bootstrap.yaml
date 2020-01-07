@@ -38,8 +38,3 @@ notify:
 
 application:
   version: 4.0.0
-
-#cxf:
-#  path: /api # CXFServlet URL pattern
-#  jaxrs:
-#    component-scan: true

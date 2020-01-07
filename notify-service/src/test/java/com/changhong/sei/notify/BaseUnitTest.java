@@ -25,6 +25,6 @@ public class BaseUnitTest {
     @Before
     public void setUp(){
         System.out.println("开始进入单元测试.......");
-        System.out.println("CXF服务基地址:"+environment.getProperty("cxf.path"));
+        System.out.println("配置中心:"+environment.getProperty("spring.cloud.config.uri"));
     }
 }
