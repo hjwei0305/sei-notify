@@ -1,6 +1,5 @@
 package com.changhong.sei.notify.service;
 
-import com.changhong.sei.core.cache.CacheUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.manager.BaseEntityManager;
 import com.changhong.sei.core.service.BaseEntityServiceImpl;
@@ -8,14 +7,16 @@ import com.changhong.sei.notify.api.ContentTemplateService;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import com.changhong.sei.notify.entity.ContentTemplate;
 import com.changhong.sei.notify.manager.ContentTemplateManager;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * <strong>实现功能:</strong>
@@ -25,28 +26,28 @@ import java.util.Objects;
  * @version 1.0.1 2019-12-23 16:01
  */
 @Service
-public class ContentTemplateServiceImpl extends BaseEntityServiceImpl<ContentTemplate, ContentTemplateDto> implements ContentTemplateService {
+@Api(value = "ContentTemplateService", tags = "内容模板API接口")
+public class ContentTemplateServiceImpl extends BaseEntityServiceImpl<ContentTemplate, ContentTemplateDto>
+        implements ContentTemplateService {
     @Autowired
     private ContentTemplateManager manager;
-    @Autowired
-    private CacheUtil<String,Object> cacheUtil;
 
 //    @Autowired
 //    private ModelMapper modelMapper;
-//    /**
-//     * 获取所有数据
-//     *
-//     * @return 应用模块清单
-//     */
-//    @Override
-//    public ResultData<List<ContentTemplateDto>> findAll() {
-//        List<ContentTemplate> templates = manager.findAll();
-//        // 转换为DTO
-//        // ModelMapper listMapper = new ModelMapper();
-//        // List<ContentTemplateDto> data = listMapper.map(templates, new TypeToken<List<ContentTemplateDto>>(){}.getType());
-//        List<ContentTemplateDto> data = templates.stream().map(this::convertToDtoWithoutContent).collect(Collectors.toList());
-//        return ResultData.success(data);
-//    }
+    /**
+     * 获取所有数据
+     *
+     * @return 应用模块清单
+     */
+    @Override
+    public ResultData<List<ContentTemplateDto>> findAll() {
+        List<ContentTemplate> templates = manager.findAll();
+        // 转换为DTO
+        // ModelMapper listMapper = new ModelMapper();
+        // List<ContentTemplateDto> data = listMapper.map(templates, new TypeToken<List<ContentTemplateDto>>(){}.getType());
+        List<ContentTemplateDto> data = templates.stream().map(this::convertToDtoWithoutContent).collect(Collectors.toList());
+        return ResultData.success(data);
+    }
 
     @Override
     protected BaseEntityManager<ContentTemplate> getManager() {
@@ -154,12 +155,10 @@ public class ContentTemplateServiceImpl extends BaseEntityServiceImpl<ContentTem
      * @return 内容模板
      */
     @Override
-    @Cacheable(cacheNames = {"ContentTemplate"})
     public ResultData<ContentTemplateDto> findByCode(String code) {
         ContentTemplate template;
         try {
             template = manager.findByCode(code);
-            cacheUtil.set("ContentTemplate:" + code, template);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultData.fail("通过代码获取内容模板，发生异常！"+e.getMessage());

@@ -1,8 +1,10 @@
 package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.notify.api.BaseHelloService;
 import com.changhong.sei.notify.api.HelloService;
 import com.changhong.sei.notify.manager.HelloManager;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -17,7 +19,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RefreshScope
-public class HelloServiceImpl implements HelloService {
+@Api(value = "HelloService", tags = "调试你好的API服务")
+public class HelloServiceImpl implements BaseHelloServiceImpl,HelloService {
     @Autowired
     private HelloManager manager;
 

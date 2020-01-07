@@ -32,11 +32,14 @@ spring:
     port: 6379
     password: ZmkDbgaua3Rso33T
     database: 0
+
 notify:
-  version: 4.0.0
   test-key: test_value_on_local
 
-cxf:
-  path: /api # CXFServlet URL pattern
-  jaxrs:
-    component-scan: true
+application:
+  version: 4.0.0
+
+#cxf:
+#  path: /api # CXFServlet URL pattern
+#  jaxrs:
+#    component-scan: true
