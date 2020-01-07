@@ -14,20 +14,7 @@ import static org.junit.Assert.*;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-31 20:32
  */
-public class PropertiesUtilTest extends BaseUnitTest {
-
-//    @Test
-//    public void getProperty() {
-//        String value = PropertiesUtil.getProperty("notify.test-key");
-//        Assert.assertNotNull(value);
-//        System.out.println("notify.test-key="+value);
-//        value = PropertiesUtil.getProperty("00001");
-//        Assert.assertNotNull(value);
-//        System.out.println("00001="+value);
-//        value = PropertiesUtil.getProperty("core_service_00001");
-//        Assert.assertNotNull(value);
-//        System.out.println("core_service_00001="+value);
-//    }
+public class ContextUtilTest extends BaseUnitTest {
 
     @Test
     public void getMessage(){

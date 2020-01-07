@@ -1,5 +1,8 @@
 package com.changhong.sei.notify.manager;
 
+import com.changhong.sei.core.log.LogUtil;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Component;
  * @version 1.0.1 2019-12-18 19:42
  */
 @Component
+@CacheConfig(cacheNames = "hello_cache")
 public class HelloManager {
     /**
      * 你好业务逻辑
@@ -17,7 +21,9 @@ public class HelloManager {
      * @param param 参数
      * @return 返回句子
      */
+    @Cacheable(key = "#name")
     public String sayHello(String name, String param){
+        LogUtil.bizLog("执行业务逻辑说：你好！");
         return "你好，"+name+"！参数："+param;
     }
 }

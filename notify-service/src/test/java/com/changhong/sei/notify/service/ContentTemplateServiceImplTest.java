@@ -2,7 +2,6 @@ package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.BaseUnitTest;
-import com.changhong.sei.notify.api.ContentTemplateService;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import com.chonghong.sei.util.JsonUtils;
 import org.junit.Assert;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ContentTemplateServiceImplTest extends BaseUnitTest {
     @Autowired
-    private ContentTemplateService service;
+    private ContentTemplateServiceImpl service;
 
     @Test
     public void save() {

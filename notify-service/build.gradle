@@ -11,26 +11,9 @@ dependencies {
     compile project(':notify-api')
 
     compile(
-            "org.springframework.boot:spring-boot-starter-data-jpa",
-            "org.springframework.boot:spring-boot-starter-web",
-            //redis缓存
-            "org.springframework.boot:spring-boot-starter-data-redis",
-            //caffeine缓存
-            //"com.github.ben-manes.caffeine:caffeine",
-            //ehcache缓存
-            //"net.sf.ehcache:ehcache",
             "mysql:mysql-connector-java:$mysqlVersion",
-            "org.modelmapper:modelmapper:$modelmapperVersion",
-            "com.changhong.sei:core-service:$sei_version",
-            "com.changhong.sei:sei-util:$util_version"
-            //"com.changhong.sei:sei-cache-starter:$sei_version"
+            "com.changhong.sei:sei-service-starter:$sei_version"
     )
-
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.cloud:spring-cloud-bus'
-    implementation 'org.springframework.cloud:spring-cloud-starter-bus-kafka'
-    implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 
     testCompile(
             "org.springframework.boot:spring-boot-starter-test"
