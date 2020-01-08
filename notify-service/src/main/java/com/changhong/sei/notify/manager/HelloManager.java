@@ -1,6 +1,8 @@
 package com.changhong.sei.notify.manager;
 
 import com.changhong.sei.core.log.LogUtil;
+import com.changhong.sei.core.mq.MqProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,12 @@ import org.springframework.stereotype.Component;
 @Component
 @CacheConfig(cacheNames = "hello_cache")
 public class HelloManager {
+    public static final String MQ_KEY="hello";
+    /**
+     * 注入消息队列生产者
+     */
+    @Autowired
+    private MqProducer mqProducer;
     /**
      * 你好业务逻辑
      * @param name 姓名
@@ -25,5 +33,16 @@ public class HelloManager {
     public String sayHello(String name, String param){
         LogUtil.bizLog("执行业务逻辑说：你好！");
         return "你好，"+name+"！参数："+param;
+    }
+
+    /**
+     * 通过消息队列说你好
+     * @param name 姓名
+     * @param param 参数
+     */
+    public void mqSayHello(String name, String param){
+        LogUtil.bizLog("通过消息队列说：你好！");
+        String message = "你好，"+name+"！参数："+param;
+        mqProducer.send(MQ_KEY, message);
     }
 }

@@ -41,4 +41,12 @@ public class HelloServiceImpl implements BaseHelloServiceImpl,HelloService {
             return ResultData.fail("你好说失败了！"+e.getMessage());
         }
     }
+
+    /**
+     * 通过消息队列说你好
+     * @param name 姓名
+     */
+    public void mqSayHello(String name){
+        manager.mqSayHello(name, testKey);
+    }
 }

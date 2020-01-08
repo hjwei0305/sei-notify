@@ -31,3 +31,9 @@ spring:
     port: 6379
     password: ZmkDbgaua3Rso33T
     database: 0
+
+# sei 参数配置
+sei:
+  mq:
+    group-id: sei_notify
+    topic: sei_notify_message

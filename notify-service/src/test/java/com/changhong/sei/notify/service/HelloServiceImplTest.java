@@ -23,4 +23,11 @@ public class HelloServiceImplTest extends BaseUnitTest {
         ResultData result = service.sayHello(name);
         System.out.println(JsonUtils.toJson(result));
     }
+
+    @Test
+    public void mqSayHello() throws Exception{
+        String name = "wangjg";
+        service.mqSayHello(name);
+        Thread.sleep(20*1000);
+    }
 }

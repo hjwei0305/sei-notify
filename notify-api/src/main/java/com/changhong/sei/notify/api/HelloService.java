@@ -27,4 +27,13 @@ public interface HelloService extends BaseHelloService{
     @GetMapping(path = "sayHello")
     @ApiOperation(value = "调试API接口说你好", notes = "备注说明调试API接口说你好")
     ResultData<String> sayHello(@RequestParam("name") String name);
+
+    /**
+     * mq say hello
+     * @param name name
+     * @return hello name
+     */
+    @GetMapping(path = "mqSayHello")
+    @ApiOperation(value = "调试API接口说你好", notes = "通过消息队列异步说你好")
+    void mqSayHello(@RequestParam("name") String name);
 }
