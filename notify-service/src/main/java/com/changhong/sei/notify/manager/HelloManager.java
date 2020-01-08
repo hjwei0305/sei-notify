@@ -21,7 +21,7 @@ public class HelloManager {
      * @param param 参数
      * @return 返回句子
      */
-    @Cacheable(key = "#name")
+    @Cacheable(key = "#name+'_'+#param")
     public String sayHello(String name, String param){
         LogUtil.bizLog("执行业务逻辑说：你好！");
         return "你好，"+name+"！参数："+param;
