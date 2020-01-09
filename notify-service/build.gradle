@@ -12,12 +12,12 @@ dependencies {
 
     compile(
             "mysql:mysql-connector-java:$mysqlVersion",
-            "com.changhong.sei:sei-service-starter",
-            "com.changhong.sei:sei-mq-starter"
+            "com.changhong.sei:sei-service-starter:$sei_version",
+            "com.changhong.sei:sei-mq-starter:$sei_version"
     )
 
     testCompile(
-            "com.changhong.sei:sei-test-starter"
+            "com.changhong.sei:sei-test-starter:$sei_version"
 //            "org.springframework.boot:spring-boot-starter-test"
     )
 }
