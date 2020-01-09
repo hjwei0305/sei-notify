@@ -34,6 +34,6 @@ spring:
 
 # sei 参数配置
 sei:
-  mq:
+  mq: # 消息队列
     group-id: sei_notify
     topic: sei_notify_message

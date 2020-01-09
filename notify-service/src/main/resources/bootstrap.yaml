@@ -10,9 +10,8 @@ spring:
       name: sei-notify
 
 sei:
-  mock:
+  mock: # 本地调试的当前用户配置
     user:
-      enable: true
       s-id: 123456
       user-id: 1234
       account: admin
