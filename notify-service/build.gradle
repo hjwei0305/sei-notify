@@ -12,12 +12,12 @@ dependencies {
 
     compile(
             "mysql:mysql-connector-java:$mysqlVersion",
-            "com.changhong.sei:sei-service-starter:$sei_version",
-            "com.changhong.sei:sei-mq-starter:$sei_version"
+            "com.changhong.sei:sei-service-starter",
+            "com.changhong.sei:sei-mq-starter"
     )
 
     testCompile(
-            "com.changhong.sei:core-test:$sei_version"
+            "com.changhong.sei:sei-test-starter"
 //            "org.springframework.boot:spring-boot-starter-test"
     )
 }
@@ -29,8 +29,10 @@ bootJar  {
     mainClassName = 'com.changhong.sei.notify.NotifyRestApplication'
     manifest {
         attributes("Manifest-Version": "4.0")
-        attributes("Created-By": "Gradle")
+        attributes("Created-By": "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString())
         attributes("Implementation-Title": "$project.name")
+        attributes("Implementation-Version": "$project.version")
+        attributes("Implementation-Vendor": "rcsit.cn")
         attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"))
     }
 }
