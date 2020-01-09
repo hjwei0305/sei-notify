@@ -1,11 +1,11 @@
 package com.changhong.sei.notify.config;
 
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.context.SessionUser;
+import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.BaseUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * <strong>实现功能:</strong>
@@ -24,5 +24,12 @@ public class ContextUtilTest extends BaseUnitTest {
         message = ContextUtil.getMessage("00001");
         Assert.assertNotNull(message);
         System.out.println("00001="+message);
+    }
+
+    @Test
+    public void getSessionUser(){
+        SessionUser sessionUser = ContextUtil.getSessionUser();
+        Assert.assertNotNull(sessionUser);
+        System.out.println(JsonUtils.toJson(sessionUser));
     }
 }

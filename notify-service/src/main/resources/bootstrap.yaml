@@ -8,3 +8,16 @@ spring:
       uri: http://10.4.208.86:8100/config-center
       profile: DEV
       name: sei-notify
+
+sei:
+  mock:
+    user:
+      enable: true
+      s-id: 123456
+      user-id: 1234
+      account: admin
+      user-name: 管理员
+      tenant-code: 10044
+      email: test.sei.com
+      ip: 127.0.0.1
+      locale: zh_CN

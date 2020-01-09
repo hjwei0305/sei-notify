@@ -1,8 +1,8 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.BaseUnitTest;
 import com.changhong.sei.notify.entity.ContentTemplate;
-import com.chonghong.sei.util.JsonUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
