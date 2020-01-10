@@ -27,7 +27,7 @@ import java.util.*;
  * *************************************************************************************************
  */
 @Component
-public class EmailProcesser {
+public class EmailManager {
     @Value("${sei.mail.default-sender}")
     private String defaultSender;
     @Value("${spring.mail.username}")

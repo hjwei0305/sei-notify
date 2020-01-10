@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 /**
  * <strong>实现功能:</strong>
  * <p></p>
@@ -22,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class EmailProcesserTest extends BaseUnitTest {
     @Autowired
-    private EmailProcesser emailProcesser;
+    private EmailManager emailProcesser;
 
     /**
      * 生成消息
