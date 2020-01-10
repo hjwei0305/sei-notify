@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.1 2017-10-23 17:14
  */
 @RestController
-@RequestMapping(path = "hello",
-        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@FeignClient(name = "sei-notify")
+@RequestMapping(path = "hello", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface HelloService extends BaseHelloService{
     /**
      * say hello
