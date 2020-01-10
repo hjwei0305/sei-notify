@@ -4,7 +4,8 @@ apply plugin: 'io.spring.dependency-management'
 dependencies {
 
     compile(
-            "com.changhong.sei:core-api:$sei_version"
+            "com.changhong.sei:core-api:$sei_version",
+            "org.springframework.cloud:spring-cloud-starter-openfeign:2.1.0.RELEASE"
     )
 }
 
