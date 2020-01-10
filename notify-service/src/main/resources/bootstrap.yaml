@@ -10,9 +10,9 @@ spring:
       name: sei-notify
     zookeeper:
       # zk 地址
-      connect-string: localhost:2181
+      connect-string: 10.4.208.132:2181
       # 关闭zk可用不用依赖zk
-      enabled: false
+      enabled: true
 
 sei:
   mock: # 本地调试的当前用户配置

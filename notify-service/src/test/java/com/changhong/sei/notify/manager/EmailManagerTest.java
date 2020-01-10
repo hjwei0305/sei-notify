@@ -18,9 +18,9 @@ import java.util.Map;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-10 9:07
  */
-public class EmailProcesserTest extends BaseUnitTest {
+public class EmailManagerTest extends BaseUnitTest {
     @Autowired
-    private EmailManager emailProcesser;
+    private EmailManager emailManager;
 
     /**
      * 生成消息
@@ -49,6 +49,6 @@ public class EmailProcesserTest extends BaseUnitTest {
 
     @Test
     public void send() {
-        emailProcesser.send(builderMessage());
+        emailManager.send(builderMessage());
     }
 }
