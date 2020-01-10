@@ -26,7 +26,7 @@ public class EmailMessage implements Serializable, MessageContent {
      */
     private String content;
     /**
-     * 发件人
+     * 发件人（可以为空）
      */
     private EmailAccount sender;
     /**
