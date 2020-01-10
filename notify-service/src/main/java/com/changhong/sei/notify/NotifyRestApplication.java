@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-18 10:41
  */
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.changhong.sei.notify.api")
 @SpringBootApplication
 public class NotifyRestApplication {
     public static void main(String[] args) {

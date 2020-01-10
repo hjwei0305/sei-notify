@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 王锦光 wangj
  * @version 1.0.1 2017-10-23 17:14
  */
-@FeignClient(name = "sei-notify")
 @RestController
 @RequestMapping(path = "hello",
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

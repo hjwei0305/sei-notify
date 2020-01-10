@@ -3,7 +3,6 @@ package com.changhong.sei.notify.service;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
-import com.changhong.sei.notify.api.BaseHelloService;
 import com.changhong.sei.notify.api.HelloService;
 import com.changhong.sei.notify.manager.HelloManager;
 import io.swagger.annotations.Api;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLOutput;
 
 /**
  * <strong>实现功能:</strong>
