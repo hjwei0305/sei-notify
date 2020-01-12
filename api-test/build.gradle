@@ -1,0 +1,19 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    compile project(':notify-api')
+
+    compile ("org.springframework.cloud:spring-cloud-starter-netflix-ribbon")
+    compile("org.springframework.cloud:spring-cloud-starter-zookeeper-discovery")
+
+    testCompile(
+            "com.changhong.sei:sei-test-starter:$sei_version"
+    )
+}

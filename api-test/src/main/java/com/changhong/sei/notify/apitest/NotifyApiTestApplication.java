@@ -1,7 +1,8 @@
-package com.changhong.sei.notify;
+package com.changhong.sei.notify.apitest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * <strong>实现功能:</strong>
@@ -10,9 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-18 10:41
  */
+@EnableFeignClients(basePackages = "com.changhong.sei.notify.api")
 @SpringBootApplication
-public class NotifyRestApplication {
+public class NotifyApiTestApplication {
     public static void main(String[] args) {
-        SpringApplication.run(NotifyRestApplication.class, args);
+        SpringApplication.run(NotifyApiTestApplication.class, args);
     }
 }
