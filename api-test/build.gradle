@@ -10,8 +10,8 @@ dependencyManagement {
 dependencies {
     compile project(':notify-api')
 
-    compile ("org.springframework.cloud:spring-cloud-starter-netflix-ribbon")
-    compile("org.springframework.cloud:spring-cloud-starter-zookeeper-discovery")
+    compile("com.changhong.sei:sei-service-starter:$sei_version")
+    compile("mysql:mysql-connector-java:$mysqlVersion")
 
     testCompile(
             "com.changhong.sei:sei-test-starter:$sei_version"

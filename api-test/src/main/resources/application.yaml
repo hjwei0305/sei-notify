@@ -1,0 +1,31 @@
+# 应用全局配置
+application:
+  name: 消息通知API测试服务
+  version: 4.0.0
+
+# 本应用的参数配置
+
+# spring 环境配置
+spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false
+    username: sei
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: none
+      namingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    show-sql: true
+  cache:
+    redis:
+      time-to-live: 20s
+  redis: # redis 缓存参数配置
+    host: 10.4.208.132
+    port: 6379
+    password: ZmkDbgaua3Rso33T
+    database: 0
