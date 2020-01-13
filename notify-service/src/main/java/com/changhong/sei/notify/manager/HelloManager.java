@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 @CacheConfig(cacheNames = "hello_cache")
 public class HelloManager {
-    public static final String MQ_KEY="hello";
+    public static final String HELLO_MQ_KEY ="hello";
     /**
      * 注入消息队列生产者
      */
@@ -43,6 +43,6 @@ public class HelloManager {
     public void mqSayHello(String name, String param){
         LogUtil.bizLog("通过消息队列说：你好！");
         String message = "你好，"+name+"！参数："+param;
-        mqProducer.send(MQ_KEY, message);
+        mqProducer.send(HELLO_MQ_KEY, message);
     }
 }

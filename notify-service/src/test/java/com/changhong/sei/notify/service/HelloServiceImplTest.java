@@ -28,6 +28,6 @@ public class HelloServiceImplTest extends BaseUnitTest {
     public void mqSayHello() throws Exception{
         String name = "wangjg";
         service.mqSayHello(name);
-        Thread.sleep(20*1000);
+        Thread.sleep(30*1000);
     }
 }

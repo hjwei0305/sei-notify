@@ -3,6 +3,7 @@ package com.changhong.sei.notify.manager;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.notify.dto.EmailAccount;
 import com.changhong.sei.notify.dto.EmailMessage;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -60,7 +61,7 @@ public class EmailManager {
      */
     public void send(EmailMessage message){
         //检查邮件消息
-        if (Objects.isNull(message.getReceivers())||message.getReceivers().isEmpty()){
+        if (Objects.isNull(message) || CollectionUtils.isEmpty(message.getReceivers())){
             return;
         }
         //初始化消息

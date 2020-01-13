@@ -45,8 +45,9 @@ public class HelloApiTemplateTest extends BaseUnitTest {
 
     @Test
     public void health(){
-        String uri = "http://10.4.208.86:20001/sei-notify/actuator/health";
-        String result = apiTemplate.getByUrl(uri, String.class);
+        String appname = "sei-notify";
+        String path = "actuator/health";
+        String result = apiTemplate.getByAppModuleCode(appname, path, String.class);
         System.out.println(JsonUtils.toJson(result));
     }
 }

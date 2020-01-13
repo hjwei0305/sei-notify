@@ -25,7 +25,7 @@ public class HelloApiTest extends BaseUnitTest {
     }
 
     @Test
-    public void syHello(){
+    public void sayHello(){
         ResultData<String> result = helloService.sayHello("wangjg");
         System.out.println(JsonUtils.toJson(result));
         Assert.assertTrue(result.isSuccessful());
