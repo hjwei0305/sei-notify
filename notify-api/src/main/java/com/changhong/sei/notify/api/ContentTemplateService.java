@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(path = "contentTemplate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public interface ContentTemplateService extends BaseEntityService<ContentTemplateDto>, FindAllService<ContentTemplateDto> {
+public interface ContentTemplateService extends BaseEntityService<ContentTemplateDto>
+        , FindAllService<ContentTemplateDto> {
     /**
      * 通过代码获取内容模板
      * @param code 代码

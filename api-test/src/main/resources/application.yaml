@@ -7,6 +7,8 @@ application:
 
 # spring 环境配置
 spring:
+#  main:
+#    allow-bean-definition-overriding: true
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false
