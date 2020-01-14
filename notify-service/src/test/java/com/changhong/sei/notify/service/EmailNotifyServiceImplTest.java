@@ -49,6 +49,6 @@ public class EmailNotifyServiceImplTest extends BaseUnitTest {
     @Test
     public void sendEmail() throws Exception{
         service.sendEmail(builderMessage());
-        Thread.sleep(30*1000);
+        //Thread.sleep(30*1000);
     }
 }

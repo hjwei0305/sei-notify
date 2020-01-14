@@ -16,7 +16,7 @@ import java.util.Map;
  * <p/>
  * *************************************************************************************************
  */
-public class MotifyMessage implements Serializable, MessageContent {
+public class NotifyMessage implements Serializable, MessageContent {
     private static final long serialVersionUID = 1L;
     /**
      * 消息通知方式
@@ -49,7 +49,7 @@ public class MotifyMessage implements Serializable, MessageContent {
     /**
      * 可以发送给发件人
      */
-    private boolean canToSender;
+    private boolean canToSender = Boolean.FALSE;
 
     public String getSubject() {
         return subject;

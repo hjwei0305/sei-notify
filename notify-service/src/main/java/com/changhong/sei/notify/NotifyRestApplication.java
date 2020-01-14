@@ -2,6 +2,7 @@ package com.changhong.sei.notify;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * <strong>实现功能:</strong>
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version 1.0.1 2019-12-18 10:41
  */
 @SpringBootApplication
+@EnableFeignClients(basePackages = {"com.changhong.sei.notify.manager.client"})
 public class NotifyRestApplication {
     public static void main(String[] args) {
         SpringApplication.run(NotifyRestApplication.class, args);
