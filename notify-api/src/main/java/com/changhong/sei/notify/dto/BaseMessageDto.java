@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.dto;
 
+import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -11,13 +12,9 @@ import java.io.Serializable;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2019-09-23 17:09
  */
-public class BaseMessageDto implements Serializable {
+public class BaseMessageDto extends BaseEntityDto implements Serializable {
 
     private static final long serialVersionUID = 132979558246200348L;
-    /**
-     * id
-     */
-    protected String id;
     /**
      * 类别
      */
@@ -37,14 +34,6 @@ public class BaseMessageDto implements Serializable {
      */
     @JsonSerialize(using = EnumJsonSerializer.class)
     protected Priority priority;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public MessageCategory getCategory() {
         return category;
@@ -85,5 +74,4 @@ public class BaseMessageDto implements Serializable {
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
-
 }

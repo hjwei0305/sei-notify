@@ -23,11 +23,40 @@ public class BulletinCompose implements Serializable {
      */
     private BulletinUser user;
 
+    /**
+     * 通告的内容
+     */
+    private String content;
+
     public BulletinCompose() {
     }
 
     public BulletinCompose(Bulletin bulletin, BulletinUser user) {
         this.bulletin = bulletin;
         this.user = user;
+    }
+
+    public Bulletin getBulletin() {
+        return bulletin;
+    }
+
+    public void setBulletin(Bulletin bulletin) {
+        this.bulletin = bulletin;
+    }
+
+    public BulletinUser getUser() {
+        return user;
+    }
+
+    public void setUser(BulletinUser user) {
+        this.user = user;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
