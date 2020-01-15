@@ -1,4 +1,4 @@
-package com.changhong.sei.notify.service;
+package com.changhong.sei.notify.manager;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.BaseEntityDao;
@@ -8,7 +8,6 @@ import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.dto.serach.SearchOrder;
 import com.changhong.sei.core.manager.BaseEntityManager;
 import com.changhong.sei.core.manager.bo.OperateResult;
-import com.changhong.sei.core.manager.bo.OperateResultWithData;
 import com.changhong.sei.notify.dao.BulletinDao;
 import com.changhong.sei.notify.dao.BulletinUserDao;
 import com.changhong.sei.notify.dao.ContentBodyDao;

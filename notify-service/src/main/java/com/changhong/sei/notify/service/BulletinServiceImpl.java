@@ -12,6 +12,7 @@ import com.changhong.sei.notify.api.BulletinService;
 import com.changhong.sei.notify.dto.BulletinDto;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
+import com.changhong.sei.notify.manager.BulletinManager;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;

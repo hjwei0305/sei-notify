@@ -27,33 +27,6 @@ public class ContentTemplateManager extends BaseEntityManager<ContentTemplate> {
         return dao;
     }
 
-//    /**
-//     * 获取所有内容模板
-//     * @return 内容模板清单
-//     */
-//    public List<ContentTemplate> findAll(){
-//        return dao.findAll();
-//    }
-//
-//    /**
-//     * 保存一个内容模板
-//     * @param contentTemplate 内容模板
-//     * @return 保存结果
-//     */
-//    public ContentTemplate save(ContentTemplate contentTemplate){
-//        return dao.save(contentTemplate);
-//    }
-//
-//    /**
-//     * 通过Id获取内容模板
-//     * @param id Id标识
-//     * @return 内容模板
-//     */
-//    public ContentTemplate findOne(String id){
-//        Optional<ContentTemplate> contentTemplate = dao.findById(id);
-//        return contentTemplate.orElse(null);
-//    }
-
     /**
      * 通过代码获取内容模板
      * @param code 代码
