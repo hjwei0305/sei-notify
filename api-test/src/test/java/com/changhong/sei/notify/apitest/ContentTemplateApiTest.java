@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * <strong>实现功能:</strong>
  * <p></p>
@@ -24,6 +26,21 @@ public class ContentTemplateApiTest extends BaseUnitTest {
     public void findByCode(){
         String code = "EMAIL_TEMPLATE_REGIST";
         ResultData<ContentTemplateDto> resultData = contentTemplateService.findByCode(code);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.isSuccessful());
+    }
+
+    @Test
+    public void findOne(){
+        String id = "27B77612-3090-11EA-A16E-080058000005";
+        ResultData<ContentTemplateDto> resultData = contentTemplateService.findOne(id);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.isSuccessful());
+    }
+
+    @Test
+    public void findAll(){
+        ResultData<List<ContentTemplateDto>> resultData = contentTemplateService.findAll();
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.isSuccessful());
     }

@@ -5,6 +5,7 @@ import com.changhong.sei.core.api.FindAllService;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 王锦光 wangj
  * @version 1.0.1 2019-12-23 15:41
  */
+@FeignClient(name = "sei-notify", path = "contentTemplate")
 @RestController
 @RequestMapping(path = "contentTemplate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface ContentTemplateService extends BaseEntityService<ContentTemplateDto>
