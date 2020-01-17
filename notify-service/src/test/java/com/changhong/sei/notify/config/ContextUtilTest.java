@@ -4,8 +4,13 @@ import com.changhong.com.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.util.JsonUtils;
+import com.changhong.sei.notify.dto.MessageCategory;
+import com.changhong.sei.notify.dto.Priority;
+import com.chonghong.sei.util.EnumUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Map;
 
 /**
  * <strong>实现功能:</strong>
@@ -31,5 +36,11 @@ public class ContextUtilTest extends BaseUnitTest {
         SessionUser sessionUser = ContextUtil.getSessionUser();
         Assert.assertNotNull(sessionUser);
         System.out.println(JsonUtils.toJson(sessionUser));
+    }
+
+    @Test
+    public void getEnumMap(){
+        Map<String, String> map = EnumUtils.getEnumMap(Priority.class);
+        System.out.println(JsonUtils.toJson(map));
     }
 }

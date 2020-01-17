@@ -1,11 +1,15 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.mq.MqProducer;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.api.NotifyService;
 import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.manager.ContentBuilder;
+import com.changhong.sei.notify.manager.client.UserNotifyInfo;
 import com.changhong.sei.notify.manager.client.UserNotifyInfoClient;
+import com.chonghong.sei.exception.ServiceException;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,11 +59,17 @@ public class NotifyServiceImpl implements NotifyService {
         if (StringUtils.isNotBlank(message.getSenderId())) {
             userIds.add(message.getSenderId());
         }
-        // 调用基础服务，获取用户的消息通知信息
-        List<UserNotifyInfo> userInfos = userNotifyInfoClient.findNotifyInfoByUserIds(new ArrayList<>(userIds));
         if (CollectionUtils.isEmpty(userIds)){
             return;
         }
+        // 调用基础服务，获取用户的消息通知信息
+        ResultData<List<UserNotifyInfo>> userInfoResult = userNotifyInfoClient.findNotifyInfoByUserIds(new ArrayList<>(userIds));
+        if (userInfoResult.isFailed()){
+            // 记录异常日志
+            LogUtil.error(userInfoResult.getMessage(), new ServiceException("调用基础服务，获取用户的消息通知信息异常！"));
+            return;
+        }
+        List<UserNotifyInfo> userInfos = userInfoResult.getData();
         // 生成消息
         contentBuilder.build(message);
         //消息主题

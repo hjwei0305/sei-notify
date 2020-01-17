@@ -1,4 +1,4 @@
-package com.changhong.sei.notify.dto;
+package com.changhong.sei.notify.manager.client;
 
 import java.io.Serializable;
 

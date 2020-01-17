@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.manager.client;
 
-import com.changhong.sei.notify.dto.UserNotifyInfo;
+import com.changhong.sei.core.dto.ResultData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +23,5 @@ public interface UserNotifyInfoClient {
      * @return 用户信息
      */
     @PostMapping(path = "findNotifyInfoByUserIds", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    List<UserNotifyInfo> findNotifyInfoByUserIds(@RequestBody List<String> userIds);
+    ResultData<List<UserNotifyInfo>> findNotifyInfoByUserIds(@RequestBody List<String> userIds);
 }
