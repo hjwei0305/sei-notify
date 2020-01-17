@@ -116,17 +116,6 @@ public class ContentTemplateServiceImpl
     }
 
     /**
-     * 更新一个内容模板
-     *
-     * @param dto 内容模板
-     * @return 操作结果
-     */
-    @Override
-    public ResultData update(ContentTemplateDto dto) {
-        return save(dto);
-    }
-
-    /**
      * 获取所有业务实体
      *
      * @return 业务实体清单
