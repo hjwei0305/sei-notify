@@ -41,9 +41,9 @@ public class ContentTemplateApiTest extends BaseUnitTest {
     @Test
     public void save() {
         ContentTemplateDto dto = new ContentTemplateDto();
-        //dto.setCode("test-001");
-        dto.setName("测试模板-001");
-        //dto.setContent("测试模板-001的内容");
+        dto.setCode("test-001");
+        dto.setName("测试模板-001dddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+        dto.setContent("测试模板-001的内容");
         ResultData resultData = contentTemplateService.save(dto);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.getSuccessful());
