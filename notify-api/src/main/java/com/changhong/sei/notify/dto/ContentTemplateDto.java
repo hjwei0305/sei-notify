@@ -4,6 +4,8 @@ import com.changhong.sei.core.dto.BaseEntityDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -20,16 +22,21 @@ public class ContentTemplateDto extends BaseEntityDto implements Serializable {
      * 代码
      */
     @ApiModelProperty(notes = "代码")
+    @NotBlank(message = "内容模板代码不能为空")
+    @Size(max = 50)
     private String code;
     /**
      * 名称
      */
     @ApiModelProperty(notes = "名称")
+    @NotBlank(message = "内容模板名称不能为空")
+    @Size(max = 50)
     private String name;
     /**
      * 内容模板
      */
     @ApiModelProperty(notes = "内容模板")
+    @NotBlank(message = "#{00019}")
     private String content;
 
     public String getCode() {

@@ -11,14 +11,19 @@ import com.changhong.sei.notify.dto.ContentTemplateDto;
 import com.changhong.sei.notify.entity.ContentTemplate;
 import com.changhong.sei.notify.manager.ContentTemplateManager;
 import io.swagger.annotations.Api;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -81,14 +86,14 @@ public class ContentTemplateServiceImpl
         if (Objects.isNull(dto)) {
             return ResultData.fail("输入的内容模板为空，禁止保存！");
         }
-        if (StringUtils.isBlank(dto.getCode())) {
-            return ResultData.fail("输入的内容模板代码为空，禁止保存！");
-        }
-        if (StringUtils.isBlank(dto.getName())) {
-            return ResultData.fail("输入的内容模板名称为空，禁止保存！");
-        }
-        if (StringUtils.isBlank(dto.getContent())) {
-            return ResultData.fail("输入模板的内容为空，禁止保存！");
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<ContentTemplateDto>> cvs = validator.validate(dto);
+        StringBuilder msg = new StringBuilder();
+        cvs.forEach(contentTemplateDtoConstraintViolation -> {
+            msg.append(contentTemplateDtoConstraintViolation.getMessage()+"！");
+        });
+        if (CollectionUtils.isNotEmpty(cvs)){
+            return ResultData.fail(msg.toString());
         }
         return DefaultBaseEntityService.super.checkDto(dto);
     }
@@ -109,6 +114,17 @@ public class ContentTemplateServiceImpl
             return ResultData.fail("通过代码获取内容模板，发生异常！" + e.getMessage());
         }
         return ResultData.success(convertToDto(template));
+    }
+
+    /**
+     * 更新一个内容模板
+     *
+     * @param dto 内容模板
+     * @return 操作结果
+     */
+    @Override
+    public ResultData update(@Valid ContentTemplateDto dto) {
+        return ResultData.success(dto);
     }
 
     /**

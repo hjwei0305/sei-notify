@@ -7,6 +7,7 @@ import com.changhong.sei.notify.dto.ContentTemplateDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.spring.web.json.Json;
 
 /**
  * <strong>实现功能:</strong>
@@ -24,7 +25,7 @@ public class ContentTemplateServiceImplTest extends BaseUnitTest {
         ContentTemplateDto dto = new ContentTemplateDto();
         dto.setCode("test-001");
         dto.setName("测试模板-001");
-        dto.setContent("测试模板-001的内容");
+        //dto.setContent("测试模板-001的内容");
         ResultData<ContentTemplateDto> resultData = service.save(dto);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.getSuccessful());
@@ -50,6 +51,26 @@ public class ContentTemplateServiceImplTest extends BaseUnitTest {
     public void findByCode() {
         String code = "test-001";
         ResultData resultData = service.findByCode(code);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.getSuccessful());
+    }
+
+    @Test
+    public void checkDto(){
+        ContentTemplateDto dto = new ContentTemplateDto();
+        dto.setContent("test");
+        ResultData resultData = service.checkDto(dto);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.isSuccessful());
+    }
+
+    @Test
+    public void update() {
+        ContentTemplateDto dto = new ContentTemplateDto();
+        // dto.setCode("test-001");
+        dto.setName("测试模板-001");
+        //dto.setContent("测试模板-001的内容");
+        ResultData resultData = service.update(dto);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.getSuccessful());
     }

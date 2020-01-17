@@ -7,10 +7,9 @@ import com.changhong.sei.notify.dto.ContentTemplateDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * <strong>实现功能:</strong>
@@ -32,4 +31,13 @@ public interface ContentTemplateService extends BaseEntityService<ContentTemplat
     @GetMapping(path = "findByCode")
     @ApiOperation("通过代码获取内容模板")
     ResultData<ContentTemplateDto> findByCode(@RequestParam("code") String code);
+
+    /**
+     * 更新一个内容模板
+     * @param dto 内容模板
+     * @return 操作结果
+     */
+    @PostMapping(path = "update", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "更新一个内容模板", tags = "更新一个内容模板,测试DTO验证")
+    ResultData update(@RequestBody @Valid ContentTemplateDto dto);
 }

@@ -39,6 +39,14 @@ public class ContentTemplateApiTest extends BaseUnitTest {
     }
 
     @Test
+    public void delete(){
+        String id = "B0141961-38D8-11EA-9FF3-0242C0A84604";
+        ResultData resultData = contentTemplateService.delete(id);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.isSuccessful());
+    }
+
+    @Test
     public void findAll(){
         ResultData<List<ContentTemplateDto>> resultData = contentTemplateService.findAll();
         System.out.println(JsonUtils.toJson(resultData));
