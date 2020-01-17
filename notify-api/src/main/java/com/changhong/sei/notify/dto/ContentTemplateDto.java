@@ -36,7 +36,7 @@ public class ContentTemplateDto extends BaseEntityDto implements Serializable {
      * 内容模板
      */
     @ApiModelProperty(notes = "内容模板")
-    @NotBlank(message = "#{00019}")
+    @NotBlank
     private String content;
 
     public String getCode() {
