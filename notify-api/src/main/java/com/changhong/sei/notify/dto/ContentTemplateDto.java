@@ -22,14 +22,14 @@ public class ContentTemplateDto extends BaseEntityDto implements Serializable {
      * 代码
      */
     @ApiModelProperty(notes = "代码")
-    @NotBlank(message = "内容模板代码不能为空")
+    @NotBlank
     @Size(max = 50)
     private String code;
     /**
      * 名称
      */
     @ApiModelProperty(notes = "名称")
-    @NotBlank(message = "内容模板名称不能为空")
+    @NotBlank
     @Size(max = 50)
     private String name;
     /**

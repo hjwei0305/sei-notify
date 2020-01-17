@@ -89,8 +89,8 @@ public class ContentTemplateServiceImpl
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<ContentTemplateDto>> cvs = validator.validate(dto);
         StringBuilder msg = new StringBuilder();
-        cvs.forEach(contentTemplateDtoConstraintViolation -> {
-            msg.append(contentTemplateDtoConstraintViolation.getMessage()+"！");
+        cvs.forEach(cv -> {
+            msg.append(cv.getPropertyPath()+cv.getMessage()+"！");
         });
         if (CollectionUtils.isNotEmpty(cvs)){
             return ResultData.fail(msg.toString());

@@ -58,7 +58,9 @@ public class ContentTemplateServiceImplTest extends BaseUnitTest {
     @Test
     public void checkDto(){
         ContentTemplateDto dto = new ContentTemplateDto();
-        dto.setContent("test");
+        // dto.setCode("test-001");
+        dto.setName("测试模板-001");
+        //dto.setContent("测试模板-001的内容");
         ResultData resultData = service.checkDto(dto);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.isSuccessful());
