@@ -19,11 +19,11 @@ public enum NotifyType {
      * 电子邮件
      */
     @Remark("电子邮件")
-    Email,
+    EMAIL,
 
     /**
      * 手机短信
      */
     @Remark("手机短信")
-    Sms;
+    SMS
 }

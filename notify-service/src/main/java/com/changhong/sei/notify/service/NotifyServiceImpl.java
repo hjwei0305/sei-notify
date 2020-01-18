@@ -5,8 +5,10 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.mq.MqProducer;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.api.NotifyService;
-import com.changhong.sei.notify.dto.*;
+import com.changhong.sei.notify.dto.NotifyMessage;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.manager.ContentBuilder;
+import com.changhong.sei.notify.manager.SendMessage;
 import com.changhong.sei.notify.manager.client.UserNotifyInfo;
 import com.changhong.sei.notify.manager.client.UserNotifyInfoClient;
 import com.chonghong.sei.exception.ServiceException;
@@ -17,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-import static com.changhong.sei.notify.service.EmailNotifyServiceImpl.EMAIL_MQ_KEY;
 
 /**
  * <strong>实现功能:</strong>
@@ -94,31 +94,16 @@ public class NotifyServiceImpl implements NotifyService {
         if (CollectionUtils.isEmpty(receivers)) {
             return;
         }
+        // 构造统一发送的消息
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setSubject(subject);
+        sendMessage.setContent(content);
+        sendMessage.setSender(sender);
+        sendMessage.setReceivers(receivers);
         // 循环通知方式，循环发送
         for (NotifyType notifyType: message.getNotifyTypes()){
-            switch (notifyType){
-                // 发送邮件
-                case Email:
-                    // 构造邮件消息
-                    EmailMessage emailMsg = new EmailMessage();
-                    if (Objects.nonNull(sender)&&StringUtils.isNotBlank(sender.getEmail())){
-                        emailMsg.setSender(new EmailAccount(sender.getUserName(),sender.getEmail()));
-                    }
-                    emailMsg.setSubject(subject);
-                    emailMsg.setContent(content);
-                    List<EmailAccount> emailAccounts = new ArrayList<>();
-                    receivers.forEach((r)->emailAccounts.add(new EmailAccount(r.getUserName(),r.getEmail())));
-                    emailMsg.setReceivers(emailAccounts);
-                    // 提交到发送邮件队列
-                    // JSON序列化
-                    String messageJson = JsonUtils.toJson(emailMsg);
-                    mqProducer.send(EMAIL_MQ_KEY, messageJson);
-                    break;
-                case Sms:
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + notifyType);
-            }
+            String sendJson = JsonUtils.toJson(sendMessage);
+            mqProducer.send(notifyType.name(), sendJson);
         }
     }
 }

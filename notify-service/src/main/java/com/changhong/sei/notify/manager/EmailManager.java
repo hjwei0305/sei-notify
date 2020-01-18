@@ -3,7 +3,10 @@ package com.changhong.sei.notify.manager;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.notify.dto.EmailAccount;
 import com.changhong.sei.notify.dto.EmailMessage;
+import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.manager.client.UserNotifyInfo;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,8 +30,8 @@ import java.util.*;
  * <p/>
  * *************************************************************************************************
  */
-@Component
-public class EmailManager {
+@Component("EMAIL")
+public class EmailManager implements NotifyManager{
     @Value("${sei.mail.default-sender}")
     private String defaultSender;
     @Value("${spring.mail.username}")
@@ -98,6 +101,31 @@ public class EmailManager {
             // 记录异常日志
             LogUtil.error("发送邮件失败！",e);
         }
+    }
+
+    /**
+     * 发送消息通知
+     *
+     * @param message 消息
+     */
+    @Override
+    public void send(SendMessage message) {
+        String subject = message.getSubject();
+        String content = message.getContent();
+        UserNotifyInfo sender = message.getSender();
+        List<UserNotifyInfo> receivers = message.getReceivers();
+        // 构造邮件消息
+        EmailMessage emailMsg = new EmailMessage();
+        if (Objects.nonNull(sender) && StringUtils.isNotBlank(sender.getEmail())){
+            emailMsg.setSender(new EmailAccount(sender.getUserName(),sender.getEmail()));
+        }
+        emailMsg.setSubject(subject);
+        emailMsg.setContent(content);
+        List<EmailAccount> emailAccounts = new ArrayList<>();
+        receivers.forEach((r)->emailAccounts.add(new EmailAccount(r.getUserName(),r.getEmail())));
+        emailMsg.setReceivers(emailAccounts);
+        // 发送邮件
+        send(emailMsg);
     }
 }
 
