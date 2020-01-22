@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.entity;
 
+import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.entity.json.EnumJsonSerializer;
 import com.changhong.sei.notify.dto.Priority;
 import com.chonghong.sei.enums.UserType;
 import com.chonghong.sei.util.DateUtils;
@@ -26,19 +26,19 @@ public class BulletinUserView extends BaseEntity {
      * 消息主题
      */
     @Column(name = "subject", nullable = false)
-    protected String subject;
+    private String subject;
     /**
      * 内容id
      */
     @Column(name = "content_id", length = 36)
-    protected String contentId;
+    private String contentId;
     /**
      * 优先级
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "priority_")
     @JsonSerialize(using = EnumJsonSerializer.class)
-    protected Priority priority = Priority.General;
+    private Priority priority = Priority.General;
     /**
      * 发布人id
      */

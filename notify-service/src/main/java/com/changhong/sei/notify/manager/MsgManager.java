@@ -18,6 +18,7 @@ import com.changhong.sei.notify.entity.BulletinUser;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.manager.client.EmployeeClient;
+import com.chonghong.sei.enums.UserType;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +124,8 @@ public class MsgManager {
                     bulletinUser.setRead(Boolean.TRUE);
                     bulletinUser.setReadDate(new Date());
                     bulletinUser.setUserId(user.getUserId());
-                    bulletinUser.setUserType(user.getUserType());
+                    // todo 需要从上下文的当前用户中获取
+                    bulletinUser.setUserType(UserType.Employee);
                     bulletinUserDao.save(bulletinUser);
                     break;
                 case Message:
