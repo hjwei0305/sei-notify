@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.manager;
 
-import com.changhong.sei.notify.manager.client.UserNotifyInfo;
+import com.changhong.sei.notify.dto.UserNotifyInfo;
 
 import java.io.Serializable;
 import java.util.List;

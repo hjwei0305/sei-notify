@@ -9,7 +9,7 @@ import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.manager.ContentBuilder;
 import com.changhong.sei.notify.manager.SendMessage;
-import com.changhong.sei.notify.manager.client.UserNotifyInfo;
+import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.manager.client.UserNotifyInfoClient;
 import com.chonghong.sei.exception.ServiceException;
 import io.swagger.annotations.Api;

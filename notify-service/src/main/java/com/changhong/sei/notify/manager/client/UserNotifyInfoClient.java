@@ -1,6 +1,7 @@
 package com.changhong.sei.notify.manager.client;
 
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.notify.dto.UserNotifyInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
