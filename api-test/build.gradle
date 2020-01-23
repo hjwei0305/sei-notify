@@ -17,3 +17,7 @@ dependencies {
             "com.changhong.sei:sei-test-starter:$sei_version"
     )
 }
+
+//打包源代码jar包
+bootJar { enabled = false }
+jar { enabled = false }
