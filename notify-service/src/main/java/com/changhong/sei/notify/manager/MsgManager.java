@@ -124,8 +124,7 @@ public class MsgManager {
                     bulletinUser.setRead(Boolean.TRUE);
                     bulletinUser.setReadDate(new Date());
                     bulletinUser.setUserId(user.getUserId());
-                    // todo 需要从上下文的当前用户中获取
-                    bulletinUser.setUserType(UserType.Employee);
+                    bulletinUser.setUserType(user.getUserType());
                     bulletinUserDao.save(bulletinUser);
                     break;
                 case Message:
