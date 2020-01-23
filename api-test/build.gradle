@@ -21,3 +21,8 @@ dependencies {
 //打包源代码jar包
 bootJar { enabled = false }
 jar { enabled = false }
+
+//上传到nexus
+uploadArchives {
+    enabled = false
+}
