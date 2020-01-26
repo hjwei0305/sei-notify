@@ -2,6 +2,7 @@ package com.changhong.sei.notify.api;
 
 import com.changhong.sei.notify.dto.NotifyMessage;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-13 16:31
  */
+@FeignClient(name = "sei-notify", path = "notify")
 @RestController
 @RequestMapping(path = "notify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface NotifyService {
