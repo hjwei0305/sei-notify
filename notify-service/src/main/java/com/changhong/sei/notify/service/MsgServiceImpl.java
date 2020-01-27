@@ -93,7 +93,7 @@ public class MsgServiceImpl implements MsgService {
             // 获取用户未读数据异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00014", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult);
+        return ResultDataUtil.convertFromOperateResult(operateResult, operateResult.getData());
     }
 
     /**
@@ -133,7 +133,7 @@ public class MsgServiceImpl implements MsgService {
             // 执行用户查看异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00016", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult);
+        return ResultDataUtil.convertFromOperateResult(operateResult, operateResult.getData());
     }
 
     /**
@@ -151,7 +151,7 @@ public class MsgServiceImpl implements MsgService {
             // 默认获取优先级高的通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00017", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult);
+        return ResultDataUtil.convertFromOperateResult(operateResult, operateResult.getData());
     }
 
     /**
