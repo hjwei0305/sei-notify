@@ -4,8 +4,8 @@ spring:
   cloud:
     bus:
       trace:
-        enabled: true
-      enabled: true
+        enabled: false
+      enabled: false
     config:
       uri: http://10.4.208.86:8100/config-center
       profile: DEV
