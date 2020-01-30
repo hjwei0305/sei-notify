@@ -15,7 +15,7 @@ spring:
     url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false
     username: sei
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
