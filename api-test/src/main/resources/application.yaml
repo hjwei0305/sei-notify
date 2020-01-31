@@ -9,23 +9,6 @@ application:
 spring:
   main:
     allow-bean-definition-overriding: true
-  datasource:
-    url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false
-    username: sei
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: none
-      namingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        format_sql: true
-    show-sql: true
-  cache:
-    redis:
-      time-to-live: 20s
   redis: # redis 缓存参数配置
     host: 10.4.208.132
     port: 6379
