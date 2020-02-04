@@ -42,3 +42,7 @@ bootJar  {
 uploadArchives {
     enabled = false
 }
+
+install {
+    enabled = false
+}
