@@ -3,7 +3,7 @@ package com.changhong.sei.notify.apitest;
 import com.changhong.com.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
-import com.changhong.sei.notify.api.ContentTemplateService;
+import com.changhong.sei.notify.api.ContentTemplateApi;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ContentTemplateApiTest extends BaseUnitTest {
     @Autowired
-    private ContentTemplateService contentTemplateService;
+    private ContentTemplateApi contentTemplateService;
 
     @Test
     public void findByCode(){

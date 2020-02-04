@@ -8,7 +8,7 @@ dependencyManagement {
 }
 
 dependencies {
-    compile project(':notify-api')
+    compile project(':sei-notify-api')
 
     compile("com.changhong.sei:sei-service-starter:$sei_version")
 

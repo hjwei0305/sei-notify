@@ -4,7 +4,6 @@ import com.changhong.com.sei.core.test.BaseUnitTest;
 import com.changhong.sei.apitemplate.ApiTemplate;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
-import com.changhong.sei.notify.api.HelloService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
