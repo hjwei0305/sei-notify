@@ -3,13 +3,16 @@ package com.changhong.sei.notify.config;
 import com.changhong.com.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
+import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.dto.MessageCategory;
 import com.changhong.sei.notify.dto.Priority;
 import com.chonghong.sei.util.EnumUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,5 +45,11 @@ public class ContextUtilTest extends BaseUnitTest {
     public void getEnumMap(){
         Map<String, String> map = EnumUtils.getEnumMap(Priority.class);
         System.out.println(JsonUtils.toJson(map));
+    }
+
+    @Test
+    public void getEnumEntities(){
+        ResultData<List<EnumUtils.EnumEntity>> resultData = ResultDataUtil.getEnumEntities(Priority.class);
+        System.out.println(JsonUtils.toJson(resultData));
     }
 }
