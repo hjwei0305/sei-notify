@@ -20,22 +20,22 @@ import java.util.List;
  */
 public class ContentTemplateApiTest extends BaseUnitTest {
     @Autowired
-    private ContentTemplateApi contentTemplateService;
+    private ContentTemplateApi contentTemplateApi;
 
     @Test
     public void findByCode(){
         String code = "EMAIL_TEMPLATE_REGIST";
-        ResultData<ContentTemplateDto> resultData = contentTemplateService.findByCode(code);
+        ResultData<ContentTemplateDto> resultData = contentTemplateApi.findByCode(code);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.isSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void findOne(){
         String id = "27B77612-3090-11EA-A16E-080058000005";
-        ResultData<ContentTemplateDto> resultData = contentTemplateService.findOne(id);
+        ResultData<ContentTemplateDto> resultData = contentTemplateApi.findOne(id);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.isSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
@@ -44,23 +44,23 @@ public class ContentTemplateApiTest extends BaseUnitTest {
         dto.setCode("test-001");
         dto.setName("测试模板-001dddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
         dto.setContent("测试模板-001的内容");
-        ResultData resultData = contentTemplateService.save(dto);
+        ResultData resultData = contentTemplateApi.save(dto);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.getSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void delete(){
         String id = "B0141961-38D8-11EA-9FF3-0242C0A84604";
-        ResultData resultData = contentTemplateService.delete(id);
+        ResultData resultData = contentTemplateApi.delete(id);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.isSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void findAll(){
-        ResultData<List<ContentTemplateDto>> resultData = contentTemplateService.findAll();
+        ResultData<List<ContentTemplateDto>> resultData = contentTemplateApi.findAll();
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.isSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 }

@@ -28,6 +28,6 @@ public class HelloApiTest extends BaseUnitTest {
     public void sayHello(){
         ResultData<String> result = helloApi.sayHello("wangjg");
         System.out.println(JsonUtils.toJson(result));
-        Assert.assertTrue(result.isSuccessful());
+        Assert.assertTrue(result.successful());
     }
 }

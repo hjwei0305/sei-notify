@@ -22,6 +22,6 @@ public class MsgControllerTest extends BaseUnitTest {
     public void getPriority() {
         ResultData result = controller.getPriority();
         System.out.println(JsonUtils.toJson(result));
-        Assert.assertTrue(result.isSuccessful());
+        Assert.assertTrue(result.successful());
     }
 }

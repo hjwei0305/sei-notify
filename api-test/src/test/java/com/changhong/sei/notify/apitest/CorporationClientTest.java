@@ -22,7 +22,7 @@ public class CorporationClientTest extends BaseUnitTest {
     public void findByCode() {
         String code = "10044-Q000";
         ResultData resultData = client.findByCode(code);
-        Assert.assertTrue(resultData.isSuccessful());
+        Assert.assertTrue(resultData.successful());
         System.out.println(JsonUtils.toJson(resultData));
     }
 }

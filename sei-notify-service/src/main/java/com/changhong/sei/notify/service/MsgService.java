@@ -64,12 +64,12 @@ public class MsgService {
     private List<String> getUserRightCode(String userId){
         // 获取用户的组织代码清单
         ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
-        if (orgCodesResult.isSuccessful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())){
+        if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())){
             return orgCodesResult.getData();
         }
         // 没有组织，获取用户岗位代码清单
         ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
-        if (positionCodesResult.isSuccessful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())){
+        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())){
             return positionCodesResult.getData();
         }
         return new ArrayList<>();

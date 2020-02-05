@@ -26,6 +26,6 @@ public class ContentTemplateApiTemplateTest extends BaseUnitTest {
         String appname = "sei-notify";
         ResultData result = apiTemplate.getByAppModuleCode(appname, "contentTemplate/findAll", ResultData.class);
         System.out.println(JsonUtils.toJson(result));
-        Assert.assertTrue(result.isSuccessful());
+        Assert.assertTrue(result.successful());
     }
 }

@@ -64,7 +64,7 @@ public class NotifyController implements NotifyApi {
         }
         // 调用基础服务，获取用户的消息通知信息
         ResultData<List<UserNotifyInfo>> userInfoResult = userNotifyInfoClient.findNotifyInfoByUserIds(new ArrayList<>(userIds));
-        if (userInfoResult.isFailed()){
+        if (userInfoResult.failed()){
             // 记录异常日志
             LogUtil.error(userInfoResult.getMessage(), new ServiceException("调用基础服务，获取用户的消息通知信息异常！"));
             return;

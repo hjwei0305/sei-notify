@@ -27,7 +27,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         //dto.setContent("测试模板-001的内容");
         ResultData<ContentTemplateDto> resultData = service.save(dto);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.getSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
         ResultData resultData = service.findOne(id);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.getSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
         ResultData resultData = service.delete(id);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.getSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         String code = "test-001";
         ResultData resultData = service.findByCode(code);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.getSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 
     @Test
@@ -62,6 +62,6 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         //dto.setContent("测试模板-001的内容");
         ResultData resultData = service.checkDto(dto);
         System.out.println(JsonUtils.toJson(resultData));
-        Assert.assertTrue(resultData.isSuccessful());
+        Assert.assertTrue(resultData.successful());
     }
 }

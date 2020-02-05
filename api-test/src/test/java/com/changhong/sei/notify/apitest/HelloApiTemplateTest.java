@@ -29,7 +29,7 @@ public class HelloApiTemplateTest extends BaseUnitTest {
         params.put("name", "wangjg");
         ResultData result = apiTemplate.getByUrl(uri, ResultData.class, params);
         System.out.println(JsonUtils.toJson(result));
-        Assert.assertTrue(result.isSuccessful());
+        Assert.assertTrue(result.successful());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class HelloApiTemplateTest extends BaseUnitTest {
         params.put("name", "wangjg");
         ResultData result = apiTemplate.getByAppModuleCode(appname, "hello/sayHello", ResultData.class, params);
         System.out.println(JsonUtils.toJson(result));
-        Assert.assertTrue(result.isSuccessful());
+        Assert.assertTrue(result.successful());
     }
 
     @Test
