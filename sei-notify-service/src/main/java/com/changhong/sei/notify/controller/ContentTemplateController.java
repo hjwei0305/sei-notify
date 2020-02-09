@@ -14,6 +14,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolation;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Api(value = "ContentTemplateApi", tags = "内容模板API接口")
+@RequestMapping(path = "contentTemplate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class ContentTemplateController
         implements DefaultBaseEntityController<ContentTemplate, ContentTemplateDto>,
         ContentTemplateApi {

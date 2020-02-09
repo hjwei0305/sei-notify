@@ -18,6 +18,8 @@ import com.changhong.sei.notify.service.MsgService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Api(value = "MsgApi", tags = "通告消息管理API服务")
+@RequestMapping(path = "bulletinMsg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MsgController implements MsgApi {
     @Autowired
     private MsgService msgService;

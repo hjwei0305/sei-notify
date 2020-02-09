@@ -6,7 +6,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <strong>实现功能:</strong>
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @version 1.0.1 2020-01-13 16:31
  */
 @FeignClient(name = "sei-notify", path = "notify")
-@RequestMapping(path = "notify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface NotifyApi {
 
     /**

@@ -7,6 +7,8 @@ import com.changhong.sei.notify.dto.EmailMessage;
 import com.changhong.sei.notify.service.ContentBuilder;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Api(value = "EmailNotifyApi", tags = "发送电子邮件的API服务")
+@RequestMapping(path = "emailNotify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class EmailNotifyController implements EmailNotifyApi {
     public final static String EMAIL_MQ_KEY = "email";
     @Autowired

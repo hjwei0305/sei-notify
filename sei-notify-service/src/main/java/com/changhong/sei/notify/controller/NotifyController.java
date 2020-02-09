@@ -16,7 +16,10 @@ import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
@@ -27,8 +30,9 @@ import java.util.*;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-13 16:45
  */
-@Service
+@RestController
 @Api(value = "NotifyApi", tags = "平台消息通知API服务")
+@RequestMapping(path = "notify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class NotifyController implements NotifyApi {
     @Autowired
     private UserNotifyInfoClient userNotifyInfoClient;
