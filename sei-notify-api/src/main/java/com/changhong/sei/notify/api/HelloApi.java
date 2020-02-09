@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author 王锦光 wangj
  * @version 1.0.1 2017-10-23 17:14
  */
-@FeignClient(name = "sei-notify", path = "hello")
+@FeignClient(name = "sei-notify")
 @RequestMapping(path = "hello", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public interface HelloApi extends BaseHelloApi {
     /**
