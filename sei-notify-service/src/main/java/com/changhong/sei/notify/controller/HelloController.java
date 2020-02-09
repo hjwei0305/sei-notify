@@ -9,6 +9,8 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RefreshScope
 @Api(value = "HelloApi", tags = "调试你好的API服务")
+@RequestMapping(path = "hello", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class HelloController implements BaseHelloController, HelloApi {
     @Autowired
     private HelloService manager;
