@@ -42,17 +42,9 @@ public class ContentTemplateController
     @Autowired
     private ContentTemplateService service;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Override
     public BaseEntityService<ContentTemplate> getService() {
         return service;
-    }
-
-    @Override
-    public ModelMapper getModelMapper() {
-        return modelMapper;
     }
 
     /**
@@ -157,7 +149,7 @@ public class ContentTemplateController
             return null;
         }
         // 自定义规则
-        ModelMapper custModelMapper = new ModelMapper();
+        ModelMapper mapper = getModelMapper();
         PropertyMap<ContentTemplate, ContentTemplateDto> propertyMap = new PropertyMap<ContentTemplate, ContentTemplateDto>() {
 
             /**
@@ -168,7 +160,7 @@ public class ContentTemplateController
                 skip(destination.getContent());
             }
         };
-        custModelMapper.addMappings(propertyMap);
-        return custModelMapper.map(entity, ContentTemplateDto.class);
+        mapper.addMappings(propertyMap);
+        return mapper.map(entity, ContentTemplateDto.class);
     }
 }

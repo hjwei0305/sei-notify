@@ -40,8 +40,6 @@ import java.util.stream.Collectors;
 public class MsgController implements MsgApi {
     @Autowired
     private MsgService msgService;
-    @Autowired
-    private ModelMapper modelMapper;
     /**
      * 获取优先级枚举值清单
      *
@@ -167,7 +165,8 @@ public class MsgController implements MsgApi {
         if (Objects.isNull(entity)) {
             return null;
         }
-        BulletinDto dto = modelMapper.map(entity.getBulletin(), BulletinDto.class);
+        ModelMapper mapper = new ModelMapper();
+        BulletinDto dto = mapper.map(entity.getBulletin(), BulletinDto.class);
         dto.setContent(entity.getContent());
         return dto;
     }

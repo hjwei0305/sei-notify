@@ -38,16 +38,9 @@ public class BulletinController implements DefaultBaseEntityController<Bulletin,
         , BulletinApi {
     @Autowired
     private BulletinService service;
-    @Autowired
-    private ModelMapper modelMapper;
     @Override
     public BaseEntityService<Bulletin> getService() {
         return service;
-    }
-
-    @Override
-    public ModelMapper getModelMapper() {
-        return modelMapper;
     }
 
     /**

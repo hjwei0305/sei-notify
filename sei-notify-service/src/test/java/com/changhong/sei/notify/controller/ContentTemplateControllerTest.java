@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class ContentTemplateControllerTest extends BaseUnitTest {
     @Autowired
-    private ContentTemplateController service;
+    private ContentTemplateController controller;
 
     @Test
     public void save() {
@@ -25,7 +25,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         dto.setCode("test-001");
         dto.setName("测试模板-001");
         //dto.setContent("测试模板-001的内容");
-        ResultData<ContentTemplateDto> resultData = service.save(dto);
+        ResultData<ContentTemplateDto> resultData = controller.save(dto);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
@@ -33,23 +33,23 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
     @Test
     public void findOne() {
         String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
-        ResultData resultData = service.findOne(id);
+        ResultData resultData = controller.findOne(id);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void delete() {
-        String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
-        ResultData resultData = service.delete(id);
+        String id = "0a630227-6f65-152a-816f-6506656e0000";
+        ResultData resultData = controller.delete(id);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void findByCode() {
-        String code = "test-001";
-        ResultData resultData = service.findByCode(code);
+        String code = "test";
+        ResultData resultData = controller.findByCode(code);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
@@ -60,7 +60,14 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         // dto.setCode("test-001");
         dto.setName("测试模板-001");
         //dto.setContent("测试模板-001的内容");
-        ResultData resultData = service.checkDto(dto);
+        ResultData resultData = controller.checkDto(dto);
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.successful());
+    }
+
+    @Test
+    public void findAll(){
+        ResultData resultData = controller.findAll();
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
