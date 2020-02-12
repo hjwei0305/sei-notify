@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.apitest;
 
-import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.api.HelloApi;
 import org.junit.Assert;

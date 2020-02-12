@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.controller;
 
-import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import org.junit.Assert;
 import org.junit.Test;
