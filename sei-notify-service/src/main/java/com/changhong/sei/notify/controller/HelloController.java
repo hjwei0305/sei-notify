@@ -3,6 +3,7 @@ package com.changhong.sei.notify.controller;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.api.HelloApi;
 import com.changhong.sei.notify.service.HelloService;
 import io.swagger.annotations.Api;
@@ -39,7 +40,7 @@ public class HelloController implements BaseHelloController, HelloApi {
     public ResultData<String> sayHello(String name){
         try {
             SessionUser sessionUser = ContextUtil.getSessionUser();
-            System.out.println(sessionUser);
+            System.out.println(JsonUtils.toJson(sessionUser));
             String data = manager.sayHello(name, testKey);
             return ResultData.success(data);
         } catch (Exception e) {
