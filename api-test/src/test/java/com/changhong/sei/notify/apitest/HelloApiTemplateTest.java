@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.apitest;
 
-import com.changhong.com.sei.core.test.BaseUnitTest;
+import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.apitemplate.ApiTemplate;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
@@ -24,7 +24,7 @@ public class HelloApiTemplateTest extends BaseUnitTest {
 
     @Test
     public void sayHello(){
-        String uri = "http://10.4.208.86:20001/sei-notify/hello/sayHello";
+        String uri = "http://localhost:8080/hello/sayHello";
         Map<String,String> params = new LinkedHashMap<>();
         params.put("name", "wangjg");
         ResultData result = apiTemplate.getByUrl(uri, ResultData.class, params);

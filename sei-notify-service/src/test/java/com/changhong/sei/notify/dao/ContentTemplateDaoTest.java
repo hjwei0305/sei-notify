@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.dao;
 
-import com.changhong.com.sei.core.test.BaseUnitTest;
+import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.entity.ContentTemplate;
 import org.junit.Assert;

@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.service.client;
 
-import com.changhong.com.sei.core.test.BaseUnitTest;
+import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
 import org.junit.Assert;

@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.service;
 
-import com.changhong.com.sei.core.test.BaseUnitTest;
+import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.notify.dto.EmailAccount;
 import com.changhong.sei.notify.dto.EmailMessage;
 import org.junit.Test;

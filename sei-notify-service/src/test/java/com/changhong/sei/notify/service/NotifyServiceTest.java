@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.service;
 
-import com.changhong.com.sei.core.test.BaseUnitTest;
+import com.changhong.sei.core.test.BaseUnitTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
