@@ -11,7 +11,7 @@ import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.service.ContentBuilder;
 import com.changhong.sei.notify.service.SendMessage;
 import com.changhong.sei.notify.service.client.UserNotifyInfoClient;
-import com.chonghong.sei.exception.ServiceException;
+import com.changhong.sei.exception.ServiceException;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

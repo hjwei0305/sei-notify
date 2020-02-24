@@ -2,7 +2,7 @@ package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.changhong.sei.notify.dto.TargetType;
-import com.chonghong.sei.util.DateUtils;
+import com.changhong.sei.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

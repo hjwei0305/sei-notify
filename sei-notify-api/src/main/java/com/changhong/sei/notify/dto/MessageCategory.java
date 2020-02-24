@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.dto;
 
-import com.chonghong.sei.annotation.Remark;
+import com.changhong.sei.annotation.Remark;
 
 /**
  * 实现功能：

@@ -1,6 +1,6 @@
 package com.changhong.sei.notify.dto;
 
-import com.chonghong.sei.util.DateUtils;
+import com.changhong.sei.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;

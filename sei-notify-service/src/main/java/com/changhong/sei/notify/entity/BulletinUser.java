@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.entity.BaseEntity;
-import com.chonghong.sei.enums.UserType;
+import com.changhong.sei.enums.UserType;
 
 import javax.persistence.*;
 import java.util.Date;

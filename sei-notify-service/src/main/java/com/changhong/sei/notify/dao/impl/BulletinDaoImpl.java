@@ -5,7 +5,7 @@ import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.notify.dao.BulletinExtDao;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
-import com.chonghong.sei.util.DateUtils;
+import com.changhong.sei.util.DateUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
