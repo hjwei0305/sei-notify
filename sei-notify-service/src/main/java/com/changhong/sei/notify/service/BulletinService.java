@@ -14,11 +14,11 @@ import com.changhong.sei.notify.dao.ContentBodyDao;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -61,7 +61,19 @@ public class BulletinService extends BaseEntityService<Bulletin> {
                 .addSortOrder(new SearchOrder("invalidDate", SearchOrder.Direction.DESC))
                 .addSortOrder(new SearchOrder("priority"))
                 .addSortOrder(new SearchOrder("releaseDate", SearchOrder.Direction.DESC));
-        return super.findByPage(searchConfig);
+        PageResult<Bulletin> result = super.findByPage(searchConfig);
+        // 获取内容
+        if (CollectionUtils.isEmpty(result.getRows())) {
+            return result;
+        }
+        List<Bulletin> bulletins = result.getRows();
+        bulletins.forEach(b-> {
+            ContentBody contentBody = contentBodyDao.findOne(b.getContentId());
+            if (Objects.nonNull(contentBody)) {
+                b.setContent(contentBody.getContent());
+            }
+        });
+        return result;
     }
 
     /**

@@ -28,6 +28,9 @@ public class BaseMessageDto extends BaseEntityDto implements Serializable {
      * 内容id
      */
     protected String contentId;
+    /**
+     * 内容
+     */
     protected String content;
     /**
      * 优先级

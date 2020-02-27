@@ -56,6 +56,12 @@ public class BaseMessage extends BaseEntity {
     @Column(name = "del_user_id", length = 36)
     protected String delUserId;
 
+    /**
+     * 内容
+     */
+    @Transient
+    protected String content;
+
 
     public String getSubject() {
         return subject;
@@ -105,4 +111,11 @@ public class BaseMessage extends BaseEntity {
         this.delUserId = delUserId;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
