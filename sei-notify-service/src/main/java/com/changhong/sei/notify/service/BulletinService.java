@@ -123,6 +123,7 @@ public class BulletinService extends BaseEntityService<Bulletin> {
      * @param ids 要发布的通告id
      * @return 返回操作结果
      */
+    @Transactional(rollbackFor = Exception.class)
     public OperateResult releaseBulletin(Set<String> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             // 发布通告参数不能为空!
@@ -177,6 +178,7 @@ public class BulletinService extends BaseEntityService<Bulletin> {
      * @param ids 要删除的通告id
      * @return 返回操作结果
      */
+    @Transactional(rollbackFor = Exception.class)
     public OperateResult deleteBulletin(Set<String> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             // 删除通告参数不能为空!
