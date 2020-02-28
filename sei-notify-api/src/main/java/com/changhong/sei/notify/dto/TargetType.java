@@ -19,5 +19,5 @@ public enum TargetType {
      * 岗位
      */
     @Remark("岗位")
-    POS,
+    POS
 }

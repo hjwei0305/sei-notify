@@ -1,7 +1,9 @@
 package com.changhong.sei.notify.dto;
 
+import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.changhong.sei.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 import java.util.Set;
@@ -61,6 +63,7 @@ public class BulletinDto extends BaseMessageDto {
     /**
      * 目标类型
      */
+    @JsonSerialize(using = EnumJsonSerializer.class)
     private TargetType targetType;
     /**
      * 附件id
