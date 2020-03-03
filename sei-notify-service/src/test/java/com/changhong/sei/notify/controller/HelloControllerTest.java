@@ -7,11 +7,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * <strong>实现功能:</strong>
- * <p></p>
+ * 实现功能: Hello Test
  *
- * @author 王锦光 wangj
- * @version 1.0.1 2019-12-18 11:21
  */
 public class HelloControllerTest extends BaseUnitTest {
     @Autowired

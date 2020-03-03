@@ -30,7 +30,10 @@ public class BulletinControllerTest extends BaseUnitTest {
     public void findByPage() {
         Search search = new Search();
         search.setPageInfo(new PageInfo());
-        SearchFilter filter = new SearchFilter("targetType", TargetType.POS);
+        List<TargetType> targetTypes = new ArrayList<>();
+        targetTypes.add(TargetType.ORG);
+        targetTypes.add(TargetType.POS);
+        SearchFilter filter = new SearchFilter("targetType", targetTypes, SearchFilter.Operator.IN);
         search.addFilter(filter);
         // 打印参数
         System.out.println(JsonUtils.toJson(search));
@@ -45,8 +48,11 @@ public class BulletinControllerTest extends BaseUnitTest {
                 "\t\"filters\": [\n" +
                 "\t\t{\n" +
                 "\t\t\t\"fieldName\": \"targetType\",\n" +
-                "\t\t\t\"value\": \"POS\",\n" +
-                "\t\t\t\"operator\": \"EQ\"\n" +
+                "\t\t\t\"value\": [\n" +
+                "\t\t\t\t\"ORG\",\n" +
+                "\t\t\t\t\"POS\"\n" +
+                "\t\t\t],\n" +
+                "\t\t\t\"operator\": \"IN\"\n" +
                 "\t\t}\n" +
                 "\t],\n" +
                 "\t\"sortOrders\": null,\n" +
