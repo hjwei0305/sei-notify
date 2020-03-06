@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author <a href="mailto:xiaogang.su@changhong.com">粟小刚</a>
@@ -19,6 +20,10 @@ public class CacheTest extends BaseUnitTest {
     @Autowired
     private CacheManager cacheManager;
     private static final String CACHE_NAME="contentTemplate_cache";
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
 
     /**
      * 获取缓存操作类
@@ -38,6 +43,20 @@ public class CacheTest extends BaseUnitTest {
         getCache().put(code, contentTemplate);
 
         ContentTemplate cache = getCache().get(code, ContentTemplate.class);
+        Assert.assertNotNull(cache);
+        System.out.println(JsonUtils.toJson(cache));
+    }
+
+    @Test
+    public void testPutAndGetByRedis(){
+        String code = "test-001";
+        ContentTemplate contentTemplate = new ContentTemplate();
+        contentTemplate.setCode(code);
+        contentTemplate.setName("测试模板-001");
+        contentTemplate.setContent("测试模板-001的内容");
+        redisTemplate.opsForValue().set(code, contentTemplate);
+
+        ContentTemplate cache = (ContentTemplate)redisTemplate.opsForValue().get(code);
         Assert.assertNotNull(cache);
         System.out.println(JsonUtils.toJson(cache));
     }

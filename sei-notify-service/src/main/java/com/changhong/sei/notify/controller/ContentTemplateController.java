@@ -5,9 +5,12 @@ import com.changhong.sei.core.controller.DefaultBaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
+import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.api.ContentTemplateApi;
+import com.changhong.sei.notify.dto.ContentParams;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import com.changhong.sei.notify.entity.ContentTemplate;
+import com.changhong.sei.notify.service.ContentBuilder;
 import com.changhong.sei.notify.service.ContentTemplateService;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.List;
@@ -41,6 +45,8 @@ public class ContentTemplateController
         ContentTemplateApi {
     @Autowired
     private ContentTemplateService service;
+    @Autowired
+    private ContentBuilder contentBuilder;
 
     @Override
     public BaseEntityService<ContentTemplate> getService() {
@@ -106,6 +112,24 @@ public class ContentTemplateController
             return ResultData.fail("通过代码获取内容模板，发生异常！" + e.getMessage());
         }
         return ResultData.success(convertToDto(template));
+    }
+
+    /**
+     * 通过参数获取指定模板的内容
+     *
+     * @param params 参数
+     * @return 模板的内容
+     */
+    @Override
+    public ResultData<String> getContent(@Valid ContentParams params) {
+        // 获取模板
+        ContentTemplate template = service.findByCode(params.getTemplateCode());
+        if (Objects.isNull(template)) {
+            // 内容模板代码【{0}】不存在！
+            return ResultDataUtil.fail("00020", params.getTemplateCode());
+        }
+        String content = contentBuilder.getContent(template, params.getParams());
+        return ResultData.success(content);
     }
 
     /**

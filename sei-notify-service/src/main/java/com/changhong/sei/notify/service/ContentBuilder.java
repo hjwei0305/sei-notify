@@ -55,14 +55,24 @@ public class ContentBuilder {
             //获取模板内容
             ContentTemplate template = contentTemplateService.findByCode(templateCode);
             if (Objects.nonNull(template) && StringUtils.isNotBlank(template.getContent())) {
-                //通过模板生成内容
-                final Context ctx = new Context(Locale.getDefault());
-                if (templateParams != null && !templateParams.isEmpty()) {
-                    templateParams.forEach(ctx::setVariable);
-                }
-                String templateContent = getTemplateEngine().process(template.getContent(), ctx);
+                String templateContent = getContent(template, templateParams);
                 content.setContent(templateContent);
             }
         }
+    }
+
+    /**
+     * 通过模板生成内容
+     * @param template 模板
+     * @param templateParams 参数
+     * @return 内容
+     */
+    public String getContent(ContentTemplate template, Map<String, Object> templateParams) {
+        //通过模板生成内容
+        final Context ctx = new Context(Locale.getDefault());
+        if (templateParams != null && !templateParams.isEmpty()) {
+            templateParams.forEach(ctx::setVariable);
+        }
+        return getTemplateEngine().process(template.getContent(), ctx);
     }
 }

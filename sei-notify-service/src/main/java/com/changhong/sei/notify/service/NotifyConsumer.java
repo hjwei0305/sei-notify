@@ -12,11 +12,7 @@ import static com.changhong.sei.notify.service.HelloService.HELLO_MQ_KEY;
 import static com.changhong.sei.notify.controller.EmailNotifyController.EMAIL_MQ_KEY;
 
 /**
- * <strong>实现功能:</strong>
- * <p>消息通知的队列消费者</p>
- *
- * @author 王锦光 wangj
- * @version 1.0.1 2020-01-08 14:31
+ * 消息通知的队列消费者
  */
 @Component
 public class NotifyConsumer extends MqConsumer {
