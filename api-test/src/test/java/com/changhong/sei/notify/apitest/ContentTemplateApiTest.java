@@ -4,12 +4,15 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.api.ContentTemplateApi;
+import com.changhong.sei.notify.dto.ContentParams;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <strong>实现功能:</strong>
@@ -60,6 +63,20 @@ public class ContentTemplateApiTest extends BaseUnitTest {
     @Test
     public void findAll(){
         ResultData<List<ContentTemplateDto>> resultData = contentTemplateApi.findAll();
+        System.out.println(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.successful());
+    }
+
+    @Test
+    public void getContent() {
+        ContentParams contentParams = new ContentParams();
+        contentParams.setTemplateCode("EMAIL_TEMPLATE_REGIST");
+        Map<String,Object> params = new HashMap<>();
+        params.put("userName","程序员");
+        params.put("account","devuser");
+        params.put("password","123456");
+        contentParams.setParams(params);
+        ResultData resultData = contentTemplateApi.getContent(contentParams);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
