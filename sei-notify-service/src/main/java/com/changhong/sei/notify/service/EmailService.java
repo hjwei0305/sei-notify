@@ -34,7 +34,7 @@ import java.util.Objects;
  */
 @Service("EMAIL")
 public class EmailService implements NotifyService {
-    @Value("${sei.mail.default-sender}")
+    @Value("${notify.mail.default-sender}")
     private String defaultSender;
     @Value("${spring.mail.username}")
     private String senderUsername;

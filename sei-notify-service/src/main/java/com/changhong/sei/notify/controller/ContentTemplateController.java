@@ -1,6 +1,7 @@
 package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.controller.BaseEntityController;
 import com.changhong.sei.core.controller.DefaultBaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
@@ -41,8 +42,8 @@ import java.util.stream.Collectors;
 @Api(value = "ContentTemplateApi", tags = "内容模板API接口")
 @RequestMapping(path = "contentTemplate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class ContentTemplateController
-        implements DefaultBaseEntityController<ContentTemplate, ContentTemplateDto>,
-        ContentTemplateApi {
+        extends BaseEntityController<ContentTemplate, ContentTemplateDto>
+        implements ContentTemplateApi {
     @Autowired
     private ContentTemplateService service;
     @Autowired
@@ -51,26 +52,6 @@ public class ContentTemplateController
     @Override
     public BaseEntityService<ContentTemplate> getService() {
         return service;
-    }
-
-    /**
-     * 获取数据实体的类型
-     *
-     * @return 类型Class
-     */
-    @Override
-    public Class<ContentTemplate> getEntityClass() {
-        return ContentTemplate.class;
-    }
-
-    /**
-     * 获取传输实体的类型
-     *
-     * @return 类型Class
-     */
-    @Override
-    public Class<ContentTemplateDto> getDtoClass() {
-        return ContentTemplateDto.class;
     }
 
     /**
@@ -87,13 +68,11 @@ public class ContentTemplateController
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<ContentTemplateDto>> cvs = validator.validate(dto);
         StringBuilder msg = new StringBuilder();
-        cvs.forEach(cv -> {
-            msg.append(cv.getPropertyPath()+cv.getMessage()+"！");
-        });
+        cvs.forEach(cv -> msg.append(cv.getPropertyPath()).append(cv.getMessage()).append("！"));
         if (CollectionUtils.isNotEmpty(cvs)){
             return ResultData.fail(msg.toString());
         }
-        return DefaultBaseEntityController.super.checkDto(dto);
+        return super.checkDto(dto);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.controller.BaseEntityController;
 import com.changhong.sei.core.controller.DefaultBaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
@@ -35,33 +36,13 @@ import java.util.Set;
 @RestController
 @Api(value = "BulletinApi", tags = "维护消息通告的API服务")
 @RequestMapping(path = "bulletin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class BulletinController implements DefaultBaseEntityController<Bulletin, BulletinDto>
-        , BulletinApi {
+public class BulletinController extends BaseEntityController<Bulletin, BulletinDto>
+        implements BulletinApi {
     @Autowired
     private BulletinService service;
     @Override
     public BaseEntityService<Bulletin> getService() {
         return service;
-    }
-
-    /**
-     * 获取数据实体的类型
-     *
-     * @return 类型Class
-     */
-    @Override
-    public Class<Bulletin> getEntityClass() {
-        return Bulletin.class;
-    }
-
-    /**
-     * 获取传输实体的类型
-     *
-     * @return 类型Class
-     */
-    @Override
-    public Class<BulletinDto> getDtoClass() {
-        return BulletinDto.class;
     }
 
     /**

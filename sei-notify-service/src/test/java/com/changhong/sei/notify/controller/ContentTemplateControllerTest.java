@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +38,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
     @Test
     public void findOne() {
         String id = "c0a80a70-6f31-1c8f-816f-31ecab230000";
-        ResultData resultData = controller.findOne(id);
+        ResultData<ContentTemplateDto> resultData = controller.findOne(id);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
@@ -45,15 +46,15 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
     @Test
     public void delete() {
         String id = "0a630227-6f65-152a-816f-6506656e0000";
-        ResultData resultData = controller.delete(id);
+        ResultData<?> resultData = controller.delete(id);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void findByCode() {
-        String code = "test";
-        ResultData resultData = controller.findByCode(code);
+        String code = "EMAIL_TEMPLATE_REGIST";
+        ResultData<ContentTemplateDto> resultData = controller.findByCode(code);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
@@ -64,14 +65,14 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         // dto.setCode("test-001");
         dto.setName("测试模板-001");
         //dto.setContent("测试模板-001的内容");
-        ResultData resultData = controller.checkDto(dto);
+        ResultData<?> resultData = controller.checkDto(dto);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
 
     @Test
     public void findAll(){
-        ResultData resultData = controller.findAll();
+        ResultData<List<ContentTemplateDto>> resultData = controller.findAll();
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
@@ -85,7 +86,7 @@ public class ContentTemplateControllerTest extends BaseUnitTest {
         params.put("account","devuser");
         params.put("password","123456");
         contentParams.setParams(params);
-        ResultData resultData = controller.getContent(contentParams);
+        ResultData<String> resultData = controller.getContent(contentParams);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
