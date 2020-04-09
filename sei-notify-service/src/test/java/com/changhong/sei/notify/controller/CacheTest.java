@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.controller;
 
+import com.changhong.sei.core.cache.CacheBuilder;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.entity.ContentTemplate;
@@ -17,47 +18,57 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 public class CacheTest extends BaseUnitTest {
 
+//    @Autowired
+//    private CacheManager cacheManager;
+//    private static final String CACHE_NAME="contentTemplate_cache";
+//
+//    @Autowired
+//    private RedisTemplate<String, Object> redisTemplate;
     @Autowired
-    private CacheManager cacheManager;
-    private static final String CACHE_NAME="contentTemplate_cache";
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private CacheBuilder cacheBuilder;
 
 
-    /**
-     * 获取缓存操作类
-     * @return 缓存操作类
-     */
-    private Cache getCache(){
-        return cacheManager.getCache(CACHE_NAME);
-    }
+//    /**
+//     * 获取缓存操作类
+//     * @return 缓存操作类
+//     */
+//    private Cache getCache(){
+//        return cacheManager.getCache(CACHE_NAME);
+//    }
 
-    @Test
-    public void testPutAndGet(){
-        String code = "test-001";
+    private ContentTemplate create(String code) {
         ContentTemplate contentTemplate = new ContentTemplate();
         contentTemplate.setCode(code);
         contentTemplate.setName("测试模板-001");
         contentTemplate.setContent("测试模板-001的内容");
-        getCache().put(code, contentTemplate);
-
-        ContentTemplate cache = getCache().get(code, ContentTemplate.class);
-        Assert.assertNotNull(cache);
-        System.out.println(JsonUtils.toJson(cache));
+        return contentTemplate;
     }
 
     @Test
-    public void testPutAndGetByRedis(){
+    public void testPut(){
         String code = "test-001";
-        ContentTemplate contentTemplate = new ContentTemplate();
-        contentTemplate.setCode(code);
-        contentTemplate.setName("测试模板-001");
-        contentTemplate.setContent("测试模板-001的内容");
-        redisTemplate.opsForValue().set(code, contentTemplate);
+        cacheBuilder.set(code, create(code), 60000L);
+    }
 
-        ContentTemplate cache = (ContentTemplate)redisTemplate.opsForValue().get(code);
+    @Test
+    public void testGet() {
+        String code = "test-001";
+        ContentTemplate cache = cacheBuilder.get(code);
         Assert.assertNotNull(cache);
         System.out.println(JsonUtils.toJson(cache));
     }
+
+//    @Test
+//    public void testPutAndGetByRedis(){
+//        String code = "test-001";
+//        ContentTemplate contentTemplate = new ContentTemplate();
+//        contentTemplate.setCode(code);
+//        contentTemplate.setName("测试模板-001");
+//        contentTemplate.setContent("测试模板-001的内容");
+//        redisTemplate.opsForValue().set(code, contentTemplate);
+//
+//        ContentTemplate cache = (ContentTemplate)redisTemplate.opsForValue().get(code);
+//        Assert.assertNotNull(cache);
+//        System.out.println(JsonUtils.toJson(cache));
+//    }
 }

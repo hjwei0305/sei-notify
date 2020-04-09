@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "hello", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class HelloController implements BaseHelloController, HelloApi {
     @Autowired
-    private HelloService manager;
+    private HelloService service;
 
     @Value("${notify.test-key}")
     private String testKey;
@@ -41,7 +41,7 @@ public class HelloController implements BaseHelloController, HelloApi {
         try {
             SessionUser sessionUser = ContextUtil.getSessionUser();
             System.out.println(JsonUtils.toJson(sessionUser));
-            String data = manager.sayHello(name, testKey);
+            String data = service.sayHello(name, testKey);
             return ResultData.success(data);
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,6 +54,14 @@ public class HelloController implements BaseHelloController, HelloApi {
      * @param name 姓名
      */
     public void mqSayHello(String name){
-        manager.mqSayHello(name, testKey);
+        service.mqSayHello(name, testKey);
+    }
+
+    /**
+     * 测试静态方法获取全局参数
+     * @return 全局参数TestKey
+     */
+    public static String getTestKey(){
+        return ContextUtil.getProperty("notify.test-key");
     }
 }

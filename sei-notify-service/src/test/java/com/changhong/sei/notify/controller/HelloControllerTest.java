@@ -27,4 +27,10 @@ public class HelloControllerTest extends BaseUnitTest {
         controller.mqSayHello(name);
         Thread.sleep(30*1000);
     }
+
+    @Test
+    public void testKey() {
+        String key = HelloController.getTestKey();
+        System.out.println(key);
+    }
 }
