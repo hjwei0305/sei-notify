@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <strong>实现功能:</strong>
@@ -40,9 +41,11 @@ public class HelloService {
      * @param name 姓名
      * @param param 参数
      */
+    @Transactional(rollbackFor = Exception.class)
     public void mqSayHello(String name, String param){
         LogUtil.bizLog("通过消息队列说：你好！");
         String message = "你好，"+name+"！参数："+param;
         mqProducer.send(HELLO_MQ_KEY, message);
+        //throw new RuntimeException("test kafka send fail!");
     }
 }

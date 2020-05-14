@@ -17,7 +17,7 @@ public class HelloControllerTest extends BaseUnitTest {
     @Test
     public void sayHello() {
         String name = "王锦光";
-        ResultData result = controller.sayHello(name);
+        ResultData<String> result = controller.sayHello(name);
         System.out.println(JsonUtils.toJson(result));
     }
 
