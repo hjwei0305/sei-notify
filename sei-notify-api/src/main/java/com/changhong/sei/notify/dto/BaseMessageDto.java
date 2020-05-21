@@ -19,7 +19,7 @@ public class BaseMessageDto extends BaseEntityDto implements Serializable {
      * 类别
      */
     @JsonSerialize(using = EnumJsonSerializer.class)
-    protected MessageCategory category;
+    protected NotifyType category;
     /**
      * 消息主题
      */
@@ -38,11 +38,11 @@ public class BaseMessageDto extends BaseEntityDto implements Serializable {
     @JsonSerialize(using = EnumJsonSerializer.class)
     protected Priority priority;
 
-    public MessageCategory getCategory() {
+    public NotifyType getCategory() {
         return category;
     }
 
-    public void setCategory(MessageCategory category) {
+    public void setCategory(NotifyType category) {
         this.category = category;
     }
 

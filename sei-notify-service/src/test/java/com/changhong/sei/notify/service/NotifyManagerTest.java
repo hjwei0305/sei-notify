@@ -1,6 +1,8 @@
 package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.test.BaseUnitTest;
+import com.changhong.sei.notify.manager.NotifyManagerContext;
+import com.changhong.sei.notify.dto.SendMessage;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-18 20:46
  */
-public class NotifyServiceTest extends BaseUnitTest {
+public class NotifyManagerTest extends BaseUnitTest {
     @Autowired
-    private NotifyServiceContext context;
+    private NotifyManagerContext context;
 
     @Test
     public void send(){

@@ -29,13 +29,13 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
     }
 
     @Override
-    public Long getUnreadCount(String userId,List<String> orgCodes) {
+    public Long getUnreadCount(String userId, List<String> orgCodes) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select count(t.id) from Bulletin t ");
-        return (Long) getUnReadQuery(jpql,userId,orgCodes).getSingleResult();
+        return (Long) getUnReadQuery(jpql, userId, orgCodes).getSingleResult();
     }
-    
-    private Query getUnReadQuery(StringBuilder jpql, String userId, List<String> orgCodes){
+
+    private Query getUnReadQuery(StringBuilder jpql, String userId, List<String> orgCodes) {
         jpql.append(" where t.del = :del and t.release = :release ");
         jpql.append(" and t.effectiveDate <= :effectiveDate and t.invalidDate >= :invalidDate ");
         jpql.append(" and not exists (select u.id from BulletinUser u where t.id = u.bulletinId and u.userId = :userId and u.read = :read) ");
@@ -54,17 +54,17 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
     }
 
     @Override
-    public List<Bulletin> getUnreadBulletin(String userId,List<String> orgCodes) {
+    public List<Bulletin> getUnreadBulletin(String userId, List<String> orgCodes) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select t from Bulletin t ");
-        return getUnReadQuery(jpql,userId,orgCodes).getResultList();
+        return getUnReadQuery(jpql, userId, orgCodes).getResultList();
     }
 
     @Override
-    public Bulletin getFirstUnreadBulletin(String userId,List<String> orgCodes) {
+    public Bulletin getFirstUnreadBulletin(String userId, List<String> orgCodes) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select t from Bulletin t ");
-        Query query = getUnReadQuery(jpql,userId,orgCodes);
+        Query query = getUnReadQuery(jpql, userId, orgCodes);
         query.setMaxResults(1);
         List<Bulletin> bulletins = query.getResultList();
         if (CollectionUtils.isEmpty(bulletins)) {
@@ -109,22 +109,28 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
                         where.append(" and b.").append(filter.getFieldName()).append(" > '").append(filter.getValue()).append("'");
                         break;
                     case LT:
-                        where.append(" and b.").append(filter.getFieldName()).append(" < '").append(filter.getValue()).append("'");;
+                        where.append(" and b.").append(filter.getFieldName()).append(" < '").append(filter.getValue()).append("'");
+                        ;
                         break;
                     case GE:
-                        where.append(" and b.").append(filter.getFieldName()).append(" >= '").append(filter.getValue()).append("'");;
+                        where.append(" and b.").append(filter.getFieldName()).append(" >= '").append(filter.getValue()).append("'");
+                        ;
                         break;
                     case LE:
-                        where.append(" and b.").append(filter.getFieldName()).append(" <= '").append(filter.getValue()).append("'");;
+                        where.append(" and b.").append(filter.getFieldName()).append(" <= '").append(filter.getValue()).append("'");
+                        ;
                         break;
                     case EQ:
-                        where.append(" and b.").append(filter.getFieldName()).append(" = '").append(filter.getValue()).append("'");;
+                        where.append(" and b.").append(filter.getFieldName()).append(" = '").append(filter.getValue()).append("'");
+                        ;
                         break;
                     case NE:
-                        where.append(" and b.").append(filter.getFieldName()).append(" != '").append(filter.getValue()).append("'");;
+                        where.append(" and b.").append(filter.getFieldName()).append(" != '").append(filter.getValue()).append("'");
+                        ;
                         break;
                     case LK:
-                        where.append(" and b.").append(filter.getFieldName()).append(" like '%").append(filter.getValue()).append("%'");;
+                        where.append(" and b.").append(filter.getFieldName()).append(" like '%").append(filter.getValue()).append("%'");
+                        ;
                         break;
                     default:
                 }

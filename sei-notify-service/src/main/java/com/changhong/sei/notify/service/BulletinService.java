@@ -14,6 +14,8 @@ import com.changhong.sei.notify.dao.ContentBodyDao;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
+import com.changhong.sei.notify.manager.NotifyManager;
+import com.changhong.sei.notify.dto.SendMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ import java.util.Set;
  * @version 1.0.00  2019-09-23 17:46
  */
 @Service
-public class BulletinService extends BaseEntityService<Bulletin> {
+public class BulletinService extends BaseEntityService<Bulletin> implements NotifyManager {
 
     @Autowired
     private BulletinDao dao;
@@ -48,8 +50,6 @@ public class BulletinService extends BaseEntityService<Bulletin> {
 
     /**
      * 基于动态组合条件对象和分页(含排序)对象查询数据集合
-     *
-     * @param searchConfig
      */
     @Override
     public PageResult<Bulletin> findByPage(Search searchConfig) {
@@ -218,5 +218,15 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             }
         }
         return result;
+    }
+
+    /**
+     * 发送消息通知
+     *
+     * @param message 发送的消息
+     */
+    @Override
+    public void send(SendMessage message) {
+
     }
 }

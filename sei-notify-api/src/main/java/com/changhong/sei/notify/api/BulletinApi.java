@@ -29,7 +29,7 @@ public interface BulletinApi extends FindByPageApi<BulletinDto> {
      */
     @PostMapping(path = "saveBulletin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "保存通告", notes = "维护一个消息通告")
-    ResultData saveBulletin(@RequestBody BulletinDto bulletinDto);
+    ResultData<String> saveBulletin(@RequestBody BulletinDto bulletinDto);
 
     /**
      * 发布通告
@@ -38,7 +38,7 @@ public interface BulletinApi extends FindByPageApi<BulletinDto> {
      */
     @PostMapping(path = "releaseBulletin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "发布通告", notes = "批量发布通告")
-    ResultData releaseBulletin(@RequestBody Set<String> ids);
+    ResultData<String> releaseBulletin(@RequestBody Set<String> ids);
 
     /**
      * 撤销通告
@@ -47,7 +47,7 @@ public interface BulletinApi extends FindByPageApi<BulletinDto> {
      */
     @PostMapping(path = "cancelBulletin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "撤销通告", notes = "批量撤销通告")
-    ResultData cancelBulletin(@RequestBody Set<String> ids);
+    ResultData<String> cancelBulletin(@RequestBody Set<String> ids);
 
     /**
      * 删除通告
@@ -56,7 +56,7 @@ public interface BulletinApi extends FindByPageApi<BulletinDto> {
      */
     @PostMapping(path = "deleteBulletin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "删除通告", notes = "批量删除通告")
-    ResultData deleteBulletin(@RequestBody Set<String> ids);
+    ResultData<String> deleteBulletin(@RequestBody Set<String> ids);
 
     /**
      * 查看通告

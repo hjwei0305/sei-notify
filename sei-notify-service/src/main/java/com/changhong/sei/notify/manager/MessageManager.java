@@ -1,4 +1,4 @@
-package com.changhong.sei.notify.service;
+package com.changhong.sei.notify.manager;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
@@ -12,7 +12,7 @@ import com.changhong.sei.notify.dao.BulletinUserDao;
 import com.changhong.sei.notify.dao.ContentBodyDao;
 import com.changhong.sei.notify.dto.BaseMessageDto;
 import com.changhong.sei.notify.dto.BulletinDto;
-import com.changhong.sei.notify.dto.MessageCategory;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.BulletinUser;
 import com.changhong.sei.notify.entity.ContentBody;
@@ -21,6 +21,7 @@ import com.changhong.sei.notify.service.client.EmployeeClient;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,8 +33,8 @@ import java.util.*;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-15 16:47
  */
-@Service
-public class MsgService {
+@Component
+public class MessageManager {
     @Autowired
     private BulletinDao bulletinDao;
     @Autowired
@@ -49,7 +50,7 @@ public class MsgService {
      */
     public Long unreadCount() {
         String userId = ContextUtil.getUserId();
-        Long count = 0L;
+        long count = 0L;
         Long bulletinCount = bulletinDao.getUnreadCount(userId, getUserRightCode(userId));
         if (Objects.nonNull(bulletinCount)) {
             count += bulletinCount;
@@ -59,7 +60,6 @@ public class MsgService {
 
     /**
      * 获取用户的权限集合{组织机构、岗位}
-     * @return
      */
     private List<String> getUserRightCode(String userId){
         // 获取用户的组织代码清单
@@ -90,13 +90,13 @@ public class MsgService {
             for (Bulletin bulletin : bulletins) {
                 BaseMessageDto messageDto = new BaseMessageDto();
                 messageDto.setId(bulletin.getId());
-                messageDto.setCategory(MessageCategory.Bulletin);
+                messageDto.setCategory(NotifyType.SEI_BULLETIN);
                 messageDto.setSubject(bulletin.getSubject());
                 messageDto.setContentId(bulletin.getContentId());
                 messageDto.setPriority(bulletin.getPriority());
                 messageDtos.add(messageDto);
             }
-            data.put(MessageCategory.Bulletin.name(), messageDtos);
+            data.put(NotifyType.SEI_BULLETIN.name(), messageDtos);
         }
         // 未读消息
         // 未读提醒
@@ -110,11 +110,11 @@ public class MsgService {
      * @param id       id
      * @return 返回结果
      */
-    public OperateResult read(MessageCategory category, String id) {
+    public OperateResult read(NotifyType category, String id) {
         if (Objects.nonNull(category) && StringUtils.isNotBlank(id)) {
             SessionUser user = ContextUtil.getSessionUser();
             switch (category) {
-                case Bulletin:
+                case SEI_BULLETIN:
                     BulletinUser bulletinUser = bulletinUserDao.findByBulletinIdAndUserId(id, user.getUserId());
                     if (Objects.isNull(bulletinUser)) {
                         bulletinUser = new BulletinUser();
@@ -126,9 +126,9 @@ public class MsgService {
                     bulletinUser.setUserType(user.getUserType());
                     bulletinUserDao.save(bulletinUser);
                     break;
-                case Message:
+                case SEI_MESSAGE:
                     break;
-                case Remind:
+                case SEI_REMIND:
                     break;
                 default:
                     return OperateResult.operationFailure("不支持的类型!");
@@ -146,26 +146,26 @@ public class MsgService {
      * @param id       id
      * @return 返回明细
      */
-    public OperateResultWithData<BaseMessageDto> detail(MessageCategory category, String id) {
+    public OperateResultWithData<BaseMessageDto> detail(NotifyType category, String id) {
         if (Objects.nonNull(category) && StringUtils.isNotBlank(id)) {
             String contentId = null;
             BaseMessageDto message = new BaseMessageDto();
             switch (category) {
-                case Bulletin:
+                case SEI_BULLETIN:
                     Bulletin bulletin = bulletinDao.findOne(id);
                     if (Objects.nonNull(bulletin)) {
                         contentId = bulletin.getContentId();
                         message.setId(bulletin.getId());
                         message.setSubject(bulletin.getSubject());
                         message.setContentId(bulletin.getContentId());
-                        message.setCategory(MessageCategory.Bulletin);
+                        message.setCategory(NotifyType.SEI_BULLETIN);
                         message.setPriority(bulletin.getPriority());
                     }
                     break;
-                case Message:
+                case SEI_MESSAGE:
 
                     break;
-                case Remind:
+                case SEI_REMIND:
 
                     break;
                 default:

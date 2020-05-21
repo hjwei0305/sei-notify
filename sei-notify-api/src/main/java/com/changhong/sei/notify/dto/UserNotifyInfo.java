@@ -37,31 +37,39 @@ public class UserNotifyInfo implements Serializable {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public UserNotifyInfo setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public UserNotifyInfo setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserNotifyInfo setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(String mobile) {
+    public UserNotifyInfo setMobile(String mobile) {
         this.mobile = mobile;
+        return this;
+    }
+
+    public static UserNotifyInfo builder() {
+        return new UserNotifyInfo();
     }
 }

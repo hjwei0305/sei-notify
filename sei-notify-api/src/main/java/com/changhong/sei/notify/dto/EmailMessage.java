@@ -17,6 +17,7 @@ import java.util.Map;
  * *************************************************************************************************
  */
 public class EmailMessage implements Serializable, MessageContent {
+    private static final long serialVersionUID = 9145192190709020613L;
     /**
      * 主题
      */
@@ -55,6 +56,7 @@ public class EmailMessage implements Serializable, MessageContent {
         return content;
     }
 
+    @Override
     public void setContent(String content) {
         this.content = content;
     }

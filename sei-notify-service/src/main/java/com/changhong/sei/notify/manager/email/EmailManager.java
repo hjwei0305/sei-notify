@@ -1,16 +1,19 @@
-package com.changhong.sei.notify.service;
+package com.changhong.sei.notify.manager.email;
 
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.notify.dto.EmailAccount;
 import com.changhong.sei.notify.dto.EmailMessage;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
+import com.changhong.sei.notify.manager.NotifyManager;
+import com.changhong.sei.notify.dto.SendMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -32,8 +35,8 @@ import java.util.Objects;
  * <p/>
  * *************************************************************************************************
  */
-@Service("EMAIL")
-public class EmailService implements NotifyService {
+@Component("EMAIL")
+public class EmailManager implements NotifyManager {
     @Value("${notify.mail.default-sender}")
     private String defaultSender;
     @Value("${spring.mail.username}")
@@ -42,31 +45,34 @@ public class EmailService implements NotifyService {
     private String senderPassword;
     @Autowired
     private JavaMailSender mailSender;
+
     /**
      * 初始化发送邮件的消息内容
+     *
      * @param message 邮件消息
      */
-    private void initMessage(EmailMessage message){
+    private void initMessage(EmailMessage message) {
         EmailAccount sender = message.getSender();
-        if (sender==null){
+        if (sender == null) {
             sender = new EmailAccount(defaultSender, senderUsername);
             message.setSender(sender);
         } else {
             //将实际发送人姓名追加输出
             String content = message.getContent();
-            content += String.format("</br><p>发送人：%s</p><p>发送人邮箱：%s</p>", sender.getName(),
-                    sender.getAddress());
+//            content += String.format("</br><p>发送人：%s</p><p>发送人邮箱：%s</p>", sender.getName(),
+//                    sender.getAddress());
             message.setContent(content);
         }
     }
 
     /**
      * 发送简单邮件
+     *
      * @param message 邮件信息
      */
-    public void send(EmailMessage message){
+    public void send(EmailMessage message) {
         //检查邮件消息
-        if (Objects.isNull(message) || CollectionUtils.isEmpty(message.getReceivers())){
+        if (Objects.isNull(message) || CollectionUtils.isEmpty(message.getReceivers())) {
             return;
         }
         //初始化消息
@@ -78,10 +84,10 @@ public class EmailService implements NotifyService {
             msg.setFrom(new InternetAddress(senderUsername, defaultSender));
             //设置收件人,为数组,可输入多个地址.
             List<InternetAddress> to = new ArrayList<>();
-            message.getReceivers().forEach((a)->{
-                if (a!=null){
+            message.getReceivers().forEach((a) -> {
+                if (a != null) {
                     try {
-                        to.add(new InternetAddress(a.getAddress(),a.getName()));
+                        to.add(new InternetAddress(a.getAddress(), a.getName()));
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -99,9 +105,9 @@ public class EmailService implements NotifyService {
             helper.setSentDate(new Date());
             //发送邮件,使用如下方法!
             mailSender.send(msg);
-        } catch (Exception e){
+        } catch (Exception e) {
             // 记录异常日志
-            LogUtil.error("发送邮件失败！",e);
+            LogUtil.error("发送邮件失败！", e);
         }
     }
 
@@ -111,23 +117,25 @@ public class EmailService implements NotifyService {
      * @param message 消息
      */
     @Override
-    public void send(SendMessage message) {
+    public ResultData<String> send(SendMessage message) {
         String subject = message.getSubject();
         String content = message.getContent();
         UserNotifyInfo sender = message.getSender();
         List<UserNotifyInfo> receivers = message.getReceivers();
         // 构造邮件消息
         EmailMessage emailMsg = new EmailMessage();
-        if (Objects.nonNull(sender) && StringUtils.isNotBlank(sender.getEmail())){
-            emailMsg.setSender(new EmailAccount(sender.getUserName(),sender.getEmail()));
+        if (Objects.nonNull(sender) && StringUtils.isNotBlank(sender.getEmail())) {
+            emailMsg.setSender(new EmailAccount(sender.getUserName(), sender.getEmail()));
         }
         emailMsg.setSubject(subject);
         emailMsg.setContent(content);
         List<EmailAccount> emailAccounts = new ArrayList<>();
-        receivers.forEach((r)->emailAccounts.add(new EmailAccount(r.getUserName(),r.getEmail())));
+        receivers.forEach((r) -> emailAccounts.add(new EmailAccount(r.getUserName(), r.getEmail())));
         emailMsg.setReceivers(emailAccounts);
         // 发送邮件
         send(emailMsg);
+
+        return ResultData.success("OK");
     }
 }
 

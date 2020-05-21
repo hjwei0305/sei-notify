@@ -1,9 +1,8 @@
-package com.changhong.sei.notify.service;
-
-import com.changhong.sei.notify.dto.UserNotifyInfo;
+package com.changhong.sei.notify.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * <strong>实现功能:</strong>
@@ -13,6 +12,7 @@ import java.util.List;
  * @version 1.0.1 2020-01-18 17:11
  */
 public class SendMessage implements Serializable {
+    private static final long serialVersionUID = -7977999907838578550L;
     /**
      * 主题
      */
@@ -34,31 +34,49 @@ public class SendMessage implements Serializable {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public SendMessage setSubject(String subject) {
         this.subject = subject;
+        return this;
     }
 
     public String getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public SendMessage setContent(String content) {
         this.content = content;
+        return this;
     }
 
     public UserNotifyInfo getSender() {
         return sender;
     }
 
-    public void setSender(UserNotifyInfo sender) {
+    public SendMessage setSender(UserNotifyInfo sender) {
         this.sender = sender;
+        return this;
     }
 
     public List<UserNotifyInfo> getReceivers() {
         return receivers;
     }
 
-    public void setReceivers(List<UserNotifyInfo> receivers) {
+    public SendMessage setReceivers(List<UserNotifyInfo> receivers) {
         this.receivers = receivers;
+        return this;
+    }
+
+    public static SendMessage builder() {
+        return new SendMessage();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SendMessage.class.getSimpleName() + "[", "]")
+                .add("subject='" + subject + "'")
+                .add("content='" + content + "'")
+                .add("sender=" + sender)
+                .add("receivers=" + receivers)
+                .toString();
     }
 }

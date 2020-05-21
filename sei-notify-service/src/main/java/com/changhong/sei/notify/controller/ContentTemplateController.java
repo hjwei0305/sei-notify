@@ -2,7 +2,6 @@ package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.controller.BaseEntityController;
-import com.changhong.sei.core.controller.DefaultBaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
@@ -11,7 +10,7 @@ import com.changhong.sei.notify.api.ContentTemplateApi;
 import com.changhong.sei.notify.dto.ContentParams;
 import com.changhong.sei.notify.dto.ContentTemplateDto;
 import com.changhong.sei.notify.entity.ContentTemplate;
-import com.changhong.sei.notify.service.ContentBuilder;
+import com.changhong.sei.notify.manager.ContentBuilder;
 import com.changhong.sei.notify.service.ContentTemplateService;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;

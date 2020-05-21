@@ -17,6 +17,7 @@ public interface BaseHelloController extends BaseHelloApi {
      * @param name name
      * @return hello name
      */
+    @Override
     default ResultData<String> baseSayHello(String name) {
         return ResultData.success("base say hello to "+name+"!");
     }

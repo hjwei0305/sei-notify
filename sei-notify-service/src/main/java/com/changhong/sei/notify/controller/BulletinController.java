@@ -52,7 +52,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      * @return 操作结果
      */
     @Override
-    public ResultData saveBulletin(BulletinDto bulletinDto) {
+    public ResultData<String> saveBulletin(BulletinDto bulletinDto) {
         // DTO转换为Entity
         Bulletin bulletin = convertToEntity(bulletinDto);
         // 执行业务逻辑
@@ -75,7 +75,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      * @return 业务处理结果
      */
     @Override
-    public ResultData releaseBulletin(Set<String> ids) {
+    public ResultData<String> releaseBulletin(Set<String> ids) {
         // 执行业务逻辑
         OperateResult result;
         try {
@@ -96,7 +96,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      * @return 业务处理结果
      */
     @Override
-    public ResultData cancelBulletin(Set<String> ids) {
+    public ResultData<String> cancelBulletin(Set<String> ids) {
         // 执行业务逻辑
         OperateResult result;
         try {
@@ -117,7 +117,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      * @return 业务处理结果
      */
     @Override
-    public ResultData deleteBulletin(Set<String> ids) {
+    public ResultData<String> deleteBulletin(Set<String> ids) {
         // 执行业务逻辑
         OperateResult result;
         try {
@@ -148,7 +148,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         try {
             compose = service.getBulletin(id);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("查看通告异常！", e);
             // 查看通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00012", e.getMessage()));

@@ -5,7 +5,7 @@ import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.notify.dto.BaseMessageDto;
 import com.changhong.sei.notify.dto.BulletinDto;
-import com.changhong.sei.notify.dto.MessageCategory;
+import com.changhong.sei.notify.dto.NotifyType;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,7 +57,7 @@ public interface MsgApi {
      */
     @GetMapping(path = "unreadData")
     @ApiOperation(value = "获取用户未读数据", notes = "获取当前用户的所有未读消息数据")
-    ResultData unreadData();
+    ResultData<Map<String, List<BaseMessageDto>>> unreadData();
 
     /**
      * 用户阅读
@@ -66,7 +67,7 @@ public interface MsgApi {
      */
     @PostMapping(path = "read")
     @ApiOperation(value = "用户阅读", notes = "用户已阅读,变更阅读状态")
-    ResultData read(@RequestParam("category") MessageCategory category, @RequestParam("id") String id);
+    ResultData<String> read(@RequestParam("category") NotifyType category, @RequestParam("id") String id);
 
     /**
      * 用户查看
@@ -76,7 +77,7 @@ public interface MsgApi {
      */
     @GetMapping(path = "detail")
     @ApiOperation(value = "用户查看", notes = "用户查看通告内容")
-    ResultData<BaseMessageDto> detail(@RequestParam("category") MessageCategory category, @RequestParam("id") String id);
+    ResultData<BaseMessageDto> detail(@RequestParam("category") NotifyType category, @RequestParam("id") String id);
 
     /**
      * 默认获取优先级高的通告

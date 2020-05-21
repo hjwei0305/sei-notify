@@ -64,6 +64,7 @@ public class NotifyMessage implements Serializable, MessageContent {
         return content;
     }
 
+    @Override
     public void setContent(String content) {
         this.content = content;
     }

@@ -1,5 +1,7 @@
-package com.changhong.sei.notify.service;
+package com.changhong.sei.notify.manager;
 
+import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.notify.dto.SendMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,18 +16,18 @@ import java.util.Map;
  * @version 1.0.1 2020-01-18 20:36
  */
 @Component
-public class NotifyServiceContext {
+public class NotifyManagerContext {
     // 策略映射map
-    private static final Map<String, NotifyService> strategyMap = new HashMap<>();
+    private static final Map<String, NotifyManager> strategyMap = new HashMap<>();
 
     /**
      * 注入所有实现了策略接口(NotifyService)的Bean
      * @param strategyMap 策略映射
      */
     @Autowired
-    public NotifyServiceContext(Map<String, NotifyService> strategyMap) {
-        NotifyServiceContext.strategyMap.clear();
-        strategyMap.forEach(NotifyServiceContext.strategyMap::put);
+    public NotifyManagerContext(Map<String, NotifyManager> strategyMap) {
+        NotifyManagerContext.strategyMap.clear();
+        strategyMap.forEach(NotifyManagerContext.strategyMap::put);
     }
 
     /**
@@ -33,7 +35,7 @@ public class NotifyServiceContext {
      * @param notifyType 消息类型标识
      * @param message 发送的消息
      */
-    public void send(String notifyType, SendMessage message){
-        strategyMap.get(notifyType).send(message);
+    public ResultData<String> send(String notifyType, SendMessage message){
+        return strategyMap.get(notifyType).send(message);
     }
 }

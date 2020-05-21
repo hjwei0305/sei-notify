@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.api;
 
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.EmailMessage;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,5 +23,5 @@ public interface EmailNotifyApi {
      */
     @ApiOperation(value = "发送一封电子邮件", notes = "发送一封邮件信息到邮件服务队列")
     @PostMapping(path = "sendEmail", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    void sendEmail(@RequestBody EmailMessage emailMessage);
+    ResultData<String> sendEmail(@RequestBody EmailMessage emailMessage);
 }

@@ -11,10 +11,10 @@ import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.api.MsgApi;
 import com.changhong.sei.notify.dto.BaseMessageDto;
 import com.changhong.sei.notify.dto.BulletinDto;
-import com.changhong.sei.notify.dto.MessageCategory;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
-import com.changhong.sei.notify.service.MsgService;
+import com.changhong.sei.notify.manager.MessageManager;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "bulletinMsg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MsgController implements MsgApi {
     @Autowired
-    private MsgService msgService;
+    private MessageManager msgService;
     /**
      * 获取优先级枚举值清单
      *
@@ -57,7 +57,7 @@ public class MsgController implements MsgApi {
      */
     @Override
     public ResultData<Map<String, String>> getCategory() {
-        return ResultDataUtil.getEnumMap(MessageCategory.class);
+        return ResultDataUtil.getEnumMap(NotifyType.class);
     }
 
     /**
@@ -105,7 +105,7 @@ public class MsgController implements MsgApi {
      * @return 操作结果
      */
     @Override
-    public ResultData read(MessageCategory category, String id) {
+    public ResultData<String> read(NotifyType category, String id) {
         OperateResult operateResult;
         try {
             operateResult = msgService.read(category, id);
@@ -125,7 +125,7 @@ public class MsgController implements MsgApi {
      * @return 操作结果
      */
     @Override
-    public ResultData<BaseMessageDto> detail(MessageCategory category, String id) {
+    public ResultData<BaseMessageDto> detail(NotifyType category, String id) {
         OperateResultWithData<BaseMessageDto> operateResult;
         try {
             operateResult = msgService.detail(category, id);

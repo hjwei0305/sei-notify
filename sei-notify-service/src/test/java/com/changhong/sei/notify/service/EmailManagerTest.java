@@ -3,6 +3,7 @@ package com.changhong.sei.notify.service;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.notify.dto.EmailAccount;
 import com.changhong.sei.notify.dto.EmailMessage;
+import com.changhong.sei.notify.manager.email.EmailManager;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,9 +19,9 @@ import java.util.Map;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-10 9:07
  */
-public class EmailServiceTest extends BaseUnitTest {
+public class EmailManagerTest extends BaseUnitTest {
     @Autowired
-    private EmailService emailService;
+    private EmailManager emailService;
 
     /**
      * 生成消息

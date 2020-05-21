@@ -37,6 +37,7 @@ public class HelloController implements BaseHelloController, HelloApi {
      * @param name 姓名
      * @return 返回句子
      */
+    @Override
     public ResultData<String> sayHello(String name){
         try {
             SessionUser sessionUser = ContextUtil.getSessionUser();
@@ -53,6 +54,7 @@ public class HelloController implements BaseHelloController, HelloApi {
      * 通过消息队列说你好
      * @param name 姓名
      */
+    @Override
     public void mqSayHello(String name){
         service.mqSayHello(name, testKey);
     }
