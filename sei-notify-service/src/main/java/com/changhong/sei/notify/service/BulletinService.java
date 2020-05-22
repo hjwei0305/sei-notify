@@ -2,6 +2,7 @@ package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.BaseEntityDao;
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
@@ -34,7 +35,7 @@ import java.util.Set;
  * @version 1.0.00  2019-09-23 17:46
  */
 @Service
-public class BulletinService extends BaseEntityService<Bulletin> implements NotifyManager {
+public class BulletinService extends BaseEntityService<Bulletin> {
 
     @Autowired
     private BulletinDao dao;
@@ -218,15 +219,5 @@ public class BulletinService extends BaseEntityService<Bulletin> implements Noti
             }
         }
         return result;
-    }
-
-    /**
-     * 发送消息通知
-     *
-     * @param message 发送的消息
-     */
-    @Override
-    public void send(SendMessage message) {
-
     }
 }
