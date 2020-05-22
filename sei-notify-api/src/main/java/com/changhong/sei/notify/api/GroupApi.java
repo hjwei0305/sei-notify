@@ -40,7 +40,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
      * @param ids 群组id集合
      * @return 操作结果
      */
-    @PostMapping(path = "frozen")
+    @PostMapping(path = "frozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "冻结群组", notes = "冻结群组")
     ResultData<String> frozen(@RequestBody List<String> ids);
 
@@ -50,7 +50,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
      * @param ids 群组id集合
      * @return 操作结果
      */
-    @PostMapping(path = "unfrozen")
+    @PostMapping(path = "unfrozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "解冻群组", notes = "解冻群组")
     ResultData<String> unfrozen(@RequestBody List<String> ids);
 
@@ -60,7 +60,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
      * @param groupUserDtos 群组用户集合
      * @return 操作结果
      */
-    @PostMapping(path = "addGroupUser")
+    @PostMapping(path = "addGroupUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "添加群组用户", notes = "添加群组用户")
     ResultData<String> addGroupUser(@RequestBody @Valid List<GroupUserDto> groupUserDtos);
 
@@ -70,7 +70,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
      * @param groupUserIds 群组用户id集合
      * @return 操作结果
      */
-    @PostMapping(path = "removeGroupUser")
+    @PostMapping(path = "removeGroupUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "移除群组用户", notes = "移除群组用户")
     ResultData<String> removeGroupUser(@RequestBody List<String> groupUserIds);
 
@@ -80,14 +80,14 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
      * @param groupId 群组id
      * @return 返回指定群组用户对象
      */
-    @GetMapping(path = "getGroupUsers")
+    @GetMapping(path = "getGroupUsers", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取指定群组用户", notes = "获取指定群组用户")
     ResultData<List<GroupUserDto>> getGroupUsers(@RequestParam("groupId") String groupId);
 
     /**
      * 获取用户账号分页数据
      */
-    @PostMapping(path = "getUserAccounts")
+    @PostMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
     ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search);
 }
