@@ -7,6 +7,7 @@ import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
+import com.changhong.sei.enums.UserType;
 import com.changhong.sei.notify.dao.BulletinDao;
 import com.changhong.sei.notify.dao.BulletinUserDao;
 import com.changhong.sei.notify.dao.ContentBodyDao;
@@ -17,10 +18,13 @@ import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.BulletinUser;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
+import com.changhong.sei.notify.service.GroupService;
 import com.changhong.sei.notify.service.client.EmployeeClient;
+import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -41,6 +45,8 @@ public class MessageManager {
     @Autowired
     private ContentBodyDao contentBodyDao;
     @Autowired
+    private GroupService groupService;
+    @Autowired
     private EmployeeClient employeeClient;
 
     /**
@@ -49,9 +55,9 @@ public class MessageManager {
      * @return 返回未读消息数
      */
     public Long unreadCount() {
-        String userId = ContextUtil.getUserId();
+        SessionUser user = ContextUtil.getSessionUser();
         long count = 0L;
-        Long bulletinCount = bulletinDao.getUnreadCount(userId, getUserRightCode(userId));
+        Long bulletinCount = bulletinDao.getUnreadCount(user.getUserId(), getTargetCodeByUser(user));
         if (Objects.nonNull(bulletinCount)) {
             count += bulletinCount;
         }
@@ -61,18 +67,30 @@ public class MessageManager {
     /**
      * 获取用户的权限集合{组织机构、岗位}
      */
-    private List<String> getUserRightCode(String userId) {
-        // 获取用户的组织代码清单
-        ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
-        if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
-            return orgCodesResult.getData();
+    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetCodeByUser:'+#userId")
+    public Set<String> getTargetCodeByUser(SessionUser user) {
+        Set<String> targetCodes = Sets.newHashSet();
+
+        String userId = user.getUserId();
+        if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
+            // 获取用户的组织代码清单
+            ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
+            if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
+                targetCodes.addAll(orgCodesResult.getData());
+            }
+//        // todo 没有组织，获取用户岗位上的组织
+//        ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
+//        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
+//            return positionCodesResult.getData();
+//        }
         }
-        // 没有组织，获取用户岗位代码清单
-        ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
-        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-            return positionCodesResult.getData();
+
+        ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(userId);
+        if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
+            targetCodes.addAll(groupCodeResult.getData());
         }
-        return new ArrayList<>();
+
+        return targetCodes;
     }
 
     /**
@@ -81,11 +99,11 @@ public class MessageManager {
      * @return 返回未读数据
      */
     public OperateResultWithData<Map<String, List<BaseMessageDto>>> unreadData() {
-        String userId = ContextUtil.getUserId();
+        SessionUser user = ContextUtil.getSessionUser();
         Map<String, List<BaseMessageDto>> data = new HashMap<>();
         List<BaseMessageDto> messageDtos = new ArrayList<>();
         // 未读通告
-        List<Bulletin> bulletins = bulletinDao.getUnreadBulletin(userId, this.getUserRightCode(userId));
+        List<Bulletin> bulletins = bulletinDao.getUnreadBulletin(user.getUserId(), this.getTargetCodeByUser(user));
         if (!CollectionUtils.isEmpty(bulletins)) {
             for (Bulletin bulletin : bulletins) {
                 BaseMessageDto messageDto = new BaseMessageDto();
@@ -190,8 +208,8 @@ public class MessageManager {
      * @return 返回未读数据
      */
     public OperateResultWithData<BaseMessageDto> getFirstUnreadBulletin() {
-        String userId = ContextUtil.getUserId();
-        Bulletin bulletin = bulletinDao.getFirstUnreadBulletin(userId, getUserRightCode(userId));
+        SessionUser user = ContextUtil.getSessionUser();
+        Bulletin bulletin = bulletinDao.getFirstUnreadBulletin(user.getUserId(), getTargetCodeByUser(user));
         BulletinDto dto = null;
         if (Objects.nonNull(bulletin)) {
             dto = new BulletinDto();
@@ -219,7 +237,7 @@ public class MessageManager {
         if (Objects.isNull(search)) {
             search = Search.createSearch();
         }
-        String userId = ContextUtil.getUserId();
-        return bulletinDao.findPage4User(search, userId, this.getUserRightCode(userId));
+        SessionUser user = ContextUtil.getSessionUser();
+        return bulletinDao.findPage4User(search, user.getUserId(), this.getTargetCodeByUser(user));
     }
 }

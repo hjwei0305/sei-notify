@@ -11,12 +11,15 @@ import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupUser;
 import com.changhong.sei.notify.service.client.AccountClient;
 import com.changhong.sei.notify.service.client.dto.AccountResponse;
+import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -88,5 +91,20 @@ public class GroupService extends BaseEntityService<Group> {
     public ResultData<List<GroupUser>> getGroupUsers(String groupId) {
         List<GroupUser> groupUsers = groupUserDao.findListByProperty(GroupUser.FIELD_GROUP_ID, groupId);
         return ResultData.success(groupUsers);
+    }
+
+    /**
+     * 获取指定用户拥有的群组
+     *
+     * @param userId 用户id
+     * @return 返回指定用户拥有的群组
+     */
+    public ResultData<Set<String>> getGroupCodes(String userId) {
+        Set<String> result = Sets.newHashSet();
+        List<Group> groups = groupUserDao.findGroups(userId);
+        if (CollectionUtils.isNotEmpty(groups)) {
+            result = groups.stream().map(Group::getCode).collect(Collectors.toSet());
+        }
+        return ResultData.success(result);
     }
 }

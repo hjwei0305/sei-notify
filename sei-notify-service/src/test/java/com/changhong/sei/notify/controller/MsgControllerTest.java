@@ -1,8 +1,11 @@
 package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.PageResult;
+import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
+import com.changhong.sei.notify.dto.BulletinDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,14 @@ public class MsgControllerTest extends BaseUnitTest {
     @Test
     public void getPriority() {
         ResultData result = controller.getPriority();
+        System.out.println(JsonUtils.toJson(result));
+        Assert.assertTrue(result.successful());
+    }
+
+    @Test
+    public void findBulletinByPage4User() {
+        Search search = Search.createSearch();
+        ResultData<PageResult<BulletinDto>> result = controller.findBulletinByPage4User(search);
         System.out.println(JsonUtils.toJson(result));
         Assert.assertTrue(result.successful());
     }

@@ -65,10 +65,12 @@ private static final long serialVersionUID = 182142067251684618L;
         this.name = name;
     }
         
+    @Override
     public String getTenantCode() {
         return tenantCode;
     }
 
+    @Override
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }
