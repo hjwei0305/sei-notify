@@ -57,10 +57,19 @@ public class MessageManager {
     public Long unreadCount() {
         SessionUser user = ContextUtil.getSessionUser();
         long count = 0L;
+
+        // 未读通告
         Long bulletinCount = bulletinDao.getUnreadCount(user.getUserId(), getTargetCodeByUser(user));
         if (Objects.nonNull(bulletinCount)) {
             count += bulletinCount;
         }
+
+        // 未读消息(站内消息)
+
+
+        // 未读提醒
+
+
         return count;
     }
 
@@ -140,7 +149,10 @@ public class MessageManager {
                     bulletinUser.setBulletinId(id);
                     bulletinUser.setRead(Boolean.TRUE);
                     bulletinUser.setReadDate(new Date());
+                    bulletinUser.setReadNum(bulletinUser.getReadNum() + 1);
                     bulletinUser.setUserId(user.getUserId());
+                    bulletinUser.setUserAccount(user.getAccount());
+                    bulletinUser.setUserName(user.getUserName());
                     bulletinUser.setUserType(user.getUserType());
                     bulletinUserDao.save(bulletinUser);
                     break;

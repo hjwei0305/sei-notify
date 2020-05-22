@@ -29,6 +29,16 @@ public class BulletinUser extends BaseEntity {
     @Column(name = "user_id", length = 36)
     private String userId;
     /**
+     * 用户
+     */
+    @Column(name = "user_account")
+    private String userAccount;
+    /**
+     * 用户
+     */
+    @Column(name = "user_name")
+    private String userName;
+    /**
      * 用户类型
      */
     @Enumerated(EnumType.ORDINAL)
@@ -40,10 +50,15 @@ public class BulletinUser extends BaseEntity {
     @Column(name = "is_read")
     private Boolean read = Boolean.FALSE;
     /**
-     * 阅读时间
+     * 最近阅读时间
      */
     @Column(name = "read_date")
     private Date readDate;
+    /**
+     * 阅读次数
+     */
+    @Column(name = "read_num")
+    private Integer readNum = 0;
 
     public String getBulletinId() {
         return bulletinId;
@@ -59,6 +74,22 @@ public class BulletinUser extends BaseEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public UserType getUserType() {
@@ -83,5 +114,13 @@ public class BulletinUser extends BaseEntity {
 
     public void setReadDate(Date readDate) {
         this.readDate = readDate;
+    }
+
+    public Integer getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(Integer readNum) {
+        this.readNum = readNum;
     }
 }
