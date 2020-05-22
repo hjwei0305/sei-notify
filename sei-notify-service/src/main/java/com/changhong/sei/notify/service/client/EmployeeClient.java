@@ -16,6 +16,7 @@ import java.util.List;
  * @version 1.0.1 2020-01-16 14:29
  */
 @FeignClient(name = "sei-basic", path = "employee")
+//@FeignClient(name = "${sei.basic.server-name}", url = "${sei.basic.server-url}", path = "employee")
 public interface EmployeeClient {
     /**
      * 获取用户的组织机构代码清单

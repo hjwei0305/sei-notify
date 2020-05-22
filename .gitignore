@@ -13,6 +13,7 @@ target/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### NetBeans ###
 nbproject/private/
@@ -25,3 +26,6 @@ dependency-reduced-pom.xml
 gradle/
 gradlew
 gradlew.bat
+.gradle
+
+logs/

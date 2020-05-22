@@ -17,6 +17,7 @@ import java.util.List;
  * @version 1.0.1 2020-01-13 17:22
  */
 @FeignClient(name = "sei-basic", path = "userProfile")
+//@FeignClient(name = "${sei.basic.server-name}", url = "${sei.basic.server-url}", path = "userProfile")
 public interface UserNotifyInfoClient {
     /**
      * 通过用户Id清单获取用户信息

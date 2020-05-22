@@ -19,5 +19,10 @@ public enum TargetType {
      * 岗位
      */
     @Remark("岗位")
-    POS
+    POS,
+    /**
+     * 群组
+     */
+    @Remark("群组")
+    GROUP
 }
