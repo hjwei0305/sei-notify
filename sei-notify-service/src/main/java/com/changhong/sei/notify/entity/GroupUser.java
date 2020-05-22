@@ -1,6 +1,7 @@
 package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.entity.BaseAuditableEntity;
+import com.changhong.sei.core.entity.ITenant;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -19,7 +20,7 @@ import java.io.Serializable;
 @Table(name = "group_user")
 @DynamicInsert
 @DynamicUpdate
-public class GroupUser extends BaseAuditableEntity implements Serializable {
+public class GroupUser extends BaseAuditableEntity implements ITenant, Serializable {
     private static final long serialVersionUID = -18017322204395690L;
     public static final String FIELD_GROUP_ID = "groupId";
     /**

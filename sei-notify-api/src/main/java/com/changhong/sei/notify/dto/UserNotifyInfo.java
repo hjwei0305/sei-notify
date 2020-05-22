@@ -21,6 +21,10 @@ public class UserNotifyInfo implements Serializable {
      */
     private String userId;
     /**
+     * 用户账号
+     */
+    private String userAccount;
+    /**
      * 用户名称
      */
     private String userName;
@@ -39,6 +43,15 @@ public class UserNotifyInfo implements Serializable {
 
     public UserNotifyInfo setUserId(String userId) {
         this.userId = userId;
+        return this;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public UserNotifyInfo setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
         return this;
     }
 
