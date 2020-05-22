@@ -4,12 +4,11 @@ import java.util.Date;
 
 import com.changhong.sei.core.entity.BaseAuditableEntity;
 import com.changhong.sei.core.entity.ITenant;
+import com.changhong.sei.enums.UserType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -22,18 +21,13 @@ import java.io.Serializable;
 @Table(name = "remind")
 @DynamicInsert
 @DynamicUpdate
-public class Remind extends BaseAuditableEntity implements ITenant, Serializable {
+public class Remind extends BaseMessage implements ITenant, Serializable {
     private static final long serialVersionUID = -32108204849583924L;
     /**
      * 租户代码
      */
     @Column(name = "tenant_code")
     private String tenantCode;
-    /**
-     * 内容id
-     */
-    @Column(name = "content_id")
-    private String contentId;
     /**
      * 用户id
      */
@@ -52,8 +46,9 @@ public class Remind extends BaseAuditableEntity implements ITenant, Serializable
     /**
      * 用户类型
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
-    private Boolean userType;
+    private UserType userType;
     /**
      * 提醒时间
      */
@@ -90,14 +85,6 @@ public class Remind extends BaseAuditableEntity implements ITenant, Serializable
         this.tenantCode = tenantCode;
     }
 
-    public String getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -122,11 +109,11 @@ public class Remind extends BaseAuditableEntity implements ITenant, Serializable
         this.userName = userName;
     }
 
-    public Boolean getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(Boolean userType) {
+    public void setUserType(UserType userType) {
         this.userType = userType;
     }
 

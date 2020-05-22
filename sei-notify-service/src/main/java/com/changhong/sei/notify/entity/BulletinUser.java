@@ -41,8 +41,8 @@ public class BulletinUser extends BaseEntity {
     /**
      * 用户类型
      */
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "user_type", length = 1)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_type")
     private UserType userType;
     /**
      * 是否阅读
