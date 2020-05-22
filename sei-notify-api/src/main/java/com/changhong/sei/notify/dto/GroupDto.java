@@ -4,13 +4,6 @@ import com.changhong.sei.core.dto.BaseEntityDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import java.io.Serializable;
-
 /**
  * 群组(Group)DTO类
  *
@@ -19,7 +12,7 @@ import java.io.Serializable;
  */
 @ApiModel(description = "群组DTO")
 public class GroupDto extends BaseEntityDto {
-private static final long serialVersionUID = 128901001160602539L;
+    private static final long serialVersionUID = 128901001160602539L;
     /**
      * 代码
      */
@@ -31,11 +24,6 @@ private static final long serialVersionUID = 128901001160602539L;
     @ApiModelProperty(value = "名称")
     private String name;
     /**
-     * 租户代码
-     */
-    @ApiModelProperty(value = "租户代码")
-    private String tenantCode;
-    /**
      * 冻结
      */
     @ApiModelProperty(value = "冻结")
@@ -46,7 +34,6 @@ private static final long serialVersionUID = 128901001160602539L;
     @ApiModelProperty(value = "排序")
     private Integer rank;
 
-        
     public String getCode() {
         return code;
     }
@@ -54,7 +41,7 @@ private static final long serialVersionUID = 128901001160602539L;
     public void setCode(String code) {
         this.code = code;
     }
-        
+
     public String getName() {
         return name;
     }
@@ -62,15 +49,7 @@ private static final long serialVersionUID = 128901001160602539L;
     public void setName(String name) {
         this.name = name;
     }
-        
-    public String getTenantCode() {
-        return tenantCode;
-    }
 
-    public void setTenantCode(String tenantCode) {
-        this.tenantCode = tenantCode;
-    }
-        
     public Boolean getFrozen() {
         return frozen;
     }
@@ -78,7 +57,7 @@ private static final long serialVersionUID = 128901001160602539L;
     public void setFrozen(Boolean frozen) {
         this.frozen = frozen;
     }
-        
+
     public Integer getRank() {
         return rank;
     }

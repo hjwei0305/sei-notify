@@ -6,6 +6,8 @@ import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.dao.GroupDao;
 import com.changhong.sei.notify.dao.GroupUserDao;
 import com.changhong.sei.notify.entity.Group;
+import com.changhong.sei.notify.entity.GroupUser;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +43,46 @@ public class GroupService extends BaseEntityService<Group> {
     public ResultData<String> frozen(List<String> ids, Boolean frozen) {
         dao.updateFrozen(ids, frozen);
         return ResultData.success("ok");
+    }
+
+    /**
+     * 添加群组用户
+     *
+     * @param groupUsers 群组用户
+     * @return 操作结果
+     */
+    @Transactional
+    public ResultData<String> addGroupUsers(List<GroupUser> groupUsers) {
+        if (CollectionUtils.isNotEmpty(groupUsers)) {
+            groupUserDao.save(groupUsers);
+            return ResultData.success("ok");
+        }
+        return ResultData.fail("群组用户为空,不能添加");
+    }
+
+    /**
+     * 删除群组用户
+     *
+     * @param groupUserIds 群组用户id
+     * @return 操作结果
+     */
+    @Transactional
+    public ResultData<String> delGroupUser(List<String> groupUserIds) {
+        if (CollectionUtils.isNotEmpty(groupUserIds)) {
+            groupUserDao.delete(groupUserIds);
+            return ResultData.success("ok");
+        }
+        return ResultData.fail("删除的群组id不能为空.");
+    }
+
+    /**
+     * 获取指定群组用户
+     *
+     * @param groupId 群组id
+     * @return 返回指定群组用户对象
+     */
+    public ResultData<List<GroupUser>> getGroupUsers(String groupId) {
+        List<GroupUser> groupUsers = groupUserDao.findListByProperty(GroupUser.FIELD_GROUP_ID, groupId);
+        return ResultData.success(groupUsers);
     }
 }

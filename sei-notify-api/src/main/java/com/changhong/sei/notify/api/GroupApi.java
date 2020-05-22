@@ -1,13 +1,17 @@
 package com.changhong.sei.notify.api;
 
 import com.changhong.sei.core.api.BaseEntityApi;
+import com.changhong.sei.core.api.FindAllApi;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.GroupDto;
+import com.changhong.sei.notify.dto.GroupUserDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,7 +24,14 @@ import java.util.List;
  */
 @Valid
 @FeignClient(name = "sei-notify", path = "group")
-public interface GroupApi extends BaseEntityApi<GroupDto> {
+public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> {
+
+    /**
+     * 屏蔽删除接口
+     */
+    @Override
+    ResultData<String> delete(String id);
+
     /**
      * 冻结群组
      *
@@ -29,7 +40,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      */
     @PostMapping(path = "frozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "冻结群组", notes = "冻结群组")
-    ResultData<String> frozen(@RequestBody @Valid List<String> ids);
+    ResultData<String> frozen(@RequestBody List<String> ids);
 
     /**
      * 解冻群组
@@ -39,5 +50,35 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      */
     @PostMapping(path = "unfrozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "解冻群组", notes = "解冻群组")
-    ResultData<String> unfrozen(@RequestBody @Valid List<String> ids);
+    ResultData<String> unfrozen(@RequestBody List<String> ids);
+
+    /**
+     * 添加群组用户
+     *
+     * @param groupUserDtos 群组用户集合
+     * @return 操作结果
+     */
+    @PostMapping(path = "addGroupUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "添加群组用户", notes = "添加群组用户")
+    ResultData<String> addGroupUser(@RequestBody @Valid List<GroupUserDto> groupUserDtos);
+
+    /**
+     * 移除群组用户
+     *
+     * @param groupUserIds 群组用户id集合
+     * @return 操作结果
+     */
+    @PostMapping(path = "removeGroupUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "移除群组用户", notes = "移除群组用户")
+    ResultData<String> removeGroupUser(@RequestBody List<String> groupUserIds);
+
+    /**
+     * 获取指定群组用户
+     *
+     * @param groupId 群组id
+     * @return 返回指定群组用户对象
+     */
+    @GetMapping(path = "getGroupUsers", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取指定群组用户", notes = "获取指定群组用户")
+    ResultData<List<GroupUserDto>> getGroupUsers(@RequestParam("groupId") String groupId);
 }

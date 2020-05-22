@@ -21,6 +21,7 @@ import java.io.Serializable;
 @DynamicUpdate
 public class GroupUser extends BaseAuditableEntity implements Serializable {
     private static final long serialVersionUID = -18017322204395690L;
+    public static final String FIELD_GROUP_ID = "groupId";
     /**
      * 群组id
      */

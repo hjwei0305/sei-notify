@@ -22,7 +22,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -43,6 +42,7 @@ public class MessageManager {
     private ContentBodyDao contentBodyDao;
     @Autowired
     private EmployeeClient employeeClient;
+
     /**
      * 未读消息数
      *
@@ -61,15 +61,15 @@ public class MessageManager {
     /**
      * 获取用户的权限集合{组织机构、岗位}
      */
-    private List<String> getUserRightCode(String userId){
+    private List<String> getUserRightCode(String userId) {
         // 获取用户的组织代码清单
         ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
-        if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())){
+        if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
             return orgCodesResult.getData();
         }
         // 没有组织，获取用户岗位代码清单
         ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
-        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())){
+        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
             return positionCodesResult.getData();
         }
         return new ArrayList<>();
@@ -85,7 +85,7 @@ public class MessageManager {
         Map<String, List<BaseMessageDto>> data = new HashMap<>();
         List<BaseMessageDto> messageDtos = new ArrayList<>();
         // 未读通告
-        List<Bulletin> bulletins = bulletinDao.getUnreadBulletin(userId,this.getUserRightCode(userId));
+        List<Bulletin> bulletins = bulletinDao.getUnreadBulletin(userId, this.getUserRightCode(userId));
         if (!CollectionUtils.isEmpty(bulletins)) {
             for (Bulletin bulletin : bulletins) {
                 BaseMessageDto messageDto = new BaseMessageDto();
@@ -220,6 +220,6 @@ public class MessageManager {
             search = Search.createSearch();
         }
         String userId = ContextUtil.getUserId();
-        return bulletinDao.findPage4User(search, userId,this.getUserRightCode(userId));
+        return bulletinDao.findPage4User(search, userId, this.getUserRightCode(userId));
     }
 }
