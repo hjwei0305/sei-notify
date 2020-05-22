@@ -3,6 +3,8 @@ package com.changhong.sei.notify.api;
 import com.changhong.sei.core.api.BaseEntityApi;
 import com.changhong.sei.core.api.FindAllApi;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.PageResult;
+import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.notify.dto.GroupDto;
 import com.changhong.sei.notify.dto.GroupUserDto;
 import io.swagger.annotations.ApiOperation;
@@ -81,4 +83,11 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
     @GetMapping(path = "getGroupUsers", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取指定群组用户", notes = "获取指定群组用户")
     ResultData<List<GroupUserDto>> getGroupUsers(@RequestParam("groupId") String groupId);
+
+    /**
+     * 获取用户账号分页数据
+     */
+    @GetMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
+    ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search);
 }

@@ -1,10 +1,12 @@
 package com.changhong.sei.notify.controller;
 
-import com.changhong.sei.notify.dto.GroupDto;
-import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.PageResult;
+import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
+import com.changhong.sei.notify.dto.GroupDto;
+import com.changhong.sei.notify.dto.GroupUserDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,15 @@ public class GroupControllerTest extends BaseUnitTest {
     public void findOne() {
         String id = "";
         ResultData<GroupDto> resultData = controller.findOne(id);
+        LOG.debug(JsonUtils.toJson(resultData));
+        Assert.assertTrue(resultData.successful());
+    }
+
+    @Test
+    public void getUserAccounts() {
+        String id = "";
+        Search search = Search.createSearch();
+        ResultData<PageResult<GroupUserDto>> resultData = controller.getUserAccounts(search);
         LOG.debug(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }

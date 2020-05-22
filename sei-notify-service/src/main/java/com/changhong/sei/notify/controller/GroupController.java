@@ -3,6 +3,8 @@ package com.changhong.sei.notify.controller;
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.controller.BaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.PageResult;
+import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.api.GroupApi;
@@ -11,6 +13,8 @@ import com.changhong.sei.notify.dto.GroupUserDto;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupUser;
 import com.changhong.sei.notify.service.GroupService;
+import com.changhong.sei.notify.service.client.AccountClient;
+import com.changhong.sei.notify.service.client.dto.AccountResponse;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,6 +49,9 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      */
     @Autowired
     private GroupService service;
+
+    @Autowired
+    private AccountClient accountClient;
 
     @Override
     public BaseEntityService<Group> getService() {
@@ -162,6 +170,32 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
         } else {
             return ResultData.fail(resultData.getMessage());
         }
+    }
+
+    /**
+     * 获取用户账号分页数据
+     */
+    @Override
+    public ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search) {
+        ResultData<PageResult<AccountResponse>> resultData = accountClient.findByPage(search);
+        if (resultData.successful()) {
+            PageResult<AccountResponse> pageResult = resultData.getData();
+            List<AccountResponse> accounts = pageResult.getRows();
+
+            GroupUserDto dto;
+            List<GroupUserDto> list = new ArrayList<>();
+            for (AccountResponse account : accounts) {
+                dto = new GroupUserDto();
+                dto.setUserAccount(account.getAccount());
+                dto.setUserName(account.getName());
+                list.add(dto);
+            }
+            PageResult<GroupUserDto> dtoPageResult = new PageResult<>(pageResult);
+            dtoPageResult.setRows(list);
+
+            return ResultData.success(dtoPageResult);
+        }
+        return ResultData.fail(resultData.getMessage());
     }
 
     /**
