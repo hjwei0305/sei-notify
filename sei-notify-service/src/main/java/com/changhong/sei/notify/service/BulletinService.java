@@ -13,6 +13,7 @@ import com.changhong.sei.notify.dao.BulletinDao;
 import com.changhong.sei.notify.dao.BulletinUserDao;
 import com.changhong.sei.notify.dao.ContentBodyDao;
 import com.changhong.sei.notify.entity.Bulletin;
+import com.changhong.sei.notify.entity.BulletinUser;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import org.apache.commons.collections.CollectionUtils;
@@ -21,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 实现功能：维护消息通告的业务逻辑
@@ -221,4 +219,51 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         }
         return result;
     }
+
+    public BulletinUser saveBulletinUser(BulletinUser bulletinUser) {
+        return bulletinUserDao.save(bulletinUser);
+    }
+
+    /**
+     * 按通告id删除用户阅读数据
+     * 通告撤销时使用
+     *
+     * @param bulletinIds 通告id
+     */
+    public void deleteByBulletinIdIn(Collection<String> bulletinIds) {
+        bulletinUserDao.deleteByBulletinIdIn(bulletinIds);
+    }
+
+    public BulletinUser findByBulletinIdAndUserId(String bulletinId, String userId) {
+        return bulletinUserDao.findByBulletinIdAndUserId(bulletinId, userId);
+    }
+
+    /**
+     * 获取未读通告数
+     */
+    public Long getUnreadCount(String userId, Set<String> targetCodes) {
+        return dao.getUnreadCount(userId, targetCodes);
+    }
+
+    /**
+     * 获取未读通告
+     */
+    public List<Bulletin> getUnreadBulletin(String userId, Set<String> targetCodes) {
+        return dao.getUnreadBulletin(userId, targetCodes);
+    }
+
+    /**
+     * 获取优先级最高的未读通告
+     */
+    public Bulletin getFirstUnreadBulletin(String userId, Set<String> targetCodes) {
+        return dao.getFirstUnreadBulletin(userId, targetCodes);
+    }
+
+    /**
+     * 分页获取用户通告
+     */
+    public PageResult<BulletinCompose> findPage4User(Search search, String userId, Set<String> targetCodes) {
+        return dao.findPage4User(search, userId, targetCodes);
+    }
+
 }

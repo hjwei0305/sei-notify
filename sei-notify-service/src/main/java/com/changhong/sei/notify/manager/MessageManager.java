@@ -8,9 +8,6 @@ import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.enums.UserType;
-import com.changhong.sei.notify.dao.BulletinDao;
-import com.changhong.sei.notify.dao.BulletinUserDao;
-import com.changhong.sei.notify.dao.ContentBodyDao;
 import com.changhong.sei.notify.dto.BaseMessageDto;
 import com.changhong.sei.notify.dto.BulletinDto;
 import com.changhong.sei.notify.dto.NotifyType;
@@ -18,7 +15,10 @@ import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.BulletinUser;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
+import com.changhong.sei.notify.service.BulletinService;
+import com.changhong.sei.notify.service.ContentBodyService;
 import com.changhong.sei.notify.service.GroupService;
+import com.changhong.sei.notify.service.RemindService;
 import com.changhong.sei.notify.service.client.EmployeeClient;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
@@ -39,11 +39,11 @@ import java.util.*;
 @Component
 public class MessageManager {
     @Autowired
-    private BulletinDao bulletinDao;
+    private BulletinService bulletinService;
     @Autowired
-    private BulletinUserDao bulletinUserDao;
+    private RemindService remindService;
     @Autowired
-    private ContentBodyDao contentBodyDao;
+    private ContentBodyService contentBodyService;
     @Autowired
     private GroupService groupService;
     @Autowired
@@ -56,10 +56,11 @@ public class MessageManager {
      */
     public Long unreadCount() {
         SessionUser user = ContextUtil.getSessionUser();
+        String userId = user.getUserId();
         long count = 0L;
 
         // 未读通告
-        Long bulletinCount = bulletinDao.getUnreadCount(user.getUserId(), getTargetCodeByUser(user));
+        Long bulletinCount = bulletinService.getUnreadCount(userId, getTargetCodeByUser(user));
         if (Objects.nonNull(bulletinCount)) {
             count += bulletinCount;
         }
@@ -68,7 +69,10 @@ public class MessageManager {
 
 
         // 未读提醒
-
+        Long remindCount = remindService.countUnRead(user.getTenantCode(), userId);
+        if (Objects.nonNull(remindCount)) {
+            count += remindCount;
+        }
 
         return count;
     }
@@ -112,7 +116,7 @@ public class MessageManager {
         Map<String, List<BaseMessageDto>> data = new HashMap<>();
         List<BaseMessageDto> messageDtos = new ArrayList<>();
         // 未读通告
-        List<Bulletin> bulletins = bulletinDao.getUnreadBulletin(user.getUserId(), this.getTargetCodeByUser(user));
+        List<Bulletin> bulletins = bulletinService.getUnreadBulletin(user.getUserId(), this.getTargetCodeByUser(user));
         if (!CollectionUtils.isEmpty(bulletins)) {
             for (Bulletin bulletin : bulletins) {
                 BaseMessageDto messageDto = new BaseMessageDto();
@@ -142,7 +146,7 @@ public class MessageManager {
             SessionUser user = ContextUtil.getSessionUser();
             switch (category) {
                 case SEI_BULLETIN:
-                    BulletinUser bulletinUser = bulletinUserDao.findByBulletinIdAndUserId(id, user.getUserId());
+                    BulletinUser bulletinUser = bulletinService.findByBulletinIdAndUserId(id, user.getUserId());
                     if (Objects.isNull(bulletinUser)) {
                         bulletinUser = new BulletinUser();
                     }
@@ -154,7 +158,7 @@ public class MessageManager {
                     bulletinUser.setUserAccount(user.getAccount());
                     bulletinUser.setUserName(user.getUserName());
                     bulletinUser.setUserType(user.getUserType());
-                    bulletinUserDao.save(bulletinUser);
+                    bulletinService.saveBulletinUser(bulletinUser);
                     break;
                 case SEI_MESSAGE:
                     break;
@@ -182,7 +186,7 @@ public class MessageManager {
             BaseMessageDto message = new BaseMessageDto();
             switch (category) {
                 case SEI_BULLETIN:
-                    Bulletin bulletin = bulletinDao.findOne(id);
+                    Bulletin bulletin = bulletinService.findOne(id);
                     if (Objects.nonNull(bulletin)) {
                         contentId = bulletin.getContentId();
                         message.setId(bulletin.getId());
@@ -203,7 +207,7 @@ public class MessageManager {
             }
             //加载内容
             if (StringUtils.isNotBlank(contentId)) {
-                ContentBody body = contentBodyDao.findOne(contentId);
+                ContentBody body = contentBodyService.findOne(contentId);
                 if (Objects.nonNull(body)) {
                     message.setContent(body.getContent());
                 }
@@ -221,7 +225,7 @@ public class MessageManager {
      */
     public OperateResultWithData<BaseMessageDto> getFirstUnreadBulletin() {
         SessionUser user = ContextUtil.getSessionUser();
-        Bulletin bulletin = bulletinDao.getFirstUnreadBulletin(user.getUserId(), getTargetCodeByUser(user));
+        Bulletin bulletin = bulletinService.getFirstUnreadBulletin(user.getUserId(), getTargetCodeByUser(user));
         BulletinDto dto = null;
         if (Objects.nonNull(bulletin)) {
             dto = new BulletinDto();
@@ -250,6 +254,6 @@ public class MessageManager {
             search = Search.createSearch();
         }
         SessionUser user = ContextUtil.getSessionUser();
-        return bulletinDao.findPage4User(search, user.getUserId(), this.getTargetCodeByUser(user));
+        return bulletinService.findPage4User(search, user.getUserId(), this.getTargetCodeByUser(user));
     }
 }
