@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Valid
 @FeignClient(name = "sei-notify", path = "group")
-public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> {
+public interface GroupApi extends BaseEntityApi<GroupDto> {
 
     /**
      * 屏蔽删除接口
@@ -53,6 +53,24 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
     @PostMapping(path = "unfrozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "解冻群组", notes = "解冻群组")
     ResultData<String> unfrozen(@RequestBody List<String> ids);
+
+    /**
+     * 获取所有群组实体
+     *
+     * @return 群组实体清单
+     */
+    @GetMapping(path = "findAll", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取所有群组实体", notes = "获取所有群组实体")
+    ResultData<List<GroupDto>> findAll();
+
+    /**
+     * 获取所有未冻结的群组实体
+     *
+     * @return 群组实体清单
+     */
+    @GetMapping(path = "findAllUnfrozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取所有未冻结群组实体", notes = "获取所有未冻结群组实体")
+    ResultData<List<GroupDto>> findAllUnfrozen();
 
     /**
      * 添加群组用户

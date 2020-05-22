@@ -1,8 +1,8 @@
 package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dao.BaseEntityDao;
-import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
@@ -15,8 +15,6 @@ import com.changhong.sei.notify.dao.ContentBodyDao;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
-import com.changhong.sei.notify.manager.NotifyManager;
-import com.changhong.sei.notify.dto.SendMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +66,7 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             return result;
         }
         List<Bulletin> bulletins = result.getRows();
-        bulletins.forEach(b-> {
+        bulletins.forEach(b -> {
             ContentBody contentBody = contentBodyDao.findOne(b.getContentId());
             if (Objects.nonNull(contentBody)) {
                 b.setContent(contentBody.getContent());
@@ -133,11 +131,12 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
             Date date = new Date();
-            String userId = ContextUtil.getUserId();
+            SessionUser sessionUser = ContextUtil.getSessionUser();
             for (Bulletin bulletin : bulletins) {
                 bulletin.setRelease(Boolean.TRUE);
                 bulletin.setReleaseDate(date);
-                bulletin.setReleaseUserId(userId);
+                bulletin.setReleaseUserAccount(sessionUser.getAccount());
+                bulletin.setReleaseUserName(sessionUser.getUserName());
             }
             dao.save(bulletins);
         }
@@ -159,11 +158,12 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
             Date date = new Date();
-            String userId = ContextUtil.getUserId();
+            SessionUser sessionUser = ContextUtil.getSessionUser();
             for (Bulletin bulletin : bulletins) {
                 bulletin.setRelease(Boolean.FALSE);
                 bulletin.setCancelDate(date);
-                bulletin.setCancelUserId(userId);
+                bulletin.setCancelUserAccount(sessionUser.getAccount());
+                bulletin.setCancelUserName(sessionUser.getUserName());
             }
             dao.save(bulletins);
             // 按通告id删除用户阅读数据
@@ -188,11 +188,12 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
             Date date = new Date();
-            String userId = ContextUtil.getUserId();
+            SessionUser sessionUser = ContextUtil.getSessionUser();
             for (Bulletin bulletin : bulletins) {
                 bulletin.setDel(Boolean.TRUE);
                 bulletin.setDelDate(date);
-                bulletin.setDelUserId(userId);
+                bulletin.setDelUserAccount(sessionUser.getAccount());
+                bulletin.setDelUserName(sessionUser.getUserName());
             }
             dao.save(bulletins);
         }

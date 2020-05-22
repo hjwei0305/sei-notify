@@ -53,8 +53,13 @@ public class BaseMessage extends BaseEntity {
     /**
      * 删除人id
      */
-    @Column(name = "del_user_id", length = 36)
-    protected String delUserId;
+    @Column(name = "del_user_account")
+    protected String delUserAccount;
+    /**
+     * 删除人id
+     */
+    @Column(name = "del_user_name")
+    protected String delUserName;
 
     /**
      * 内容
@@ -103,12 +108,20 @@ public class BaseMessage extends BaseEntity {
         this.delDate = delDate;
     }
 
-    public String getDelUserId() {
-        return delUserId;
+    public String getDelUserAccount() {
+        return delUserAccount;
     }
 
-    public void setDelUserId(String delUserId) {
-        this.delUserId = delUserId;
+    public void setDelUserAccount(String delUserAccount) {
+        this.delUserAccount = delUserAccount;
+    }
+
+    public String getDelUserName() {
+        return delUserName;
+    }
+
+    public void setDelUserName(String delUserName) {
+        this.delUserName = delUserName;
     }
 
     public String getContent() {

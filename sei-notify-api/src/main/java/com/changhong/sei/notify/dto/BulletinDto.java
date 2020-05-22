@@ -24,7 +24,8 @@ public class BulletinDto extends BaseMessageDto {
     /**
      * 发布人id
      */
-    private String releaseUserId;
+    private String releaseUserAccount;
+    private String releaseUserName;
     /**
      * 发布时间
      */
@@ -33,7 +34,8 @@ public class BulletinDto extends BaseMessageDto {
     /**
      * 撤销人id
      */
-    private String cancelUserId;
+    private String cancelUserAccount;
+    private String cancelUserName;
     /**
      * 撤销时间
      */
@@ -53,12 +55,12 @@ public class BulletinDto extends BaseMessageDto {
     /**
      * 目标对象code
      */
-    private String tagCode;
+    private String targetCode;
 
     /**
      * 目标对象name
      */
-    private String tagName;
+    private String targetName;
 
     /**
      * 目标类型
@@ -79,12 +81,20 @@ public class BulletinDto extends BaseMessageDto {
         this.release = release;
     }
 
-    public String getReleaseUserId() {
-        return releaseUserId;
+    public String getReleaseUserAccount() {
+        return releaseUserAccount;
     }
 
-    public void setReleaseUserId(String releaseUserId) {
-        this.releaseUserId = releaseUserId;
+    public void setReleaseUserAccount(String releaseUserAccount) {
+        this.releaseUserAccount = releaseUserAccount;
+    }
+
+    public String getReleaseUserName() {
+        return releaseUserName;
+    }
+
+    public void setReleaseUserName(String releaseUserName) {
+        this.releaseUserName = releaseUserName;
     }
 
     public Date getReleaseDate() {
@@ -95,12 +105,20 @@ public class BulletinDto extends BaseMessageDto {
         this.releaseDate = releaseDate;
     }
 
-    public String getCancelUserId() {
-        return cancelUserId;
+    public String getCancelUserAccount() {
+        return cancelUserAccount;
     }
 
-    public void setCancelUserId(String cancelUserId) {
-        this.cancelUserId = cancelUserId;
+    public void setCancelUserAccount(String cancelUserAccount) {
+        this.cancelUserAccount = cancelUserAccount;
+    }
+
+    public String getCancelUserName() {
+        return cancelUserName;
+    }
+
+    public void setCancelUserName(String cancelUserName) {
+        this.cancelUserName = cancelUserName;
     }
 
     public Date getCancelDate() {
@@ -143,20 +161,20 @@ public class BulletinDto extends BaseMessageDto {
         this.read = read;
     }
 
-    public String getTagCode() {
-        return tagCode;
+    public String getTargetCode() {
+        return targetCode;
     }
 
-    public void setTagCode(String tagCode) {
-        this.tagCode = tagCode;
+    public void setTargetCode(String targetCode) {
+        this.targetCode = targetCode;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String getTargetName() {
+        return targetName;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
     }
 
     public TargetType getTargetType() {
