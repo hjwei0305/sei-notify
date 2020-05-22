@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Api(value = "GroupApi", tags = "群组服务")
-@RequestMapping(path = "group", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "group", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class GroupController extends BaseEntityController<Group, GroupDto> implements GroupApi {
 
     @Autowired
