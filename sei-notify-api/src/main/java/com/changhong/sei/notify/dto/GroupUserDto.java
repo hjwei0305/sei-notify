@@ -27,6 +27,12 @@ public class GroupUserDto extends BaseEntityDto {
     @ApiModelProperty(value = "群组id")
     private String groupId;
     /**
+     * 用户id
+     */
+    @NotBlank
+    @ApiModelProperty(value = "用户id")
+    private String userId;
+    /**
      * 用户账号
      */
     @NotBlank
@@ -45,6 +51,14 @@ public class GroupUserDto extends BaseEntityDto {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUserAccount() {

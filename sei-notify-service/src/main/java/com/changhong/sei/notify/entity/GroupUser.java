@@ -29,6 +29,11 @@ public class GroupUser extends BaseAuditableEntity implements ITenant, Serializa
     @Column(name = "group_id")
     private String groupId;
     /**
+     * 用户id
+     */
+    @Column(name = "user_id")
+    private String userId;
+    /**
      * 用户账号
      */
     @Column(name = "user_account")
@@ -52,6 +57,14 @@ public class GroupUser extends BaseAuditableEntity implements ITenant, Serializa
         this.groupId = groupId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getUserAccount() {
         return userAccount;
     }
@@ -68,10 +81,12 @@ public class GroupUser extends BaseAuditableEntity implements ITenant, Serializa
         this.userName = userName;
     }
 
+    @Override
     public String getTenantCode() {
         return tenantCode;
     }
 
+    @Override
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }

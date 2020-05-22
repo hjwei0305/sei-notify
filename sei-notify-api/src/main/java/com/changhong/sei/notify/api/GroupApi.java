@@ -98,7 +98,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupId 群组id
      * @return 返回指定群组用户对象
      */
-    @GetMapping(path = "getGroupUsers", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "getGroupUsers")
     @ApiOperation(value = "获取指定群组用户", notes = "获取指定群组用户")
     ResultData<List<GroupUserDto>> getGroupUsers(@RequestParam("groupId") String groupId);
 
