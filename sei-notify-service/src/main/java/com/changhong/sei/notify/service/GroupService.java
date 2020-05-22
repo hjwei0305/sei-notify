@@ -1,12 +1,16 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.dao.BaseEntityDao;
+import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.service.BaseEntityService;
+import com.changhong.sei.notify.dao.GroupDao;
 import com.changhong.sei.notify.dao.GroupUserDao;
 import com.changhong.sei.notify.entity.Group;
-import com.changhong.sei.notify.dao.GroupDao;
-import com.changhong.sei.core.dao.BaseEntityDao;
-import com.changhong.sei.core.service.BaseEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 /**
@@ -27,4 +31,15 @@ public class GroupService extends BaseEntityService<Group> {
         return dao;
     }
 
+    /**
+     * 冻结
+     *
+     * @param ids 主键
+     * @return 返回操作结果对象
+     */
+    @Transactional
+    public ResultData<String> frozen(List<String> ids, Boolean frozen) {
+        dao.updateFrozen(ids, frozen);
+        return ResultData.success("ok");
+    }
 }
