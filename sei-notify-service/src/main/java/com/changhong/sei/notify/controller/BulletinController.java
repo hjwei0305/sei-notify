@@ -60,7 +60,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         try {
             result = service.saveBulletin(bulletin, bulletinDto.getContent());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("保存消息通告异常！", e);
             // 保存消息通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00008", e.getMessage()));
@@ -81,7 +80,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         try {
             result = service.releaseBulletin(ids);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("发布通告异常！", e);
             // 发布通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00009", e.getMessage()));
