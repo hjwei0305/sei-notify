@@ -87,7 +87,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto>, FindAllApi<GroupDto> 
     /**
      * 获取用户账号分页数据
      */
-    @GetMapping(path = "getUserAccounts")
+    @PostMapping(path = "getUserAccounts")
     @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
     ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search);
 }

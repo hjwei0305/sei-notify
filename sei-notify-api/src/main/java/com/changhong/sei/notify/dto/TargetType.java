@@ -15,11 +15,7 @@ public enum TargetType {
      */
     @Remark("组织机构")
     ORG,
-    /**
-     * 岗位
-     */
-    @Remark("岗位")
-    POS,
+
     /**
      * 群组
      */

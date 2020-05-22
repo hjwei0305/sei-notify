@@ -51,12 +51,12 @@ public class BulletinDto extends BaseMessageDto {
     private Date invalidDate;
 
     /**
-     * 发布机构code
+     * 目标对象code
      */
     private String tagCode;
 
     /**
-     * 发布机构name
+     * 目标对象name
      */
     private String tagName;
 

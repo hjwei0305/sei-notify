@@ -32,7 +32,6 @@ public class BulletinControllerTest extends BaseUnitTest {
         search.setPageInfo(new PageInfo());
         List<TargetType> targetTypes = new ArrayList<>();
         targetTypes.add(TargetType.ORG);
-        targetTypes.add(TargetType.POS);
         SearchFilter filter = new SearchFilter("targetType", targetTypes, SearchFilter.Operator.IN);
         search.addFilter(filter);
         // 打印参数
@@ -49,8 +48,7 @@ public class BulletinControllerTest extends BaseUnitTest {
                 "\t\t{\n" +
                 "\t\t\t\"fieldName\": \"targetType\",\n" +
                 "\t\t\t\"value\": [\n" +
-                "\t\t\t\t\"ORG\",\n" +
-                "\t\t\t\t\"POS\"\n" +
+                "\t\t\t\t\"ORG\"\n" +
                 "\t\t\t],\n" +
                 "\t\t\t\"operator\": \"IN\"\n" +
                 "\t\t}\n" +
