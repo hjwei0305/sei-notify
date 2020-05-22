@@ -1,6 +1,7 @@
 package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.entity.BaseAuditableEntity;
+import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -20,7 +21,7 @@ import java.io.Serializable;
 @Table(name = "group_info")
 @DynamicInsert
 @DynamicUpdate
-public class Group extends BaseAuditableEntity implements ITenant, Serializable {
+public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, Serializable {
 private static final long serialVersionUID = 182142067251684618L;
     /**
      * 代码
@@ -49,10 +50,12 @@ private static final long serialVersionUID = 182142067251684618L;
     private Integer rank = 0;
 
         
+    @Override
     public String getCode() {
         return code;
     }
 
+    @Override
     public void setCode(String code) {
         this.code = code;
     }

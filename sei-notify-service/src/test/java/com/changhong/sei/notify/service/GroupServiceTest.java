@@ -22,8 +22,8 @@ public class GroupServiceTest extends BaseUnitTest {
     @Test
     public void save() {
         Group group = new Group();
-        group.setCode("aaasa");
-        group.setName("aaasa");
+        group.setCode("aaassaa");
+        group.setName("aaasasa");
         group.setRank(1);
         OperateResultWithData result = service.save(group);
         System.out.println(result);
