@@ -51,8 +51,8 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
         date = DateUtils.parseDate(DateUtils.formatDate(date));
         query.setParameter("del", Boolean.FALSE);
         query.setParameter("release", Boolean.TRUE);
-        query.setParameter("effectiveDate", date, TemporalType.TIMESTAMP);
-        query.setParameter("invalidDate", date, TemporalType.TIMESTAMP);
+        query.setParameter("effectiveDate", date, TemporalType.DATE);
+        query.setParameter("invalidDate", date, TemporalType.DATE);
         query.setParameter("userId", userId);
         query.setParameter("read", Boolean.TRUE);
         query.setParameter("targetCodes", targetCodes);
