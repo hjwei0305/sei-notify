@@ -144,10 +144,11 @@ public class MessageManager {
     public OperateResult read(NotifyType category, String id) {
         if (Objects.nonNull(category) && StringUtils.isNotBlank(id)) {
             SessionUser user = ContextUtil.getSessionUser();
+            String userId = user.getUserId();
             LocalDateTime date = LocalDateTime.now();
             switch (category) {
                 case SEI_BULLETIN:
-                    BulletinUser bulletinUser = bulletinService.findByBulletinIdAndUserId(id, user.getUserId());
+                    BulletinUser bulletinUser = bulletinService.findByBulletinIdAndUserId(id, userId);
                     if (Objects.isNull(bulletinUser)) {
                         bulletinUser = new BulletinUser();
                     }
@@ -155,15 +156,27 @@ public class MessageManager {
                     bulletinUser.setRead(Boolean.TRUE);
                     bulletinUser.setReadDate(date);
                     bulletinUser.setReadNum(bulletinUser.getReadNum() + 1);
-                    bulletinUser.setUserId(user.getUserId());
+                    bulletinUser.setUserId(userId);
                     bulletinUser.setUserAccount(user.getAccount());
                     bulletinUser.setUserName(user.getUserName());
                     bulletinUser.setUserType(user.getUserType());
                     bulletinService.saveBulletinUser(bulletinUser);
                     break;
                 case SEI_MESSAGE:
+
                     break;
                 case SEI_REMIND:
+                    Search search = Search.createSearch();
+                    search.addFilter(new SearchFilter(Remind.ID, id));
+                    search.addFilter(new SearchFilter(Remind.FIELD_USER_ID, userId));
+                    Remind remind = remindService.findOneByFilters(search);
+                    if (Objects.isNull(remind)) {
+                        return OperateResult.operationFailure("消息[" + id + "]不属于用户[" + user + "].");
+                    }
+                    remind.setRead(Boolean.TRUE);
+                    remind.setReadDate(LocalDateTime.now());
+                    remind.setReadNum(remind.getReadNum() + 1);
+                    remindService.save(remind);
                     break;
                 default:
                     return OperateResult.operationFailure("不支持的类型!");
@@ -201,7 +214,15 @@ public class MessageManager {
 
                     break;
                 case SEI_REMIND:
-
+                    Remind remind = remindService.findOne(id);
+                    if (Objects.nonNull(remind)) {
+                        contentId = remind.getContentId();
+                        message.setId(remind.getId());
+                        message.setSubject(remind.getSubject());
+                        message.setContentId(remind.getContentId());
+                        message.setCategory(NotifyType.SEI_REMIND);
+                        message.setPriority(remind.getPriority());
+                    }
                     break;
                 default:
                     return OperateResultWithData.operationFailure("不支持的类型!");
