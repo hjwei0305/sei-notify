@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -47,8 +48,7 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
         }
 
         Query query = entityManager.createQuery(jpql.toString());
-        Date date = new Date();
-        date = DateUtils.parseDate(DateUtils.formatDate(date));
+        LocalDate date = LocalDate.now();
         query.setParameter("del", Boolean.FALSE);
         query.setParameter("release", Boolean.TRUE);
         query.setParameter("effectiveDate", date);
