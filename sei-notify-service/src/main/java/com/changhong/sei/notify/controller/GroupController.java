@@ -16,6 +16,7 @@ import com.changhong.sei.notify.service.GroupService;
 import com.changhong.sei.notify.service.client.AccountClient;
 import com.changhong.sei.notify.service.client.dto.AccountResponse;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
@@ -177,6 +178,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      */
     @Override
     public ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search) {
+        search.setQuickSearchProperties(Sets.newHashSet("account", "name"));
         ResultData<PageResult<AccountResponse>> resultData = accountClient.findByPage(search);
         if (resultData.successful()) {
             PageResult<AccountResponse> pageResult = resultData.getData();
