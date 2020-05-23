@@ -19,17 +19,14 @@ spring:
   application:
     name: ${sei.application.code}
   cloud:
-    bus: # 启用平台的配置中心
-      trace:
-        enabled: true
-      enabled: true
     config: # 配置中心地址
       uri: http://10.4.208.86:8100/config-center
       profile: ${sei.application.env} #当前环境
       name: ${spring.application.name}
+      enabled: false
     zookeeper: #启用平台注册发现
       # zk地址
       connect-string: 10.4.208.132:2181
       # 关闭zk可用不用依赖平台注册中心
-      enabled: true
+      enabled: false
 

@@ -2,17 +2,11 @@ package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.changhong.sei.notify.dto.TargetType;
-import com.changhong.sei.util.DateUtils;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.mysql.cj.MysqlType;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 /**
