@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -144,6 +145,7 @@ public class MessageManager {
     public OperateResult read(NotifyType category, String id) {
         if (Objects.nonNull(category) && StringUtils.isNotBlank(id)) {
             SessionUser user = ContextUtil.getSessionUser();
+            LocalDateTime date = LocalDateTime.now();
             switch (category) {
                 case SEI_BULLETIN:
                     BulletinUser bulletinUser = bulletinService.findByBulletinIdAndUserId(id, user.getUserId());
@@ -152,7 +154,7 @@ public class MessageManager {
                     }
                     bulletinUser.setBulletinId(id);
                     bulletinUser.setRead(Boolean.TRUE);
-                    bulletinUser.setReadDate(new Date());
+                    bulletinUser.setReadDate(date);
                     bulletinUser.setReadNum(bulletinUser.getReadNum() + 1);
                     bulletinUser.setUserId(user.getUserId());
                     bulletinUser.setUserAccount(user.getAccount());

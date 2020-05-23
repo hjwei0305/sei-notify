@@ -5,6 +5,8 @@ import com.changhong.sei.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public class BulletinDto extends BaseMessageDto {
      * 发布时间
      */
     @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-    private Date releaseDate;
+    private LocalDateTime releaseDate;
     /**
      * 撤销人id
      */
@@ -40,17 +42,17 @@ public class BulletinDto extends BaseMessageDto {
      * 撤销时间
      */
     @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-    private Date cancelDate;
+    private LocalDateTime cancelDate;
     /**
      * 生效时间
      */
     @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_DATE_FORMAT)
-    private Date effectiveDate;
+    private LocalDate effectiveDate;
     /**
      * 失效时间
      */
     @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_DATE_FORMAT)
-    private Date invalidDate;
+    private LocalDate invalidDate;
 
     /**
      * 目标对象code
@@ -97,11 +99,11 @@ public class BulletinDto extends BaseMessageDto {
         this.releaseUserName = releaseUserName;
     }
 
-    public Date getReleaseDate() {
+    public LocalDateTime getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDateTime releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -121,27 +123,27 @@ public class BulletinDto extends BaseMessageDto {
         this.cancelUserName = cancelUserName;
     }
 
-    public Date getCancelDate() {
+    public LocalDateTime getCancelDate() {
         return cancelDate;
     }
 
-    public void setCancelDate(Date cancelDate) {
+    public void setCancelDate(LocalDateTime cancelDate) {
         this.cancelDate = cancelDate;
     }
 
-    public Date getEffectiveDate() {
+    public LocalDate getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(Date effectiveDate) {
+    public void setEffectiveDate(LocalDate effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
-    public Date getInvalidDate() {
+    public LocalDate getInvalidDate() {
         return invalidDate;
     }
 
-    public void setInvalidDate(Date invalidDate) {
+    public void setInvalidDate(LocalDate invalidDate) {
         this.invalidDate = invalidDate;
     }
 

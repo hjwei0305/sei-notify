@@ -1,5 +1,7 @@
 package com.changhong.sei.notify.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.changhong.sei.core.entity.BaseAuditableEntity;
@@ -50,10 +52,10 @@ public class Remind extends BaseMessage implements ITenant, Serializable {
     @Column(name = "user_type")
     private UserType userType;
     /**
-     * 提醒时间
+     * 创建提醒时间
      */
     @Column(name = "remind_date")
-    private Date remindDate;
+    private LocalDateTime remindDate;
     /**
      * 来源
      */
@@ -68,7 +70,7 @@ public class Remind extends BaseMessage implements ITenant, Serializable {
      * 最近阅读时间
      */
     @Column(name = "read_date")
-    private Date readDate;
+    private LocalDateTime readDate;
     /**
      * 阅读次数
      */
@@ -117,11 +119,11 @@ public class Remind extends BaseMessage implements ITenant, Serializable {
         this.userType = userType;
     }
 
-    public Date getRemindDate() {
+    public LocalDateTime getRemindDate() {
         return remindDate;
     }
 
-    public void setRemindDate(Date remindDate) {
+    public void setRemindDate(LocalDateTime remindDate) {
         this.remindDate = remindDate;
     }
 
@@ -141,11 +143,11 @@ public class Remind extends BaseMessage implements ITenant, Serializable {
         this.read = read;
     }
 
-    public Date getReadDate() {
+    public LocalDateTime getReadDate() {
         return readDate;
     }
 
-    public void setReadDate(Date readDate) {
+    public void setReadDate(LocalDateTime readDate) {
         this.readDate = readDate;
     }
 

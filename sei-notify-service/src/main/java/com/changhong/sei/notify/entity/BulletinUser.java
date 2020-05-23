@@ -4,7 +4,7 @@ import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.enums.UserType;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 实现功能：
@@ -53,7 +53,7 @@ public class BulletinUser extends BaseEntity {
      * 最近阅读时间
      */
     @Column(name = "read_date")
-    private Date readDate;
+    private LocalDateTime readDate;
     /**
      * 阅读次数
      */
@@ -108,11 +108,11 @@ public class BulletinUser extends BaseEntity {
         this.read = read;
     }
 
-    public Date getReadDate() {
+    public LocalDateTime getReadDate() {
         return readDate;
     }
 
-    public void setReadDate(Date readDate) {
+    public void setReadDate(LocalDateTime readDate) {
         this.readDate = readDate;
     }
 

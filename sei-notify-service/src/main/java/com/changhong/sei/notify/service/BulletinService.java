@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -128,7 +129,7 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         }
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
-            Date date = new Date();
+            LocalDateTime date = LocalDateTime.now();
             SessionUser sessionUser = ContextUtil.getSessionUser();
             for (Bulletin bulletin : bulletins) {
                 bulletin.setRelease(Boolean.TRUE);
@@ -155,7 +156,7 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         }
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
-            Date date = new Date();
+            LocalDateTime date = LocalDateTime.now();
             SessionUser sessionUser = ContextUtil.getSessionUser();
             for (Bulletin bulletin : bulletins) {
                 bulletin.setRelease(Boolean.FALSE);
@@ -185,7 +186,7 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         }
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
-            Date date = new Date();
+            LocalDateTime date = LocalDateTime.now();
             SessionUser sessionUser = ContextUtil.getSessionUser();
             for (Bulletin bulletin : bulletins) {
                 bulletin.setDel(Boolean.TRUE);

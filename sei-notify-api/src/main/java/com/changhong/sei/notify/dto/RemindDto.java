@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import com.changhong.sei.core.dto.BaseEntityDto;
 import io.swagger.annotations.ApiModel;
@@ -50,7 +51,7 @@ private static final long serialVersionUID = 390597983994017121L;
      * 提醒时间
      */
     @ApiModelProperty(value = "提醒时间")
-    private Date remindDate;
+    private LocalDateTime remindDate;
     /**
      * 来源
      */
@@ -65,13 +66,12 @@ private static final long serialVersionUID = 390597983994017121L;
      * 最近阅读时间
      */
     @ApiModelProperty(value = "最近阅读时间")
-    private Date readDate;
+    private LocalDateTime readDate;
     /**
      * 阅读次数
      */
     @ApiModelProperty(value = "阅读次数")
     private Integer readNum;
-
         
     public String getContentId() {
         return contentId;
@@ -113,11 +113,11 @@ private static final long serialVersionUID = 390597983994017121L;
         this.userType = userType;
     }
         
-    public Date getRemindDate() {
+    public LocalDateTime getRemindDate() {
         return remindDate;
     }
 
-    public void setRemindDate(Date remindDate) {
+    public void setRemindDate(LocalDateTime remindDate) {
         this.remindDate = remindDate;
     }
         
@@ -137,11 +137,11 @@ private static final long serialVersionUID = 390597983994017121L;
         this.read = read;
     }
         
-    public Date getReadDate() {
+    public LocalDateTime getReadDate() {
         return readDate;
     }
 
-    public void setReadDate(Date readDate) {
+    public void setReadDate(LocalDateTime readDate) {
         this.readDate = readDate;
     }
         

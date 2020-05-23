@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -46,10 +47,10 @@ public class BaseMessage extends BaseEntity {
     /**
      * 删除时间
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     @Column(name = "del_date")
-    protected Date delDate;
+    protected LocalDateTime delDate;
     /**
      * 删除人id
      */
@@ -100,11 +101,11 @@ public class BaseMessage extends BaseEntity {
         this.del = del;
     }
 
-    public Date getDelDate() {
+    public LocalDateTime getDelDate() {
         return delDate;
     }
 
-    public void setDelDate(Date delDate) {
+    public void setDelDate(LocalDateTime delDate) {
         this.delDate = delDate;
     }
 
