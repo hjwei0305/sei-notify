@@ -1,8 +1,13 @@
 package com.changhong.sei.notify.manager;
 
+import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.test.BaseUnitTest;
+import com.changhong.sei.notify.dto.BaseMessageDto;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -29,6 +34,8 @@ public class MessageManagerTest extends BaseUnitTest {
 
     @Test
     public void unreadData() {
+        OperateResultWithData<Map<String, List<BaseMessageDto>>> result = messageManager.unreadData();
+        System.out.println(result);
     }
 
     @Test

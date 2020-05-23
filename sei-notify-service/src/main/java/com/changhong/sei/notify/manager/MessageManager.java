@@ -5,6 +5,7 @@ import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
+import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.enums.UserType;
@@ -14,6 +15,7 @@ import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.BulletinUser;
 import com.changhong.sei.notify.entity.ContentBody;
+import com.changhong.sei.notify.entity.Remind;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.service.BulletinService;
 import com.changhong.sei.notify.service.ContentBodyService;
@@ -79,48 +81,22 @@ public class MessageManager {
     }
 
     /**
-     * 获取用户的权限集合{组织机构、岗位}
-     */
-    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetCodeByUser:'+#userId")
-    public Set<String> getTargetCodeByUser(SessionUser user) {
-        Set<String> targetCodes = Sets.newHashSet();
-
-        String userId = user.getUserId();
-        if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
-            // 获取用户的组织代码清单
-            ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
-            if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
-                targetCodes.addAll(orgCodesResult.getData());
-            }
-//        // todo 没有组织，获取用户岗位上的组织
-//        ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
-//        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-//            return positionCodesResult.getData();
-//        }
-        }
-
-        ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(userId);
-        if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
-            targetCodes.addAll(groupCodeResult.getData());
-        }
-
-        return targetCodes;
-    }
-
-    /**
      * 用户未读数据
      *
      * @return 返回未读数据
      */
     public OperateResultWithData<Map<String, List<BaseMessageDto>>> unreadData() {
         SessionUser user = ContextUtil.getSessionUser();
+        String userId = user.getUserId();
+        BaseMessageDto messageDto;
         Map<String, List<BaseMessageDto>> data = new HashMap<>();
-        List<BaseMessageDto> messageDtos = new ArrayList<>();
+
         // 未读通告
-        List<Bulletin> bulletins = bulletinService.getUnreadBulletin(user.getUserId(), this.getTargetCodeByUser(user));
-        if (!CollectionUtils.isEmpty(bulletins)) {
+        List<Bulletin> bulletins = bulletinService.getUnreadBulletin(userId, this.getTargetCodeByUser(user));
+        if (CollectionUtils.isNotEmpty(bulletins)) {
+            List<BaseMessageDto> messageDtos = new ArrayList<>();
             for (Bulletin bulletin : bulletins) {
-                BaseMessageDto messageDto = new BaseMessageDto();
+                messageDto = new BaseMessageDto();
                 messageDto.setId(bulletin.getId());
                 messageDto.setCategory(NotifyType.SEI_BULLETIN);
                 messageDto.setSubject(bulletin.getSubject());
@@ -129,9 +105,32 @@ public class MessageManager {
                 messageDtos.add(messageDto);
             }
             data.put(NotifyType.SEI_BULLETIN.name(), messageDtos);
+            bulletins.clear();
         }
+
         // 未读消息
+
+
         // 未读提醒
+        Search search = Search.createSearch();
+        search.addFilter(new SearchFilter(Remind.FIELD_USER_ID, userId));
+        search.addFilter(new SearchFilter(Remind.FIELD_READ, Boolean.FALSE));
+        List<Remind> reminds = remindService.findByFilters(search);
+        if (Objects.nonNull(reminds)) {
+            List<BaseMessageDto> messageDtos = new ArrayList<>();
+            for (Remind remind : reminds) {
+                messageDto = new BaseMessageDto();
+                messageDto.setId(remind.getId());
+                messageDto.setCategory(NotifyType.SEI_REMIND);
+                messageDto.setSubject(remind.getSubject());
+                messageDto.setContentId(remind.getContentId());
+                messageDto.setPriority(remind.getPriority());
+                messageDtos.add(messageDto);
+            }
+            data.put(NotifyType.SEI_REMIND.name(), messageDtos);
+            reminds.clear();
+        }
+
         return OperateResultWithData.operationSuccessWithData(data);
     }
 
@@ -257,5 +256,34 @@ public class MessageManager {
         }
         SessionUser user = ContextUtil.getSessionUser();
         return bulletinService.findPage4User(search, user.getUserId(), this.getTargetCodeByUser(user));
+    }
+
+    /**
+     * 获取用户的权限集合{组织机构、岗位}
+     */
+    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetCodeByUser:'+#userId")
+    public Set<String> getTargetCodeByUser(SessionUser user) {
+        Set<String> targetCodes = Sets.newHashSet();
+
+        String userId = user.getUserId();
+        if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
+            // 获取用户的组织代码清单
+            ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
+            if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
+                targetCodes.addAll(orgCodesResult.getData());
+            }
+//        // todo 没有组织，获取用户岗位上的组织
+//        ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
+//        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
+//            return positionCodesResult.getData();
+//        }
+        }
+
+        ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(userId);
+        if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
+            targetCodes.addAll(groupCodeResult.getData());
+        }
+
+        return targetCodes;
     }
 }

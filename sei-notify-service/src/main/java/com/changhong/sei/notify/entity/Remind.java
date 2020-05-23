@@ -25,6 +25,8 @@ import java.io.Serializable;
 @DynamicUpdate
 public class Remind extends BaseMessage implements ITenant, Serializable {
     private static final long serialVersionUID = -32108204849583924L;
+    public static final String FIELD_USER_ID = "userId";
+    public static final String FIELD_READ = "read";
     /**
      * 租户代码
      */
@@ -65,7 +67,7 @@ public class Remind extends BaseMessage implements ITenant, Serializable {
      * 是否阅读
      */
     @Column(name = "is_read")
-    private Boolean read;
+    private Boolean read = Boolean.FALSE;
     /**
      * 最近阅读时间
      */
@@ -75,7 +77,7 @@ public class Remind extends BaseMessage implements ITenant, Serializable {
      * 阅读次数
      */
     @Column(name = "read_num")
-    private Integer readNum;
+    private Integer readNum = 0;
 
     @Override
     public String getTenantCode() {
