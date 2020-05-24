@@ -1,8 +1,9 @@
 package com.changhong.sei.notify.dto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * *************************************************************************************************
@@ -45,11 +46,26 @@ public class NotifyMessage implements Serializable, MessageContent {
     /**
      * 内容模板参数
      */
-    private Map<String,Object> contentTemplateParams;
+    private Map<String, Object> contentTemplateParams;
+    /**
+     * 附件id（可以为空）
+     */
+    private Set<String> docIds;
     /**
      * 可以发送给发件人
      */
     private boolean canToSender = Boolean.FALSE;
+
+    public NotifyMessage() {
+    }
+
+    public NotifyMessage(String subject) {
+        this.subject = subject;
+    }
+    public NotifyMessage(String subject, String content) {
+        this.subject = subject;
+        this.content = content;
+    }
 
     public String getSubject() {
         return subject;
@@ -111,11 +127,39 @@ public class NotifyMessage implements Serializable, MessageContent {
         this.notifyTypes = notifyTypes;
     }
 
+    public Set<String> getDocIds() {
+        return docIds;
+    }
+
+    public void setDocIds(Set<String> docIds) {
+        this.docIds = docIds;
+    }
+
     public boolean isCanToSender() {
         return canToSender;
     }
 
     public void setCanToSender(boolean canToSender) {
         this.canToSender = canToSender;
+    }
+
+    public List<NotifyType> addNotifyType(NotifyType notifyType) {
+        if (Objects.isNull(notifyTypes)) {
+            notifyTypes = new ArrayList<>();
+        }
+        if (Objects.nonNull(notifyType)) {
+            notifyTypes.add(notifyType);
+        }
+        return notifyTypes;
+    }
+
+    public List<String> addReceiverId(String userId) {
+        if (Objects.isNull(receiverIds)) {
+            receiverIds = new ArrayList<>();
+        }
+        if (StringUtils.isNotBlank(userId)) {
+            receiverIds.add(userId);
+        }
+        return receiverIds;
     }
 }

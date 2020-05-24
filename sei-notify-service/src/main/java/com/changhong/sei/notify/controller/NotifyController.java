@@ -8,9 +8,9 @@ import com.changhong.sei.exception.ServiceException;
 import com.changhong.sei.notify.api.NotifyApi;
 import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.dto.SendMessage;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.manager.ContentBuilder;
-import com.changhong.sei.notify.dto.SendMessage;
 import com.changhong.sei.notify.service.client.UserNotifyInfoClient;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,6 +42,7 @@ public class NotifyController implements NotifyApi {
      */
     @Autowired
     private MqProducer mqProducer;
+
     /**
      * 发送平台消息通知
      *
@@ -62,12 +63,12 @@ public class NotifyController implements NotifyApi {
         if (StringUtils.isNotBlank(message.getSenderId())) {
             userIds.add(message.getSenderId());
         }
-        if (CollectionUtils.isEmpty(userIds)){
+        if (CollectionUtils.isEmpty(userIds)) {
             return;
         }
         // 调用基础服务，获取用户的消息通知信息
         ResultData<List<UserNotifyInfo>> userInfoResult = userNotifyInfoClient.findNotifyInfoByUserIds(new ArrayList<>(userIds));
-        if (userInfoResult.failed()){
+        if (userInfoResult.failed()) {
             // 记录异常日志
             LogUtil.error(userInfoResult.getMessage(), new ServiceException("调用基础服务，获取用户的消息通知信息异常！"));
             return;
@@ -79,7 +80,7 @@ public class NotifyController implements NotifyApi {
         String subject = message.getSubject();
         //消息内容
         String content = message.getContent();
-        UserNotifyInfo sender=null;
+        UserNotifyInfo sender = null;
         List<UserNotifyInfo> receivers = new ArrayList<>();
         for (UserNotifyInfo info : userInfos) {
             if (StringUtils.isNotBlank(message.getSenderId()) && Objects.equals(info.getUserId(), message.getSenderId())) {
@@ -89,8 +90,8 @@ public class NotifyController implements NotifyApi {
             }
         }
         //判断是否发送给发件人
-        if (message.isCanToSender()&&Objects.nonNull(sender)){
-            if (receiverIds.contains(sender.getUserId())){
+        if (message.isCanToSender() && Objects.nonNull(sender)) {
+            if (receiverIds.contains(sender.getUserId())) {
                 receivers.add(sender);
             }
         }
@@ -103,8 +104,11 @@ public class NotifyController implements NotifyApi {
         sendMessage.setContent(content);
         sendMessage.setSender(sender);
         sendMessage.setReceivers(receivers);
+
+        // 去重
+        Set<NotifyType> notifyTypeSet = new HashSet<>(message.getNotifyTypes());
         // 循环通知方式，循环发送
-        for (NotifyType notifyType: message.getNotifyTypes()){
+        for (NotifyType notifyType : notifyTypeSet) {
             String sendJson = JsonUtils.toJson(sendMessage);
             mqProducer.send(notifyType.name(), sendJson);
         }

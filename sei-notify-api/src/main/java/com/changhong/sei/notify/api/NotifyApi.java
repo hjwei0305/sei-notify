@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+
 /**
  * <strong>实现功能:</strong>
  * <p>平台消息通知服务API接口</p>
@@ -23,5 +25,5 @@ public interface NotifyApi {
      */
     @ApiOperation(value = "发送平台消息通知", notes = "发送一个平台消息到消息服务队列")
     @PostMapping(path = "send", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    void send(@RequestBody NotifyMessage message);
+    void send(@RequestBody @Valid NotifyMessage message);
 }

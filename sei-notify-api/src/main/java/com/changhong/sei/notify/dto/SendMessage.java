@@ -2,6 +2,7 @@ package com.changhong.sei.notify.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -22,13 +23,17 @@ public class SendMessage implements Serializable {
      */
     private String content;
     /**
+     * 收件人清单
+     */
+    private List<UserNotifyInfo> receivers;
+    /**
      * 发件人（可以为空）
      */
     private UserNotifyInfo sender;
     /**
-     * 收件人清单
+     * 附件id（可以为空）
      */
-    private List<UserNotifyInfo> receivers;
+    private Set<String> docIds;
 
     public String getSubject() {
         return subject;
@@ -66,6 +71,15 @@ public class SendMessage implements Serializable {
         return this;
     }
 
+    public Set<String> getDocIds() {
+        return docIds;
+    }
+
+    public SendMessage setDocIds(Set<String> docIds) {
+        this.docIds = docIds;
+        return this;
+    }
+
     public static SendMessage builder() {
         return new SendMessage();
     }
@@ -76,6 +90,7 @@ public class SendMessage implements Serializable {
                 .add("subject='" + subject + "'")
                 .add("content='" + content + "'")
                 .add("sender=" + sender)
+                .add("docIds=" + docIds)
                 .add("receivers=" + receivers)
                 .toString();
     }
