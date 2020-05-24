@@ -3,6 +3,7 @@ package com.changhong.sei.notify.api;
 import com.changhong.sei.core.api.FindByPageApi;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.BulletinDto;
+import com.changhong.sei.notify.dto.OrganizationDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -66,4 +68,14 @@ public interface BulletinApi extends FindByPageApi<BulletinDto> {
     @GetMapping(path = "getBulletin")
     @ApiOperation(value = "查看通告", notes = "获取一个通告")
     ResultData<BulletinDto> getBulletin(@RequestParam("id") String id);
+
+    /**
+     * 获取当前用户有权限的树形组织实体清单
+     *
+     * @param featureCode 功能项代码
+     * @return 有权限的树形组织实体清单
+     */
+    @GetMapping(path = "getUserAuthorizedTreeOrg")
+    @ApiOperation(value = "获取当前用户有权限的树形组织实体清单", notes = "获取当前用户有权限的树形组织实体清单")
+    ResultData<List<OrganizationDto>> getUserAuthorizedTreeOrg(@RequestParam(value = "featureCode", required = false, defaultValue = "") String featureCode);
 }

@@ -2,4 +2,5 @@ rootProject.name = 'sei-notify'
 include 'sei-notify-service'
 include 'sei-notify-api'
 include 'api-test'
+include 'sei-notify-sdk'
 

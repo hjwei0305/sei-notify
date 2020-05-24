@@ -2,7 +2,6 @@ package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.controller.BaseEntityController;
-import com.changhong.sei.core.controller.DefaultBaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
@@ -12,18 +11,19 @@ import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.api.BulletinApi;
 import com.changhong.sei.notify.dto.BulletinDto;
+import com.changhong.sei.notify.dto.OrganizationDto;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.service.BulletinService;
+import com.changhong.sei.notify.service.client.OrganizationClient;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,6 +40,9 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         implements BulletinApi {
     @Autowired
     private BulletinService service;
+    @Autowired
+    private OrganizationClient organizationClient;
+
     @Override
     public BaseEntityService<Bulletin> getService() {
         return service;
@@ -164,5 +167,16 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
     @Override
     public ResultData<PageResult<BulletinDto>> findByPage(Search search) {
         return convertToDtoPageResult(service.findByPage(search));
+    }
+
+    /**
+     * 获取当前用户有权限的树形组织实体清单
+     *
+     * @param featureCode 功能项代码
+     * @return 有权限的树形组织实体清单
+     */
+    @Override
+    public ResultData<List<OrganizationDto>> getUserAuthorizedTreeOrg(String featureCode) {
+        return organizationClient.getUserAuthorizedTreeEntities(featureCode);
     }
 }

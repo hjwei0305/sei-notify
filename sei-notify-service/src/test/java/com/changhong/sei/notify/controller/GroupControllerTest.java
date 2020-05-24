@@ -43,8 +43,10 @@ public class GroupControllerTest extends BaseUnitTest {
 
     @Test
     public void getUserAccounts() {
-        String id = "";
-        Search search = Search.createSearch();
+//        Search search = Search.createSearch();
+        String json = "{\"quickSearchValue\":\"admin\",\"quickSearchProperties\":[\"userName\",\"userAccount\"],\"pageInfo\":{\"page\":1,\"rows\":15}}";
+        Search search = JsonUtils.fromJson(json, Search.class);
+//        search.setQuickSearchValue("admin");
         ResultData<PageResult<GroupUserDto>> resultData = controller.getUserAccounts(search);
         LOG.debug(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());

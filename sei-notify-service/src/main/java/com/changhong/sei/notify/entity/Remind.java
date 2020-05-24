@@ -1,10 +1,5 @@
 package com.changhong.sei.notify.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-
-import com.changhong.sei.core.entity.BaseAuditableEntity;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.enums.UserType;
 import org.hibernate.annotations.DynamicInsert;
@@ -12,6 +7,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 提醒信息(Remind)实体类
