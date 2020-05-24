@@ -49,29 +49,32 @@ public class NotifyController implements NotifyApi {
      * @param message 平台消息
      */
     @Override
-    public void send(NotifyMessage message) {
+    public ResultData<String> send(NotifyMessage message) {
         //检查消息通知方式
         if (message == null || CollectionUtils.isEmpty(message.getNotifyTypes())) {
-            return;
+            // 发送的消息类型以及内容不能为空
+            return ResultData.fail("00022");
         }
         //检查收件人是否存在
-        if (CollectionUtils.isEmpty(message.getReceiverIds())) {
-            return;
-        }
         List<String> receiverIds = message.getReceiverIds();
+        if (CollectionUtils.isEmpty(receiverIds)) {
+            // 发送消息的收件人不能为空
+            return ResultData.fail("00023");
+        }
         Set<String> userIds = new HashSet<>(receiverIds);
         if (StringUtils.isNotBlank(message.getSenderId())) {
             userIds.add(message.getSenderId());
         }
         if (CollectionUtils.isEmpty(userIds)) {
-            return;
+            // 发送消息的收件人不能为空
+            return ResultData.fail("00023");
         }
         // 调用基础服务，获取用户的消息通知信息
         ResultData<List<UserNotifyInfo>> userInfoResult = userNotifyInfoClient.findNotifyInfoByUserIds(new ArrayList<>(userIds));
         if (userInfoResult.failed()) {
             // 记录异常日志
             LogUtil.error(userInfoResult.getMessage(), new ServiceException("调用基础服务，获取用户的消息通知信息异常！"));
-            return;
+            return ResultData.fail("00025");
         }
         List<UserNotifyInfo> userInfos = userInfoResult.getData();
         // 生成消息
@@ -96,7 +99,8 @@ public class NotifyController implements NotifyApi {
             }
         }
         if (CollectionUtils.isEmpty(receivers)) {
-            return;
+            // 发送消息的收件人不存在
+            return ResultData.fail("00024");
         }
         // 构造统一发送的消息
         SendMessage sendMessage = new SendMessage();
@@ -112,5 +116,6 @@ public class NotifyController implements NotifyApi {
             String sendJson = JsonUtils.toJson(sendMessage);
             mqProducer.send(notifyType.name(), sendJson);
         }
+        return ResultData.success("ok");
     }
 }

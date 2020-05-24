@@ -29,7 +29,7 @@ public class NotifyManagerTest extends BaseUnitTest {
         message.setSubject("测试");
         message.setContent("测试内容");
 
-        message.addReceiverId("userId");
+        message.addReceiverId("B54E8964-D14D-11E8-A64B-0242C0A8441B");
         message.addNotifyType(NotifyType.SEI_REMIND);
 
         ResultData<String> result = notifyManager.send(message);

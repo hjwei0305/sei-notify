@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.api;
 
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.NotifyMessage;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -25,5 +26,5 @@ public interface NotifyApi {
      */
     @ApiOperation(value = "发送平台消息通知", notes = "发送一个平台消息到消息服务队列")
     @PostMapping(path = "send", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    void send(@RequestBody @Valid NotifyMessage message);
+    ResultData<String> send(@RequestBody @Valid NotifyMessage message);
 }
