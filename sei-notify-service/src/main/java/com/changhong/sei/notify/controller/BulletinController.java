@@ -15,7 +15,7 @@ import com.changhong.sei.notify.dto.OrganizationDto;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.service.BulletinService;
-import com.changhong.sei.notify.service.client.OrganizationClient;
+import com.changhong.sei.notify.service.cust.BasicIntegration;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
     @Autowired
     private BulletinService service;
     @Autowired
-    private OrganizationClient organizationClient;
+    private BasicIntegration basicIntegration;
 
     @Override
     public BaseEntityService<Bulletin> getService() {
@@ -177,6 +177,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      */
     @Override
     public ResultData<List<OrganizationDto>> getUserAuthorizedTreeOrg(String featureCode) {
-        return organizationClient.getUserAuthorizedTreeEntities(featureCode);
+        return basicIntegration.getUserAuthorizedTreeEntities(featureCode);
     }
 }

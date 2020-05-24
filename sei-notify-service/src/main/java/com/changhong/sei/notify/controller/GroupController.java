@@ -13,8 +13,8 @@ import com.changhong.sei.notify.dto.GroupUserDto;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupUser;
 import com.changhong.sei.notify.service.GroupService;
-import com.changhong.sei.notify.service.client.AccountClient;
-import com.changhong.sei.notify.service.client.dto.AccountResponse;
+import com.changhong.sei.notify.dto.AccountResponse;
+import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
@@ -52,7 +52,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     private GroupService service;
 
     @Autowired
-    private AccountClient accountClient;
+    private BasicIntegration basicIntegration;
 
     @Override
     public BaseEntityService<Group> getService() {
@@ -179,7 +179,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     @Override
     public ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search) {
         search.setQuickSearchProperties(Sets.newHashSet("account", "name"));
-        ResultData<PageResult<AccountResponse>> resultData = accountClient.findByPage(search);
+        ResultData<PageResult<AccountResponse>> resultData = basicIntegration.findByPage(search);
         if (resultData.successful()) {
             PageResult<AccountResponse> pageResult = resultData.getData();
             List<AccountResponse> accounts = pageResult.getRows();

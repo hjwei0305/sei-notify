@@ -21,7 +21,7 @@ import com.changhong.sei.notify.service.BulletinService;
 import com.changhong.sei.notify.service.ContentBodyService;
 import com.changhong.sei.notify.service.GroupService;
 import com.changhong.sei.notify.service.RemindService;
-import com.changhong.sei.notify.service.client.EmployeeClient;
+import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +50,7 @@ public class MessageManager {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private EmployeeClient employeeClient;
+    private BasicIntegration basicIntegration;
 
     /**
      * 未读消息数
@@ -289,7 +289,7 @@ public class MessageManager {
         String userId = user.getUserId();
         if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
             // 获取用户的组织代码清单
-            ResultData<List<String>> orgCodesResult = employeeClient.getEmployeeOrgCodes(userId);
+            ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
             if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
                 targetCodes.addAll(orgCodesResult.getData());
             }

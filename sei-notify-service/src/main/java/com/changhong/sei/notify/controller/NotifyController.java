@@ -11,7 +11,7 @@ import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.SendMessage;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.manager.ContentBuilder;
-import com.changhong.sei.notify.service.client.UserNotifyInfoClient;
+import com.changhong.sei.notify.service.cust.BasicIntegration;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +34,7 @@ import java.util.*;
 @RequestMapping(path = "notify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class NotifyController implements NotifyApi {
     @Autowired
-    private UserNotifyInfoClient userNotifyInfoClient;
+    private BasicIntegration basicIntegration;
     @Autowired
     private ContentBuilder contentBuilder;
     /**
@@ -70,7 +70,7 @@ public class NotifyController implements NotifyApi {
             return ResultData.fail("00023");
         }
         // 调用基础服务，获取用户的消息通知信息
-        ResultData<List<UserNotifyInfo>> userInfoResult = userNotifyInfoClient.findNotifyInfoByUserIds(new ArrayList<>(userIds));
+        ResultData<List<UserNotifyInfo>> userInfoResult = basicIntegration.findNotifyInfoByUserIds(new ArrayList<>(userIds));
         if (userInfoResult.failed()) {
             // 记录异常日志
             LogUtil.error(userInfoResult.getMessage(), new ServiceException("调用基础服务，获取用户的消息通知信息异常！"));

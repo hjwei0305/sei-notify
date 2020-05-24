@@ -1,4 +1,4 @@
-package com.changhong.sei.notify.service.client.dto;
+package com.changhong.sei.notify.dto;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.fasterxml.jackson.annotation.JsonFormat;

@@ -2,15 +2,11 @@ package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
-import com.changhong.sei.core.dto.serach.PageResult;
-import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.dao.GroupDao;
 import com.changhong.sei.notify.dao.GroupUserDao;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupUser;
-import com.changhong.sei.notify.service.client.AccountClient;
-import com.changhong.sei.notify.service.client.dto.AccountResponse;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
