@@ -9,6 +9,7 @@ import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.dto.serach.SearchOrder;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
+import com.changhong.sei.edm.sdk.DocumentManager;
 import com.changhong.sei.notify.dao.BulletinDao;
 import com.changhong.sei.notify.dao.BulletinUserDao;
 import com.changhong.sei.notify.dao.ContentBodyDao;
@@ -40,6 +41,8 @@ public class BulletinService extends BaseEntityService<Bulletin> {
     private ContentBodyDao contentBodyDao;
     @Autowired
     private BulletinUserDao bulletinUserDao;
+    @Autowired(required = false)
+    private DocumentManager documentManager;
 
     @Override
     protected BaseEntityDao<Bulletin> getDao() {
@@ -87,6 +90,8 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             // 维护的通告以及内容不能为空！
             return OperateResult.operationFailure("00002");
         }
+        Set<String> docIds = bulletin.getDocIds();
+
         ContentBody body = new ContentBody(content);
         String id = bulletin.getId();
         if (StringUtils.isBlank(id)) {
@@ -112,6 +117,12 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             bulletin.setContentId(body.getId());
         }
         dao.save(bulletin);
+
+        //绑定附件
+        if (CollectionUtils.isNotEmpty(docIds) && Objects.nonNull(documentManager)) {
+            documentManager.bindBusinessDocuments(bulletin.getId(), docIds);
+        }
+
         return OperateResult.operationSuccess();
     }
 
