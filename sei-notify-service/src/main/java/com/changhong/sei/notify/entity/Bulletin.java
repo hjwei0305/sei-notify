@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity()
 @Table(name = "bulletin")
 @Access(AccessType.FIELD)
-public class Bulletin extends BaseEntity /*implements ITenant*/ {
+public class Bulletin extends BaseEntity implements ITenant {
     private static final long serialVersionUID = 1029465462675785527L;
     public static final String FIELD_RELEASE = "release";
 
@@ -71,12 +71,12 @@ public class Bulletin extends BaseEntity /*implements ITenant*/ {
         this.msgId = msgId;
     }
 
-//    @Override
+    @Override
     public String getTenantCode() {
         return tenantCode;
     }
 
-//    @Override
+    @Override
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }

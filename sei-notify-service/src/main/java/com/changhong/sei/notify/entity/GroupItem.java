@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Table(name = "group_item")
 @DynamicInsert
 @DynamicUpdate
-public class GroupItem extends BaseAuditableEntity implements /*ITenant,*/ Serializable {
+public class GroupItem extends BaseAuditableEntity implements ITenant, Serializable {
     private static final long serialVersionUID = -18017322204395690L;
     public static final String FIELD_GROUP_ID = "groupId";
     public static final String FIELD_CATEGORY = "category";
@@ -98,12 +98,12 @@ public class GroupItem extends BaseAuditableEntity implements /*ITenant,*/ Seria
         this.itemName = itemName;
     }
 
-//    @Override
+    @Override
     public String getTenantCode() {
         return tenantCode;
     }
 
-//    @Override
+    @Override
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }

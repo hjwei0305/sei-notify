@@ -24,7 +24,7 @@ import java.util.Set;
 @Table(name = "message")
 @DynamicInsert
 @DynamicUpdate
-public class Message extends BaseEntity /*implements ITenant*/ {
+public class Message extends BaseEntity implements ITenant {
     private static final long serialVersionUID = 8454048674835991508L;
     public static final String FIELD_DEL = "del";
 
@@ -134,12 +134,12 @@ public class Message extends BaseEntity /*implements ITenant*/ {
     @Transient
     private Set<String> docIds;
 
-//    @Override
+    @Override
     public String getTenantCode() {
         return tenantCode;
     }
 
-//    @Override
+    @Override
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }

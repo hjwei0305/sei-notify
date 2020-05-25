@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Table(name = "group_info")
 @DynamicInsert
 @DynamicUpdate
-public class Group extends BaseAuditableEntity implements /*ITenant,*/ ICodeUnique, Serializable {
+public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, Serializable {
     private static final long serialVersionUID = 182142067251684618L;
     /**
      * 类别
@@ -83,12 +83,12 @@ public class Group extends BaseAuditableEntity implements /*ITenant,*/ ICodeUniq
         this.name = name;
     }
 
-//    @Override
+    @Override
     public String getTenantCode() {
         return tenantCode;
     }
 
-//    @Override
+    @Override
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }
