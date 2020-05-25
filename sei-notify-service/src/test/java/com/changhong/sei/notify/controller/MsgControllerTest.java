@@ -5,9 +5,7 @@ import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
-import com.changhong.sei.notify.dto.BaseMessageDto;
-import com.changhong.sei.notify.dto.BulletinDto;
-import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.dto.MessageDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class MsgControllerTest extends BaseUnitTest {
     @Test
     public void findMessageByPage() {
         Search search = Search.createSearch();
-        ResultData<PageResult<BaseMessageDto>> result = controller.findMessageByPage(NotifyType.SEI_REMIND, search);
+        ResultData<PageResult<MessageDto>> result = controller.findMessageByPage(search);
         System.out.println(JsonUtils.toJson(result));
         Assert.assertTrue(result.successful());
     }

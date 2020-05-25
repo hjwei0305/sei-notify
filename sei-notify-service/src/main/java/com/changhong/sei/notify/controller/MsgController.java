@@ -9,12 +9,12 @@ import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.api.MsgApi;
-import com.changhong.sei.notify.dto.BaseMessageDto;
-import com.changhong.sei.notify.dto.BulletinDto;
+import com.changhong.sei.notify.dto.MessageDto;
 import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.Priority;
-import com.changhong.sei.notify.entity.compose.BulletinCompose;
-import com.changhong.sei.notify.manager.MessageManager;
+import com.changhong.sei.notify.entity.Message;
+import com.changhong.sei.notify.entity.compose.MessageCompose;
+import com.changhong.sei.notify.service.MessageService;
 import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * <strong>实现功能:</strong>
@@ -39,7 +37,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "message", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MsgController implements MsgApi {
     @Autowired
-    private MessageManager msgService;
+    private MessageService messageService;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -72,7 +70,7 @@ public class MsgController implements MsgApi {
     public ResultData<Long> unreadCount() {
         Long unread;
         try {
-            unread = msgService.unreadCount();
+            unread = messageService.getUnreadCount(ContextUtil.getSessionUser());
         } catch (Exception e) {
             e.printStackTrace();
             LogUtil.error("获取未读消息数异常！", e);
@@ -88,30 +86,28 @@ public class MsgController implements MsgApi {
      * @return 查询结果
      */
     @Override
-    public ResultData<Map<String, List<BaseMessageDto>>> unreadData() {
-        OperateResultWithData<Map<String, List<BaseMessageDto>>> operateResult;
+    public ResultData<Map<String, List<MessageDto>>> unreadData() {
         try {
-            operateResult = msgService.unreadData();
+            Map<String, List<MessageDto>> messageMap = messageService.getUnreadMessage(ContextUtil.getSessionUser());
+            return ResultData.success(messageMap);
         } catch (Exception e) {
             LogUtil.error("获取用户未读数据异常！", e);
             // 获取用户未读数据异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00014", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult, operateResult.getData());
     }
 
     /**
      * 用户阅读
      *
-     * @param category 消息类型
-     * @param id       通告Id
+     * @param msgId 消息Id
      * @return 操作结果
      */
     @Override
-    public ResultData<String> read(NotifyType category, String id) {
+    public ResultData<String> read(String msgId) {
         OperateResult operateResult;
         try {
-            operateResult = msgService.read(category, id);
+            operateResult = messageService.read(msgId);
         } catch (Exception e) {
             LogUtil.error("执行用户阅读异常！", e);
             // 执行用户阅读异常！{0}
@@ -123,21 +119,24 @@ public class MsgController implements MsgApi {
     /**
      * 用户查看
      *
-     * @param category 消息类型
-     * @param id       通告Id
+     * @param msgId 消息Id
      * @return 操作结果
      */
     @Override
-    public ResultData<BaseMessageDto> detail(NotifyType category, String id) {
-        OperateResultWithData<BaseMessageDto> operateResult;
+    public ResultData<MessageDto> detail(String msgId) {
         try {
-            operateResult = msgService.detail(category, id);
+            ResultData<Message> messageResultData = messageService.detail(msgId);
+            if (messageResultData.successful()) {
+                MessageDto messageDto = modelMapper.map(messageResultData.getData(), MessageDto.class);
+                return ResultData.success(messageDto);
+            } else {
+                return ResultData.fail(messageResultData.getMessage());
+            }
         } catch (Exception e) {
             LogUtil.error("执行用户查看异常！", e);
             // 执行用户查看异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00016", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult, operateResult.getData());
     }
 
     /**
@@ -146,33 +145,17 @@ public class MsgController implements MsgApi {
      * @return 操作结果
      */
     @Override
-    public ResultData<BaseMessageDto> getFirstUnreadBulletin() {
-        OperateResultWithData<BaseMessageDto> operateResult;
+    public ResultData<MessageDto> getFirstUnreadMessage() {
+        OperateResultWithData<MessageDto> operateResult;
         try {
-            operateResult = msgService.getFirstUnreadBulletin();
+            Message message = messageService.getFirstUnreadMessage(ContextUtil.getSessionUser());
+            return ResultData.success(modelMapper.map(message, MessageDto.class));
         } catch (Exception e) {
             LogUtil.error("默认获取优先级高的通告异常！", e);
             // 默认获取优先级高的通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00017", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult, operateResult.getData());
     }
-
-    /**
-     * 将数据实体转换成DTO
-     *
-     * @param entity 业务实体
-     * @return DTO
-     */
-    private BulletinDto convertToDto(BulletinCompose entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        BulletinDto dto = modelMapper.map(entity.getBulletin(), BulletinDto.class);
-        dto.setContent(entity.getContent());
-        return dto;
-    }
-
 
     /**
      * 用户查询通告
@@ -181,7 +164,16 @@ public class MsgController implements MsgApi {
      * @return 查询结果
      */
     @Override
-    public ResultData<PageResult<BaseMessageDto>> findMessageByPage(NotifyType category, Search search) {
-        return msgService.findMessageByPage(category, search);
+    public ResultData<PageResult<MessageDto>> findMessageByPage(Search search) {
+        PageResult<MessageCompose> pageResult = messageService.findPage4User(search, ContextUtil.getSessionUser());
+
+        MessageDto dto;
+        PageResult<MessageDto> result = new PageResult<>(pageResult);
+        for (MessageCompose compose : pageResult.getRows()) {
+            dto = modelMapper.map(compose.getMessage(), MessageDto.class);
+            dto.setRead(compose.getUser().getRead());
+        }
+
+        return ResultData.success(result);
     }
 }

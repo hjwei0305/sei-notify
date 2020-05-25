@@ -31,7 +31,7 @@ public class BulletinControllerTest extends BaseUnitTest {
         Search search = new Search();
         search.setPageInfo(new PageInfo());
         List<TargetType> targetTypes = new ArrayList<>();
-        targetTypes.add(TargetType.ORG);
+//        targetTypes.add(TargetType.ORG);
         SearchFilter filter = new SearchFilter("targetType", targetTypes, SearchFilter.Operator.IN);
         search.addFilter(filter);
         // 打印参数

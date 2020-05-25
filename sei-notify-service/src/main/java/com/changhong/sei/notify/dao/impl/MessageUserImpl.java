@@ -2,18 +2,16 @@ package com.changhong.sei.notify.dao.impl;
 
 import com.changhong.sei.core.dao.impl.BaseEntityDaoImpl;
 import com.changhong.sei.core.dto.serach.*;
-import com.changhong.sei.notify.dao.BulletinExtDao;
-import com.changhong.sei.notify.entity.Bulletin;
-import com.changhong.sei.notify.entity.compose.BulletinCompose;
-import com.changhong.sei.util.DateUtils;
+import com.changhong.sei.notify.dao.MessageUserExtDao;
+import com.changhong.sei.notify.entity.Message;
+import com.changhong.sei.notify.entity.MessageUser;
+import com.changhong.sei.notify.entity.compose.MessageCompose;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -24,24 +22,23 @@ import java.util.Set;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2019-09-25 13:44
  */
-public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements BulletinExtDao {
+public class MessageUserImpl extends BaseEntityDaoImpl<MessageUser> implements MessageUserExtDao {
 
-    public BulletinDaoImpl(EntityManager entityManager) {
-        super(Bulletin.class, entityManager);
+    public MessageUserImpl(EntityManager entityManager) {
+        super(MessageUser.class, entityManager);
     }
 
     @Override
-    public Long getUnreadCount(String userId, Set<String> targetCodes) {
+    public Long getUnreadCount(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
-        jpql.append("select count(t.id) from Bulletin t ");
-        return (Long) getUnReadQuery(jpql, userId, targetCodes, "").getSingleResult();
+        jpql.append("select count(t.id) from Message t ");
+        return (Long) getUnReadQuery(jpql, userId, targetValues, "").getSingleResult();
     }
 
-    private Query getUnReadQuery(StringBuilder jpql, String userId, Set<String> targetCodes, String order) {
-        jpql.append(" where t.del = :del and t.release = :release ");
-        jpql.append(" and t.effectiveDate <= :effectiveDate and t.invalidDate >= :invalidDate ");
-        jpql.append(" and not exists (select u.id from BulletinUser u where t.id = u.bulletinId and u.userId = :userId and u.read = :read) ");
-        jpql.append(" and t.targetCode in (:targetCodes)");
+    private Query getUnReadQuery(StringBuilder jpql, String userId, Set<String> targetValues, String order) {
+        jpql.append(" where t.del = :del and t.publish = :publish and t.effective = :effective ");
+        jpql.append(" and not exists (select u.id from MessageUser u where t.id = u.msgId and u.userId = :userId and u.read = :read) ");
+        jpql.append(" and t.targetValue in (:targetValues)");
 
         if (StringUtils.isNotBlank(order)) {
             jpql.append(" ").append(order);
@@ -50,42 +47,41 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
         Query query = entityManager.createQuery(jpql.toString());
         LocalDate date = LocalDate.now();
         query.setParameter("del", Boolean.FALSE);
-        query.setParameter("release", Boolean.TRUE);
-        query.setParameter("effectiveDate", date);
-        query.setParameter("invalidDate", date);
+        query.setParameter("publish", Boolean.TRUE);
+        query.setParameter("effective", Boolean.TRUE);
         query.setParameter("userId", userId);
         query.setParameter("read", Boolean.TRUE);
-        query.setParameter("targetCodes", targetCodes);
+        query.setParameter("targetValues", targetValues);
         return query;
     }
 
     @Override
-    public List<Bulletin> getUnreadBulletin(String userId, Set<String> targetCodes) {
+    public List<Message> getUnreadMessage(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
-        jpql.append("select t from Bulletin t ");
-        return getUnReadQuery(jpql, userId, targetCodes, "").getResultList();
+        jpql.append("select t from Message t ");
+        return getUnReadQuery(jpql, userId, targetValues, "").getResultList();
     }
 
     @Override
-    public Bulletin getFirstUnreadBulletin(String userId, Set<String> targetCodes) {
+    public Message getFirstUnreadMessage(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
-        jpql.append("select t from Bulletin t ");
+        jpql.append("select t from Message t ");
 
         // 优先级, 发布时间
-        String order = " order by t.priority desc, t.releaseDate desc";
+        String order = " order by t.priority desc, t.publishDate desc";
 
-        Query query = getUnReadQuery(jpql, userId, targetCodes, order);
+        Query query = getUnReadQuery(jpql, userId, targetValues, order);
         query.setMaxResults(1);
-        List<Bulletin> bulletins = query.getResultList();
-        if (CollectionUtils.isEmpty(bulletins)) {
+        List<Message> messageList = query.getResultList();
+        if (CollectionUtils.isEmpty(messageList)) {
             return null;
         } else {
-            return bulletins.get(0);
+            return messageList.get(0);
         }
     }
 
     @Override
-    public PageResult<BulletinCompose> findPage4User(Search search, String userId, Set<String> targetCodes) {
+    public PageResult<MessageCompose> findPage4User(Search search, String userId, Set<String> targetCodes) {
         PageInfo pageInfo = search.getPageInfo();
         if (Objects.isNull(pageInfo)) {
             pageInfo = new PageInfo();
@@ -94,8 +90,8 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
         String val = search.getQuickSearchValue();
 
         StringBuilder where = new StringBuilder();
-        where.append(" from Bulletin b left join BulletinUser u on b.id = u.bulletinId and u.userId = :userId ");
-        where.append(" where b.del = 0 and b.release = 1  and b.targetCode in (:targetCodes)");
+        where.append(" from Message b left join MessageUser u on b.id = u.msgId and u.userId = :userId ");
+        where.append(" where b.del = 0 and b.publish = 1  and b.targetValue in (:targetValues)");
         if (StringUtils.isNotBlank(val)) {
             where.append(" and b.subject like :subject ");
         }
@@ -141,23 +137,23 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
             }
         }
 
-        List<BulletinCompose> bulletinComposes = null;
+        List<MessageCompose> messageComposes = null;
         StringBuilder jpql = new StringBuilder();
         jpql.append("select count(1) ").append(where);
         Query countQuery = entityManager.createQuery(jpql.toString());
         countQuery.setParameter("userId", userId);
-        countQuery.setParameter("targetCodes", targetCodes);
+        countQuery.setParameter("targetValues", targetCodes);
         if (StringUtils.isNotBlank(val)) {
             countQuery.setParameter("subject", "%" + val + "%");
         }
         Long countNum = (Long) countQuery.getSingleResult();
         if (Objects.nonNull(countNum)) {
             jpql.delete(0, jpql.length());
-            jpql.append("select new com.changhong.sei.notify.entity.compose.BulletinCompose(b, u) ").append(where);
+            jpql.append("select new com.changhong.sei.notify.entity.compose.MessageCompose(b, u) ").append(where);
             // 排序
             List<SearchOrder> orders = search.getSortOrders();
             if (CollectionUtils.isNotEmpty(orders)) {
-                jpql.append(" order by b.release ");
+                jpql.append(" order by b.publish ");
                 for (SearchOrder order : orders) {
                     if (StringUtils.equals("read", order.getProperty())) {
                         jpql.append(", u.").append(order.getProperty()).append(" ").append(order.getDirection().name());
@@ -168,7 +164,7 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
             }
             Query query = entityManager.createQuery(jpql.toString());
             query.setParameter("userId", userId);
-            query.setParameter("targetCodes", targetCodes);
+            query.setParameter("targetValues", targetCodes);
             if (StringUtils.isNotBlank(val)) {
                 query.setParameter("subject", "%" + val + "%");
             }
@@ -176,10 +172,10 @@ public class BulletinDaoImpl extends BaseEntityDaoImpl<Bulletin> implements Bull
             query.setFirstResult(pageInfo.getPage() - 1);
             query.setMaxResults(pageInfo.getRows());
 
-            bulletinComposes = (List<BulletinCompose>) query.getResultList();
+            messageComposes = (List<MessageCompose>) query.getResultList();
         }
-        PageResult<BulletinCompose> pageResult = new PageResult<>();
-        pageResult.setRows(bulletinComposes);
+        PageResult<MessageCompose> pageResult = new PageResult<>();
+        pageResult.setRows(messageComposes);
         pageResult.setTotal((int) Math.ceil((double) countNum / (double) pageInfo.getRows()));
         pageResult.setRecords(countNum.intValue());
         pageResult.setPage(pageInfo.getPage());

@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.entity.compose;
 
 import com.changhong.sei.notify.entity.Bulletin;
-import com.changhong.sei.notify.entity.BulletinUser;
+import com.changhong.sei.notify.entity.Message;
 
 import java.io.Serializable;
 
@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @version 1.0.1 2020-01-15 11:17
  */
 public class BulletinCompose implements Serializable {
+    private static final long serialVersionUID = 3048139596682418260L;
     /**
      * 通告
      */
@@ -21,19 +22,14 @@ public class BulletinCompose implements Serializable {
     /**
      * 通告的用户
      */
-    private BulletinUser user;
-
-    /**
-     * 通告的内容
-     */
-    private String content;
+    private Message message;
 
     public BulletinCompose() {
     }
 
-    public BulletinCompose(Bulletin bulletin, BulletinUser user) {
+    public BulletinCompose(Bulletin bulletin, Message message) {
         this.bulletin = bulletin;
-        this.user = user;
+        this.message = message;
     }
 
     public Bulletin getBulletin() {
@@ -44,19 +40,11 @@ public class BulletinCompose implements Serializable {
         this.bulletin = bulletin;
     }
 
-    public BulletinUser getUser() {
-        return user;
+    public Message getMessage() {
+        return message;
     }
 
-    public void setUser(BulletinUser user) {
-        this.user = user;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setMessage(Message message) {
+        this.message = message;
     }
 }

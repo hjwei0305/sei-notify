@@ -13,6 +13,7 @@ import com.changhong.sei.notify.api.BulletinApi;
 import com.changhong.sei.notify.dto.BulletinDto;
 import com.changhong.sei.notify.dto.OrganizationDto;
 import com.changhong.sei.notify.entity.Bulletin;
+import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.service.BulletinService;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
@@ -61,7 +62,8 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         // 执行业务逻辑
         OperateResult result;
         try {
-            result = service.saveBulletin(bulletin, bulletinDto.getContent());
+            Message message = new Message();
+            result = service.saveBulletin(bulletin, message);
         } catch (Exception e) {
             LogUtil.error("保存消息通告异常！", e);
             // 保存消息通告异常！{0}
@@ -145,17 +147,23 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             return ResultData.fail(ContextUtil.getMessage("00007"));
         }
         // 执行业务逻辑
-        BulletinCompose compose;
+        ResultData<BulletinCompose> resultData;
         try {
-            compose = service.getBulletin(id);
+            resultData = service.getBulletin(id);
+            if (resultData.successful()) {
+                BulletinCompose compose = resultData.getData();
+
+                BulletinDto dto = getModelMapper().map(compose.getBulletin(), BulletinDto.class);
+                dto.setContent(compose.getMessage().getContent());
+                return ResultData.success(dto);
+            } else {
+                return ResultData.fail(resultData.getMessage());
+            }
         } catch (Exception e) {
             LogUtil.error("查看通告异常！", e);
             // 查看通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00012", e.getMessage()));
         }
-        BulletinDto dto = convertToDto(compose.getBulletin());
-        dto.setContent(compose.getContent());
-        return ResultData.success(dto);
     }
 
     /**

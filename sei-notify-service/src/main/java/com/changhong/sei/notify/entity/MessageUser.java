@@ -8,21 +8,22 @@ import java.time.LocalDateTime;
 
 /**
  * 实现功能：
- * 通告用户
+ * 用户消息
  *
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2019-09-19 17:35
  */
 @Entity
-@Table(name = "bulletin_user")
-public class BulletinUser extends BaseEntity {
+@Table(name = "message_user")
+public class MessageUser extends BaseEntity {
     private static final long serialVersionUID = -7194060511283609572L;
+    public static final String FIELD_READ = "read";
 
     /**
-     * 通告id
+     * 消息id
      */
-    @Column(name = "bulletin_id", length = 36)
-    private String bulletinId;
+    @Column(name = "msg_id", length = 36)
+    private String msgId;
     /**
      * 用户id
      */
@@ -60,12 +61,12 @@ public class BulletinUser extends BaseEntity {
     @Column(name = "read_num")
     private Integer readNum = 0;
 
-    public String getBulletinId() {
-        return bulletinId;
+    public String getMsgId() {
+        return msgId;
     }
 
-    public void setBulletinId(String bulletinId) {
-        this.bulletinId = bulletinId;
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 
     public String getUserId() {

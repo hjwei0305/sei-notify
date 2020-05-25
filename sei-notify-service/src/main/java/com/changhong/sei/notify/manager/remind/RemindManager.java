@@ -1,15 +1,19 @@
 package com.changhong.sei.notify.manager.remind;
 
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.SendMessage;
+import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
-import com.changhong.sei.notify.entity.Remind;
+import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.manager.NotifyManager;
-import com.changhong.sei.notify.service.RemindService;
+import com.changhong.sei.notify.service.MessageService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 实现功能：
@@ -20,7 +24,7 @@ import java.util.List;
 @Component("SEI_REMIND")
 public class RemindManager implements NotifyManager {
     @Autowired
-    private RemindService remindService;
+    private MessageService messageService;
 
     /**
      * 发送消息通知
@@ -29,22 +33,32 @@ public class RemindManager implements NotifyManager {
      */
     @Override
     public ResultData<String> send(SendMessage message) {
-        String subject = message.getSubject();
-        List<UserNotifyInfo> userList = message.getReceivers();
-        Remind[] reminds = new Remind[userList.size()];
-        Remind remind;
-        int i = 0;
-        for (UserNotifyInfo user : userList) {
-            remind = new Remind();
-            remind.setSubject(subject);
-            remind.setUserId(user.getUserId());
-            remind.setUserAccount(user.getUserAccount());
-            remind.setUserName(user.getUserName());
+        Message messageObj;
+        //收件人清单
+        List<UserNotifyInfo> receivers = message.getReceivers();
+        if (CollectionUtils.isNotEmpty(receivers)) {
+            int i = 0;
+            UserNotifyInfo sender = message.getSender();
+            Message[] messages = new Message[receivers.size()];
+            for (UserNotifyInfo receiver : receivers) {
+                messageObj = new Message();
+                messageObj.setNotifyType(NotifyType.SEI_REMIND);
+                messageObj.setSubject(message.getSubject());
+                messageObj.setTargetType(TargetType.PERSONAL);
+                messageObj.setTargetValue(receiver.getUserId());
+                messageObj.setTargetName(receiver.getUserName());
 
-            reminds[i++] = remind;
+                if (Objects.nonNull(sender)) {
+                    messageObj.setPublishUserAccount(sender.getUserAccount());
+                    messageObj.setPublishUserName(sender.getUserName());
+                }
+                messages[i++] = messageObj;
+            }
+
+            ResultData<String> result = messageService.sendMessage(message.getContent(), message.getDocIds(), messages);
+            return result;
+        } else {
+            return ResultData.fail("消息接收人不能为空.");
         }
-
-        ResultData<String> result = remindService.sendRemind(message.getContent(), message.getDocIds(), reminds);
-        return result;
     }
 }

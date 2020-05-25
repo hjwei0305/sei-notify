@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -16,7 +15,7 @@ import java.util.Set;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2019-09-23 15:29
  */
-public class BulletinDto extends BaseMessageDto {
+public class BulletinDto extends MessageDto {
     private static final long serialVersionUID = 2575128462397611147L;
 
     /**

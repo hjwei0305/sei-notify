@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @version 1.0.00  2019-09-20 14:33
  */
 @Repository
-public interface BulletinDao extends BaseEntityDao<Bulletin>, BulletinExtDao {
+public interface BulletinDao extends BaseEntityDao<Bulletin> {
 }

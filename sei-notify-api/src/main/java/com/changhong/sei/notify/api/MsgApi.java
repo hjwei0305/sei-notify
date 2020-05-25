@@ -3,8 +3,7 @@ package com.changhong.sei.notify.api;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
-import com.changhong.sei.notify.dto.BaseMessageDto;
-import com.changhong.sei.notify.dto.BulletinDto;
+import com.changhong.sei.notify.dto.MessageDto;
 import com.changhong.sei.notify.dto.NotifyType;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -29,6 +28,7 @@ public interface MsgApi {
 
     /**
      * 获取优先级枚举值清单
+     *
      * @return 枚举值清单
      */
     @GetMapping(path = "getPriority")
@@ -37,6 +37,7 @@ public interface MsgApi {
 
     /**
      * 获取消息类别枚举值清单
+     *
      * @return 枚举值清单
      */
     @GetMapping(path = "getCategory")
@@ -45,6 +46,7 @@ public interface MsgApi {
 
     /**
      * 获取未读消息数
+     *
      * @return 查询结果
      */
     @GetMapping(path = "unreadCount")
@@ -53,46 +55,49 @@ public interface MsgApi {
 
     /**
      * 获取用户未读数据
+     *
      * @return 查询结果
      */
     @GetMapping(path = "unreadData")
     @ApiOperation(value = "获取当前会话用户未读消息", notes = "获取当前会话用户的所有未读消息数据")
-    ResultData<Map<String, List<BaseMessageDto>>> unreadData();
+    ResultData<Map<String, List<MessageDto>>> unreadData();
 
     /**
      * 用户阅读
-     * @param category 消息类型
-     * @param id 通告Id
+     *
+     * @param msgId 消息Id
      * @return 操作结果
      */
     @PostMapping(path = "read")
     @ApiOperation(value = "阅读消息", notes = "消息已阅读,变更阅读状态")
-    ResultData<String> read(@RequestParam("category") NotifyType category, @RequestParam("id") String id);
+    ResultData<String> read(@RequestParam("msgId") String msgId);
 
     /**
      * 用户查看
-     * @param category 消息类型
-     * @param id 通告Id
+     *
+     * @param msgId 消息Id
      * @return 操作结果
      */
     @GetMapping(path = "detail")
     @ApiOperation(value = "查看消息", notes = "查看消息内容")
-    ResultData<BaseMessageDto> detail(@RequestParam("category") NotifyType category, @RequestParam("id") String id);
+    ResultData<MessageDto> detail(@RequestParam("msgId") String msgId);
 
     /**
      * 默认获取优先级高的通告
+     *
      * @return 操作结果
      */
     @GetMapping(path = "getFirstUnreadBulletin")
     @ApiOperation(value = "默认获取优先级高的通告", notes = "登录时获取当前用户优先级最高的通告并打开")
-    ResultData<BaseMessageDto> getFirstUnreadBulletin();
+    ResultData<MessageDto> getFirstUnreadMessage();
 
     /**
      * 按类型查询消息
+     *
      * @param search 查询参数
      * @return 查询结果
      */
     @PostMapping(path = "findMessageByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "按类型分页查询消息", notes = "按类型分页查询消息")
-    ResultData<PageResult<BaseMessageDto>> findMessageByPage(@RequestParam("category") NotifyType category, @RequestBody Search search);
+    ResultData<PageResult<MessageDto>> findMessageByPage(@RequestBody Search search);
 }

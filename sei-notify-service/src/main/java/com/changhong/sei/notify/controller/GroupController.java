@@ -11,7 +11,7 @@ import com.changhong.sei.notify.api.GroupApi;
 import com.changhong.sei.notify.dto.GroupDto;
 import com.changhong.sei.notify.dto.GroupUserDto;
 import com.changhong.sei.notify.entity.Group;
-import com.changhong.sei.notify.entity.GroupUser;
+import com.changhong.sei.notify.entity.GroupItem;
 import com.changhong.sei.notify.service.GroupService;
 import com.changhong.sei.notify.dto.AccountResponse;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
@@ -131,8 +131,8 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     @Override
     public ResultData<String> addGroupUser(@Valid List<GroupUserDto> groupUserDtos) {
         if (CollectionUtils.isNotEmpty(groupUserDtos)) {
-            List<GroupUser> groupUsers = groupUserDtos.stream().map(
-                    v -> modelMapper.map(v, GroupUser.class)
+            List<GroupItem> groupUsers = groupUserDtos.stream().map(
+                    v -> modelMapper.map(v, GroupItem.class)
             ).collect(Collectors.toList());
             return service.addGroupUsers(groupUsers);
         }
@@ -158,10 +158,10 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      */
     @Override
     public ResultData<List<GroupUserDto>> getGroupUsers(String groupId) {
-        ResultData<List<GroupUser>> resultData = service.getGroupUsers(groupId);
+        ResultData<List<GroupItem>> resultData = service.getGroupUsers(groupId);
         if (resultData.successful()) {
             List<GroupUserDto> list;
-            List<GroupUser> groupUsers = resultData.getData();
+            List<GroupItem> groupUsers = resultData.getData();
             if (CollectionUtils.isNotEmpty(groupUsers)) {
                 list = groupUsers.stream().map(v -> modelMapper.map(v, GroupUserDto.class)).collect(Collectors.toList());
             } else {

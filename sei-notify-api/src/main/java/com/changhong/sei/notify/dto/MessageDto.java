@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2019-09-23 17:09
  */
-public class BaseMessageDto extends BaseEntityDto implements Serializable {
+public class MessageDto extends BaseEntityDto implements Serializable {
 
     private static final long serialVersionUID = 132979558246200348L;
     /**
@@ -92,7 +92,7 @@ public class BaseMessageDto extends BaseEntityDto implements Serializable {
         return publishDate;
     }
 
-    public BaseMessageDto setPublishDate(LocalDateTime publishDate) {
+    public MessageDto setPublishDate(LocalDateTime publishDate) {
         this.publishDate = publishDate;
         return this;
     }

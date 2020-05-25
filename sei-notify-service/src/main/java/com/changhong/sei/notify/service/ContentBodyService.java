@@ -3,9 +3,7 @@ package com.changhong.sei.notify.service;
 import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.dao.ContentBodyDao;
-import com.changhong.sei.notify.dao.RemindDao;
 import com.changhong.sei.notify.entity.ContentBody;
-import com.changhong.sei.notify.entity.Remind;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

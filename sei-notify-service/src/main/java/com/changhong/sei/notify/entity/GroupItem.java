@@ -2,7 +2,6 @@ package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.changhong.sei.core.entity.BaseAuditableEntity;
-import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.notify.dto.GroupCategory;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,17 +12,24 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 群组(Group)实体类
+ * 群组(GroupUser)实体类
  *
  * @author sei
  * @since 2020-05-22 11:04:12
  */
 @Entity
-@Table(name = "group_info")
+@Table(name = "group_item")
 @DynamicInsert
 @DynamicUpdate
-public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, Serializable {
-    private static final long serialVersionUID = 182142067251684618L;
+public class GroupItem extends BaseAuditableEntity implements ITenant, Serializable {
+    private static final long serialVersionUID = -18017322204395690L;
+    public static final String FIELD_GROUP_ID = "groupId";
+    public static final String FIELD_CATEGORY = "category";
+    /**
+     * 群组id
+     */
+    @Column(name = "group_id")
+    private String groupId;
     /**
      * 类别
      */
@@ -32,30 +38,33 @@ public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, 
     @JsonSerialize(using = EnumJsonSerializer.class)
     private GroupCategory category;
     /**
-     * 代码
+     * 群组项id
      */
-    @Column(name = "code")
-    private String code;
+    @Column(name = "item_id")
+    private String itemId;
     /**
-     * 名称
+     * 群组项代码
      */
-    @Column(name = "name")
-    private String name;
+    @Column(name = "item_code")
+    private String itemCode;
+    /**
+     * 群组项名称
+     */
+    @Column(name = "item_name")
+    private String itemName;
     /**
      * 租户代码
      */
     @Column(name = "tenant_code")
     private String tenantCode;
-    /**
-     * 冻结
-     */
-    @Column(name = "frozen")
-    private Boolean frozen = Boolean.FALSE;
-    /**
-     * 排序
-     */
-    @Column(name = "rank")
-    private Integer rank = 0;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     public GroupCategory getCategory() {
         return category;
@@ -65,22 +74,28 @@ public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, 
         this.category = category;
     }
 
-    @Override
-    public String getCode() {
-        return code;
+    public String getItemId() {
+        return itemId;
     }
 
-    @Override
-    public void setCode(String code) {
-        this.code = code;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
-    public String getName() {
-        return name;
+    public String getItemCode() {
+        return itemCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     @Override
@@ -92,21 +107,4 @@ public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, 
     public void setTenantCode(String tenantCode) {
         this.tenantCode = tenantCode;
     }
-
-    public Boolean getFrozen() {
-        return frozen;
-    }
-
-    public void setFrozen(Boolean frozen) {
-        this.frozen = frozen;
-    }
-
-    public Integer getRank() {
-        return rank;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
-    }
-
 }

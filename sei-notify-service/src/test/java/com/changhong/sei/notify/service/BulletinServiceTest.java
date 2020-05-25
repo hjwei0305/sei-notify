@@ -4,13 +4,11 @@ import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.notify.entity.Bulletin;
+import com.changhong.sei.notify.entity.Message;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static org.junit.Assert.*;
 
 /**
  * 实现功能：
@@ -28,15 +26,18 @@ public class BulletinServiceTest extends BaseUnitTest {
         LocalDate date = LocalDate.now();
         String content = "测试内容abc1234";
         Bulletin bulletin = new Bulletin();
-        bulletin.setSubject("测试主题123");
         bulletin.setEffectiveDate(date);
         bulletin.setInvalidDate(date);
-        bulletin.setTargetType(TargetType.GROUP);
-        bulletin.setTargetCode("123");
-        bulletin.setTargetName("123");
-        bulletin.setPriority(Priority.General);
 
-        service.saveBulletin(bulletin, content);
+        Message message = new Message();
+        message.setSubject("测试主题123");
+        message.setContent(content);
+        message.setTargetType(TargetType.GROUP);
+        message.setTargetValue("123");
+        message.setTargetName("123");
+        message.setPriority(Priority.General);
+
+        service.saveBulletin(bulletin, message);
     }
 
     @Test

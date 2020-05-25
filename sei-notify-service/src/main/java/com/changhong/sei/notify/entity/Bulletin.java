@@ -1,13 +1,11 @@
 package com.changhong.sei.notify.entity;
 
-import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
-import com.changhong.sei.notify.dto.TargetType;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.changhong.sei.core.entity.BaseEntity;
+import com.changhong.sei.core.entity.ITenant;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * 实现功能：公告消息
@@ -18,32 +16,20 @@ import java.util.Set;
 @Entity()
 @Table(name = "bulletin")
 @Access(AccessType.FIELD)
-public class Bulletin extends BaseMessage {
+public class Bulletin extends BaseEntity implements ITenant {
     private static final long serialVersionUID = 1029465462675785527L;
     public static final String FIELD_RELEASE = "release";
 
     /**
-     * 是否发布
+     * 租户代码
      */
-    @Column(name = "is_release")
-    private Boolean release = Boolean.FALSE;
+    @Column(name = "tenant_code")
+    private String tenantCode;
     /**
-     * 发布人
+     * 消息id
      */
-    @Column(name = "release_user_account")
-    private String releaseUserAccount;
-    /**
-     * 发布人
-     */
-    @Column(name = "release_user_name")
-    private String releaseUserName;
-    /**
-     * 发布时间
-     */
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-    @Column(name = "release_date")
-    private LocalDateTime releaseDate;
+    @Column(name = "msg_id")
+    private String msgId;
     /**
      * 撤销人id
      */
@@ -54,26 +40,6 @@ public class Bulletin extends BaseMessage {
      */
     @Column(name = "cancel_user_name", length = 36)
     private String cancelUserName;
-
-    /**
-     * 目标对象code
-     */
-    @Column(name = "target_code", length = 36)
-    private String targetCode;
-
-    /**
-     * 目标对象name
-     */
-    @Column(name = "target_name", length = 36)
-    private String targetName;
-
-    /**
-     * 目标类型
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "target_type")
-    @JsonSerialize(using = EnumJsonSerializer.class)
-    private TargetType targetType;
 
     /**
      * 撤销时间
@@ -96,42 +62,23 @@ public class Bulletin extends BaseMessage {
 //    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_DATE_FORMAT)
     @Column(name = "invalid_date")
     private LocalDate invalidDate;
-    /**
-     * 附件id
-     */
-    @Transient
-    private Set<String> docIds;
 
-    public Boolean getRelease() {
-        return release;
+    public String getMsgId() {
+        return msgId;
     }
 
-    public void setRelease(Boolean release) {
-        this.release = release;
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 
-    public String getReleaseUserAccount() {
-        return releaseUserAccount;
+    @Override
+    public String getTenantCode() {
+        return tenantCode;
     }
 
-    public void setReleaseUserAccount(String releaseUserAccount) {
-        this.releaseUserAccount = releaseUserAccount;
-    }
-
-    public String getReleaseUserName() {
-        return releaseUserName;
-    }
-
-    public void setReleaseUserName(String releaseUserName) {
-        this.releaseUserName = releaseUserName;
-    }
-
-    public LocalDateTime getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDateTime releaseDate) {
-        this.releaseDate = releaseDate;
+    @Override
+    public void setTenantCode(String tenantCode) {
+        this.tenantCode = tenantCode;
     }
 
     public String getCancelUserAccount() {
@@ -172,37 +119,5 @@ public class Bulletin extends BaseMessage {
 
     public void setInvalidDate(LocalDate invalidDate) {
         this.invalidDate = invalidDate;
-    }
-
-    public Set<String> getDocIds() {
-        return docIds;
-    }
-
-    public void setDocIds(Set<String> docIds) {
-        this.docIds = docIds;
-    }
-
-    public String getTargetCode() {
-        return targetCode;
-    }
-
-    public void setTargetCode(String targetCode) {
-        this.targetCode = targetCode;
-    }
-
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    public TargetType getTargetType() {
-        return targetType;
-    }
-
-    public void setTargetType(TargetType targetType) {
-        this.targetType = targetType;
     }
 }

@@ -4,9 +4,9 @@ import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.dao.GroupDao;
-import com.changhong.sei.notify.dao.GroupUserDao;
+import com.changhong.sei.notify.dao.GroupItemDao;
 import com.changhong.sei.notify.entity.Group;
-import com.changhong.sei.notify.entity.GroupUser;
+import com.changhong.sei.notify.entity.GroupItem;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class GroupService extends BaseEntityService<Group> {
     @Autowired
     private GroupDao dao;
     @Autowired
-    private GroupUserDao groupUserDao;
+    private GroupItemDao groupUserDao;
 
     @Override
     protected BaseEntityDao<Group> getDao() {
@@ -55,7 +55,7 @@ public class GroupService extends BaseEntityService<Group> {
      * @return 操作结果
      */
     @Transactional
-    public ResultData<String> addGroupUsers(List<GroupUser> groupUsers) {
+    public ResultData<String> addGroupUsers(List<GroupItem> groupUsers) {
         if (CollectionUtils.isNotEmpty(groupUsers)) {
             groupUserDao.save(groupUsers);
             return ResultData.success("ok");
@@ -84,8 +84,8 @@ public class GroupService extends BaseEntityService<Group> {
      * @param groupId 群组id
      * @return 返回指定群组用户对象
      */
-    public ResultData<List<GroupUser>> getGroupUsers(String groupId) {
-        List<GroupUser> groupUsers = groupUserDao.findListByProperty(GroupUser.FIELD_GROUP_ID, groupId);
+    public ResultData<List<GroupItem>> getGroupUsers(String groupId) {
+        List<GroupItem> groupUsers = groupUserDao.findListByProperty(GroupItem.FIELD_GROUP_ID, groupId);
         return ResultData.success(groupUsers);
     }
 
