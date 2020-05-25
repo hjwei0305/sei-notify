@@ -22,9 +22,9 @@ import java.util.Set;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2019-09-25 13:44
  */
-public class MessageUserImpl extends BaseEntityDaoImpl<MessageUser> implements MessageUserExtDao {
+public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implements MessageUserExtDao {
 
-    public MessageUserImpl(EntityManager entityManager) {
+    public MessageUserDaoImpl(EntityManager entityManager) {
         super(MessageUser.class, entityManager);
     }
 
