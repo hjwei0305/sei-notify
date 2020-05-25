@@ -11,14 +11,14 @@ import com.changhong.sei.annotation.Remark;
 public enum TargetType {
 
     /**
-     * 组织机构
-     */
-    @Remark("组织机构")
-    ORG,
-
-    /**
      * 群组
      */
     @Remark("群组")
-    GROUP
+    GROUP,
+
+    /**
+     * 个人
+     */
+    @Remark("个人")
+    PERSONAL
 }
