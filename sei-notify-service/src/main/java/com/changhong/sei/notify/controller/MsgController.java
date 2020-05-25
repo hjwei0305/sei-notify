@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <strong>实现功能:</strong>
@@ -170,7 +171,9 @@ public class MsgController implements MsgApi {
         PageResult<MessageDto> result = new PageResult<>(pageResult);
         for (MessageCompose compose : pageResult.getRows()) {
             dto = modelMapper.map(compose.getMessage(), MessageDto.class);
-            dto.setRead(compose.getUser().getRead());
+            if (Objects.nonNull(compose.getUser())) {
+                dto.setRead(compose.getUser().getRead());
+            }
         }
 
         return ResultData.success(result);

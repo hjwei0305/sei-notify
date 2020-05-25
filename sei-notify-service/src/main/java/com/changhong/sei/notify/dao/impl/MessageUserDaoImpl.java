@@ -96,7 +96,7 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
 
         StringBuilder where = new StringBuilder();
         where.append(" from Message b left join MessageUser u on b.id = u.msgId and u.userId = :userId ");
-        where.append(" where b.del = 0 and b.publish = 1  and b.targetValue in (:targetValues)");
+        where.append(" where b.del = 0 and b.publish = 1  and b.targetValue in :targetValues ");
         if (StringUtils.isNotBlank(val)) {
             where.append(" and b.subject like :subject ");
         }
