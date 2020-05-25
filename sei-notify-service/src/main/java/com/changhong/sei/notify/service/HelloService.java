@@ -46,7 +46,7 @@ public class HelloService {
      * @param name  姓名
      * @param param 参数
      */
-    @Transactional(rollbackFor = Exception.class)
+    // @Transactional(rollbackFor = Exception.class)
     public void mqSayHello(String name, String param) {
         LogUtil.bizLog("通过消息队列说：你好！");
         SendMessage sendMessage = SendMessage.builder().setContent("你好，" + name + "！参数：" + param);
