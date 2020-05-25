@@ -12,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class RemindService extends BaseEntityService<Remind> {
      * @param reminds 提醒
      * @return 返回操作结果
      */
+    @Transactional(rollbackFor = Exception.class)
     public ResultData<String> sendRemind(String content, Set<String> docIds, Remind... reminds) {
         if (Objects.isNull(reminds) || StringUtils.isBlank(content)) {
             // 发送的提醒以及内容不能为空！
