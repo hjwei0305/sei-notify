@@ -188,9 +188,9 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
             List<GroupUserDto> list = new ArrayList<>();
             for (AccountResponse account : accounts) {
                 dto = new GroupUserDto();
-                dto.setUserId(account.getUserId());
-                dto.setUserName(account.getName());
-                dto.setUserAccount(account.getAccount());
+                dto.setItemId(account.getUserId());
+                dto.setItemCode(account.getAccount());
+                dto.setItemName(account.getName());
                 list.add(dto);
             }
             PageResult<GroupUserDto> dtoPageResult = new PageResult<>(pageResult);

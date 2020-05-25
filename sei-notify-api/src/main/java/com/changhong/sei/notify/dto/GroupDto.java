@@ -1,6 +1,8 @@
 package com.changhong.sei.notify.dto;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
+import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,6 +15,11 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "群组DTO")
 public class GroupDto extends BaseEntityDto {
     private static final long serialVersionUID = 128901001160602539L;
+    /**
+     * 类别
+     */
+    @JsonSerialize(using = EnumJsonSerializer.class)
+    private GroupCategory category;
     /**
      * 代码
      */
@@ -33,6 +40,14 @@ public class GroupDto extends BaseEntityDto {
      */
     @ApiModelProperty(value = "排序")
     private Integer rank;
+
+    public GroupCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(GroupCategory category) {
+        this.category = category;
+    }
 
     public String getCode() {
         return code;

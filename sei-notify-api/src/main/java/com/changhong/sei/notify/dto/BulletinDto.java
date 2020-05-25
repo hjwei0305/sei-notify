@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * 实现功能：
@@ -19,23 +18,16 @@ public class BulletinDto extends MessageDto {
     private static final long serialVersionUID = 2575128462397611147L;
 
     /**
-     * 是否发布
+     * 消息id
      */
-    private Boolean release = Boolean.FALSE;
-    /**
-     * 发布人id
-     */
-    private String releaseUserAccount;
-    private String releaseUserName;
-    /**
-     * 发布时间
-     */
-    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-    private LocalDateTime releaseDate;
+    private String msgId;
     /**
      * 撤销人id
      */
     private String cancelUserAccount;
+    /**
+     * 撤销人id
+     */
     private String cancelUserName;
     /**
      * 撤销时间
@@ -53,56 +45,12 @@ public class BulletinDto extends MessageDto {
     @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_DATE_FORMAT)
     private LocalDate invalidDate;
 
-    /**
-     * 目标对象code
-     */
-    private String targetCode;
-
-    /**
-     * 目标对象name
-     */
-    private String targetName;
-
-    /**
-     * 目标类型
-     */
-    @JsonSerialize(using = EnumJsonSerializer.class)
-    private TargetType targetType;
-    /**
-     * 附件id
-     */
-    private Set<String> docIds;
-
-    public Boolean getRelease() {
-        return release;
+    public String getMsgId() {
+        return msgId;
     }
 
-    public void setRelease(Boolean release) {
-        this.release = release;
-    }
-
-    public String getReleaseUserAccount() {
-        return releaseUserAccount;
-    }
-
-    public void setReleaseUserAccount(String releaseUserAccount) {
-        this.releaseUserAccount = releaseUserAccount;
-    }
-
-    public String getReleaseUserName() {
-        return releaseUserName;
-    }
-
-    public void setReleaseUserName(String releaseUserName) {
-        this.releaseUserName = releaseUserName;
-    }
-
-    public LocalDateTime getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(LocalDateTime releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 
     public String getCancelUserAccount() {
@@ -143,37 +91,5 @@ public class BulletinDto extends MessageDto {
 
     public void setInvalidDate(LocalDate invalidDate) {
         this.invalidDate = invalidDate;
-    }
-
-    public Set<String> getDocIds() {
-        return docIds;
-    }
-
-    public void setDocIds(Set<String> docIds) {
-        this.docIds = docIds;
-    }
-
-    public String getTargetCode() {
-        return targetCode;
-    }
-
-    public void setTargetCode(String targetCode) {
-        this.targetCode = targetCode;
-    }
-
-    public String getTargetName() {
-        return targetName;
-    }
-
-    public void setTargetName(String targetName) {
-        this.targetName = targetName;
-    }
-
-    public TargetType getTargetType() {
-        return targetType;
-    }
-
-    public void setTargetType(TargetType targetType) {
-        this.targetType = targetType;
     }
 }

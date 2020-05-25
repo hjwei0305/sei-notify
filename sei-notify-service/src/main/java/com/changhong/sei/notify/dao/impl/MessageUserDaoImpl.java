@@ -45,7 +45,6 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         }
 
         Query query = entityManager.createQuery(jpql.toString());
-        LocalDate date = LocalDate.now();
         query.setParameter("del", Boolean.FALSE);
         query.setParameter("publish", Boolean.TRUE);
         query.setParameter("effective", Boolean.TRUE);

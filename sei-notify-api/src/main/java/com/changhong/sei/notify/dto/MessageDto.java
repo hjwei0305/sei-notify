@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * 实现功能：
@@ -36,17 +37,61 @@ public class MessageDto extends BaseEntityDto implements Serializable {
      */
     protected String content;
     /**
+     * 目标对象Value
+     */
+    private String targetValue;
+
+    /**
+     * 目标对象name
+     */
+    private String targetName;
+
+    /**
+     * 目标类型
+     */
+    @JsonSerialize(using = EnumJsonSerializer.class)
+    private TargetType targetType;
+    /**
      * 优先级
      */
     @JsonSerialize(using = EnumJsonSerializer.class)
     protected Priority priority;
-
     /**
-     * 发布时间
+     * 是否发布
+     */
+    private Boolean publish = Boolean.FALSE;
+    /**
+     * 发布时间时间
      */
     @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
-    private LocalDateTime publishDate;
+    protected LocalDateTime publishDate;
+    /**
+     * 发布人
+     */
+    private String publishUserAccount;
+    /**
+     * 发布人
+     */
+    private String publishUserName;
+    /**
+     * 是否有效
+     */
+    protected Boolean effective = Boolean.TRUE;
+
     protected Boolean read = Boolean.FALSE;
+    /**
+     * 最近阅读时间
+     */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+    private LocalDateTime readDate;
+    /**
+     * 阅读次数
+     */
+    private Integer readNum = 0;
+    /**
+     * 附件id
+     */
+    private Set<String> docIds;
 
     public NotifyType getCategory() {
         return category;
@@ -80,6 +125,30 @@ public class MessageDto extends BaseEntityDto implements Serializable {
         this.content = content;
     }
 
+    public String getTargetValue() {
+        return targetValue;
+    }
+
+    public void setTargetValue(String targetValue) {
+        this.targetValue = targetValue;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
+
+    public TargetType getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(TargetType targetType) {
+        this.targetType = targetType;
+    }
+
     public Priority getPriority() {
         return priority;
     }
@@ -88,13 +157,44 @@ public class MessageDto extends BaseEntityDto implements Serializable {
         this.priority = priority;
     }
 
+    public Boolean getPublish() {
+        return publish;
+    }
+
+    public void setPublish(Boolean publish) {
+        this.publish = publish;
+    }
+
     public LocalDateTime getPublishDate() {
         return publishDate;
     }
 
-    public MessageDto setPublishDate(LocalDateTime publishDate) {
+    public void setPublishDate(LocalDateTime publishDate) {
         this.publishDate = publishDate;
-        return this;
+    }
+
+    public String getPublishUserAccount() {
+        return publishUserAccount;
+    }
+
+    public void setPublishUserAccount(String publishUserAccount) {
+        this.publishUserAccount = publishUserAccount;
+    }
+
+    public String getPublishUserName() {
+        return publishUserName;
+    }
+
+    public void setPublishUserName(String publishUserName) {
+        this.publishUserName = publishUserName;
+    }
+
+    public Boolean getEffective() {
+        return effective;
+    }
+
+    public void setEffective(Boolean effective) {
+        this.effective = effective;
     }
 
     public Boolean getRead() {
@@ -103,5 +203,29 @@ public class MessageDto extends BaseEntityDto implements Serializable {
 
     public void setRead(Boolean read) {
         this.read = read;
+    }
+
+    public LocalDateTime getReadDate() {
+        return readDate;
+    }
+
+    public void setReadDate(LocalDateTime readDate) {
+        this.readDate = readDate;
+    }
+
+    public Integer getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(Integer readNum) {
+        this.readNum = readNum;
+    }
+
+    public Set<String> getDocIds() {
+        return docIds;
+    }
+
+    public void setDocIds(Set<String> docIds) {
+        this.docIds = docIds;
     }
 }

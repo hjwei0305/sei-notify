@@ -1,6 +1,8 @@
 package com.changhong.sei.notify.dto;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
+import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -22,23 +24,22 @@ public class GroupUserDto extends BaseEntityDto {
     @ApiModelProperty(value = "群组id")
     private String groupId;
     /**
-     * 用户id
+     * 类别
      */
-    @NotBlank
-    @ApiModelProperty(value = "用户id")
-    private String userId;
+    @JsonSerialize(using = EnumJsonSerializer.class)
+    private GroupCategory category;
     /**
-     * 用户账号
+     * 群组项id
      */
-    @NotBlank
-    @ApiModelProperty(value = "用户账号")
-    private String userAccount;
+    private String itemId;
     /**
-     * 用户名称
+     * 群组项代码
      */
-    @NotBlank
-    @ApiModelProperty(value = "用户名称")
-    private String userName;
+    private String itemCode;
+    /**
+     * 群组项名称
+     */
+    private String itemName;
 
     public String getGroupId() {
         return groupId;
@@ -48,28 +49,35 @@ public class GroupUserDto extends BaseEntityDto {
         this.groupId = groupId;
     }
 
-    public String getUserId() {
-        return userId;
+    public GroupCategory getCategory() {
+        return category;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCategory(GroupCategory category) {
+        this.category = category;
     }
 
-    public String getUserAccount() {
-        return userAccount;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setUserAccount(String userAccount) {
-        this.userAccount = userAccount;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getItemCode() {
+        return itemCode;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
     }
 
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 }
