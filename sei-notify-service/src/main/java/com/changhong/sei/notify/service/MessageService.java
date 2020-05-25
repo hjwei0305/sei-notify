@@ -274,7 +274,7 @@ public class MessageService extends BaseEntityService<Message> {
         MessageDto messageDto;
         NotifyType notifyType;
         for (Message message : messages) {
-            notifyType = message.getNotifyType();
+            notifyType = message.getCategory();
             messageList = listMap.get(notifyType.name());
             if (Objects.isNull(messageList)) {
                 messageList = new ArrayList<>();
@@ -302,7 +302,18 @@ public class MessageService extends BaseEntityService<Message> {
      * 获取优先级最高的未读消息
      */
     public Message getFirstUnreadMessage(String userId, Set<String> targetValues) {
-        return messageUserDao.getFirstUnreadMessage(userId, targetValues);
+        Message message = messageUserDao.getFirstUnreadMessage(userId, targetValues);
+        if (Objects.nonNull(message)) {
+            String contentId = message.getContentId();
+            //加载内容
+            if (StringUtils.isNotBlank(contentId)) {
+                ContentBody body = contentBodyService.findOne(contentId);
+                if (Objects.nonNull(body)) {
+                    message.setContent(body.getContent());
+                }
+            }
+        }
+        return message;
     }
 
     /**

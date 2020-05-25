@@ -3,6 +3,7 @@ package com.changhong.sei.notify.dao.impl;
 import com.changhong.sei.core.dao.impl.BaseEntityDaoImpl;
 import com.changhong.sei.core.dto.serach.*;
 import com.changhong.sei.notify.dao.MessageUserExtDao;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
@@ -32,13 +33,16 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
     public Long getUnreadCount(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select count(t.id) from Message t ");
-        return (Long) getUnReadQuery(jpql, userId, targetValues, "").getSingleResult();
+        return (Long) getUnReadQuery(jpql, userId, targetValues, "", "").getSingleResult();
     }
 
-    private Query getUnReadQuery(StringBuilder jpql, String userId, Set<String> targetValues, String order) {
+    private Query getUnReadQuery(StringBuilder jpql, String userId, Set<String> targetValues, String extendWhere, String order) {
         jpql.append(" where t.del = :del and t.publish = :publish and t.effective = :effective ");
         jpql.append(" and not exists (select u.id from MessageUser u where t.id = u.msgId and u.userId = :userId and u.read = :read) ");
-        jpql.append(" and t.targetValue in (:targetValues)");
+        jpql.append(" and t.targetValue in :targetValues");
+        if (StringUtils.isNotBlank(extendWhere)) {
+            jpql.append(extendWhere);
+        }
 
         if (StringUtils.isNotBlank(order)) {
             jpql.append(" ").append(order);
@@ -58,7 +62,7 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
     public List<Message> getUnreadMessage(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select t from Message t ");
-        return getUnReadQuery(jpql, userId, targetValues, "").getResultList();
+        return getUnReadQuery(jpql, userId, targetValues, "", "").getResultList();
     }
 
     @Override
@@ -66,10 +70,12 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         StringBuilder jpql = new StringBuilder();
         jpql.append("select t from Message t ");
 
+        String extendWhere = " and t.category = '" + NotifyType.SEI_BULLETIN + "' ";
+
         // 优先级, 发布时间
         String order = " order by t.priority desc, t.publishDate desc";
 
-        Query query = getUnReadQuery(jpql, userId, targetValues, order);
+        Query query = getUnReadQuery(jpql, userId, targetValues, extendWhere, order);
         query.setMaxResults(1);
         List<Message> messageList = query.getResultList();
         if (CollectionUtils.isEmpty(messageList)) {

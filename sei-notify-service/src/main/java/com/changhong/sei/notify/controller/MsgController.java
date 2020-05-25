@@ -146,7 +146,6 @@ public class MsgController implements MsgApi {
      */
     @Override
     public ResultData<MessageDto> getFirstUnreadMessage() {
-        OperateResultWithData<MessageDto> operateResult;
         try {
             Message message = messageService.getFirstUnreadMessage(ContextUtil.getSessionUser());
             return ResultData.success(modelMapper.map(message, MessageDto.class));

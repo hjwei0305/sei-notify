@@ -42,7 +42,7 @@ public class RemindManager implements NotifyManager {
             Message[] messages = new Message[receivers.size()];
             for (UserNotifyInfo receiver : receivers) {
                 messageObj = new Message();
-                messageObj.setNotifyType(NotifyType.SEI_REMIND);
+                messageObj.setCategory(NotifyType.SEI_REMIND);
                 messageObj.setSubject(message.getSubject());
                 messageObj.setTargetType(TargetType.PERSONAL);
                 messageObj.setTargetValue(receiver.getUserId());

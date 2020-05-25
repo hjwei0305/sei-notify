@@ -2,6 +2,7 @@ package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.test.BaseUnitTest;
+import com.changhong.sei.notify.entity.Message;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +24,18 @@ public class MessageServiceTest extends BaseUnitTest {
     @Test
     public void getTargetValueByUser() {
         Set<String> datas = service.getTargetValueByUser(ContextUtil.getSessionUser());
+        System.out.println(datas);
+    }
+
+    @Test
+    public void getUnreadCount() {
+        Long datas = service.getUnreadCount(ContextUtil.getSessionUser());
+        System.out.println(datas);
+    }
+
+    @Test
+    public void getFirstUnreadMessage() {
+        Message datas = service.getFirstUnreadMessage(ContextUtil.getSessionUser());
         System.out.println(datas);
     }
 }

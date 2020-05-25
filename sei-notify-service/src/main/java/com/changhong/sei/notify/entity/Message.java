@@ -34,7 +34,7 @@ public class Message extends BaseEntity implements ITenant {
     @Enumerated(EnumType.STRING)
     @Column(name = "notify_type")
     @JsonSerialize(using = EnumJsonSerializer.class)
-    private NotifyType notifyType;
+    private NotifyType category;
     /**
      * 租户代码
      */
@@ -144,12 +144,12 @@ public class Message extends BaseEntity implements ITenant {
         this.tenantCode = tenantCode;
     }
 
-    public NotifyType getNotifyType() {
-        return notifyType;
+    public NotifyType getCategory() {
+        return category;
     }
 
-    public void setNotifyType(NotifyType notifyType) {
-        this.notifyType = notifyType;
+    public void setCategory(NotifyType notifyType) {
+        this.category = notifyType;
     }
 
     public String getSubject() {
