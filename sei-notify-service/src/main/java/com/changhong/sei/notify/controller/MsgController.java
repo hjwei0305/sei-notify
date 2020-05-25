@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 public class MsgController implements MsgApi {
     @Autowired
     private MessageManager msgService;
+    @Autowired
+    private ModelMapper modelMapper;
     /**
      * 获取优先级枚举值清单
      *
@@ -165,8 +167,7 @@ public class MsgController implements MsgApi {
         if (Objects.isNull(entity)) {
             return null;
         }
-        ModelMapper mapper = new ModelMapper();
-        BulletinDto dto = mapper.map(entity.getBulletin(), BulletinDto.class);
+        BulletinDto dto = modelMapper.map(entity.getBulletin(), BulletinDto.class);
         dto.setContent(entity.getContent());
         return dto;
     }
@@ -184,7 +185,13 @@ public class MsgController implements MsgApi {
         try {
             PageResult<BulletinCompose> pageResult = msgService.findBulletinByPage4User(search);
             resultData = new PageResult<>(pageResult);
-            List<BulletinDto> rows = pageResult.getRows().stream().map(this::convertToDto).collect(Collectors.toList());
+            List<BulletinDto> rows = pageResult.getRows().stream().map(obj -> {
+                BulletinDto dto = new BulletinDto();
+                modelMapper.map(obj.getBulletin(), dto);
+
+                dto.setRead(obj.getUser().getRead());
+                return dto;
+            }).collect(Collectors.toList());
             resultData.setRows(rows);
         } catch (Exception e) {
             LogUtil.error("用户查询通告异常！", e);

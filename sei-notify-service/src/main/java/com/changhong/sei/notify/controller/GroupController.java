@@ -179,7 +179,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     @Override
     public ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search) {
         search.setQuickSearchProperties(Sets.newHashSet("account", "name"));
-        ResultData<PageResult<AccountResponse>> resultData = basicIntegration.findByPage(search);
+        ResultData<PageResult<AccountResponse>> resultData = basicIntegration.findAccountByPage(search);
         if (resultData.successful()) {
             PageResult<AccountResponse> pageResult = resultData.getData();
             List<AccountResponse> accounts = pageResult.getRows();

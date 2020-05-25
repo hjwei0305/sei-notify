@@ -1,16 +1,19 @@
 package com.changhong.sei.notify.service.cust;
 
+import com.changhong.sei.apitemplate.ApiTemplate;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
+import com.changhong.sei.notify.dto.AccountResponse;
 import com.changhong.sei.notify.dto.OrganizationDto;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
-import com.changhong.sei.notify.dto.AccountResponse;
 import com.changhong.sei.notify.service.client.AccountClient;
 import com.changhong.sei.notify.service.client.EmployeeClient;
 import com.changhong.sei.notify.service.client.OrganizationClient;
 import com.changhong.sei.notify.service.client.UserNotifyInfoClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.List;
 
@@ -21,7 +24,10 @@ import java.util.List;
  * @version 1.0.00  2020-05-25 06:37
  */
 public class BasicIntegrationCustBase implements BasicIntegration {
-
+    @Value("${sei.basic.server-name:sei-auth}")
+    private String basicServiceName;
+    @Autowired
+    private ApiTemplate apiTemplate;
     @Autowired
     private AccountClient accountClient;
     @Autowired
@@ -38,8 +44,10 @@ public class BasicIntegrationCustBase implements BasicIntegration {
      * @return 分页查询结果
      */
     @Override
-    public ResultData<PageResult<AccountResponse>> findByPage(Search search) {
-        return accountClient.findByPage(search);
+    public ResultData<PageResult<AccountResponse>> findAccountByPage(Search search) {
+        return apiTemplate.postByAppModuleCode(basicServiceName, "/account/findByPage", new ParameterizedTypeReference<ResultData<PageResult<AccountResponse>>>() {
+        }, search);
+//        return accountClient.findByPage(search);
     }
 
     /**

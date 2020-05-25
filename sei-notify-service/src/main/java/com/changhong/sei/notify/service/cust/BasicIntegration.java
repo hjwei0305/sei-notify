@@ -22,7 +22,7 @@ public interface BasicIntegration {
      * @param search 查询参数
      * @return 分页查询结果
      */
-    ResultData<PageResult<AccountResponse>> findByPage(Search search);
+    ResultData<PageResult<AccountResponse>> findAccountByPage(Search search);
 
     /**
      * 获取用户的组织机构代码清单
