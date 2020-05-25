@@ -36,7 +36,7 @@ public class GroupControllerTest extends BaseUnitTest {
     public void addUserAccounts() {
         String json = "[{\"userAccount\":\"sei\",\"userId\":\"8f9f3a92-3f82-11e7-ac6f-005056930c6b\",\"groupId\":\"C9399501-9BF8-11EA-9F72-0242C0A8460B\",\"userName\":\"全局管理员\"}]";
         List<GroupUserDto> groupUserDtos = JsonUtils.fromJson2List(json, GroupUserDto.class);
-        ResultData<String> resultData = controller.addGroupUser(groupUserDtos);
+        ResultData<String> resultData = controller.addGroupItem(groupUserDtos);
         LOG.debug(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }

@@ -242,35 +242,35 @@ public class MessageService extends BaseEntityService<Message> {
      * 获取未读消息数
      */
     public Long getUnreadCount(SessionUser user) {
-        Set<String> targetCodes = getTargetCodeByUser(user);
+        Set<String> targetValues = getTargetValueByUser(user);
 
-        return getUnreadCount(user.getUserId(), targetCodes);
+        return getUnreadCount(user.getUserId(), targetValues);
     }
 
     /**
      * 获取未读消息数
      */
-    public Long getUnreadCount(String userId, Set<String> targetCodes) {
-        return messageUserDao.getUnreadCount(userId, targetCodes);
+    public Long getUnreadCount(String userId, Set<String> targetValues) {
+        return messageUserDao.getUnreadCount(userId, targetValues);
     }
 
     /**
      * 获取未读消息
      */
     public Map<String, List<MessageDto>> getUnreadMessage(SessionUser user) {
-        Set<String> targetCodes = getTargetCodeByUser(user);
+        Set<String> targetValues = getTargetValueByUser(user);
 
-        return getUnreadMessage(user.getUserId(), targetCodes);
+        return getUnreadMessage(user.getUserId(), targetValues);
     }
 
     /**
      * 获取未读消息
      */
-    public Map<String, List<MessageDto>> getUnreadMessage(String userId, Set<String> targetCodes) {
+    public Map<String, List<MessageDto>> getUnreadMessage(String userId, Set<String> targetValues) {
         Map<String, List<MessageDto>> listMap = new HashMap<>();
         List<MessageDto> messageList;
 
-        List<Message> messages = messageUserDao.getUnreadMessage(userId, targetCodes);
+        List<Message> messages = messageUserDao.getUnreadMessage(userId, targetValues);
         MessageDto messageDto;
         NotifyType notifyType;
         for (Message message : messages) {
@@ -293,32 +293,32 @@ public class MessageService extends BaseEntityService<Message> {
      * 获取优先级最高的未读消息
      */
     public Message getFirstUnreadMessage(SessionUser user) {
-        Set<String> targetCodes = getTargetCodeByUser(user);
+        Set<String> targetValues = getTargetValueByUser(user);
 
-        return getFirstUnreadMessage(user.getUserId(), targetCodes);
+        return getFirstUnreadMessage(user.getUserId(), targetValues);
     }
 
     /**
      * 获取优先级最高的未读消息
      */
-    public Message getFirstUnreadMessage(String userId, Set<String> targetCodes) {
-        return messageUserDao.getFirstUnreadMessage(userId, targetCodes);
+    public Message getFirstUnreadMessage(String userId, Set<String> targetValues) {
+        return messageUserDao.getFirstUnreadMessage(userId, targetValues);
     }
 
     /**
      * 分页获取用户消息
      */
     public PageResult<MessageCompose> findPage4User(Search search, SessionUser user) {
-        Set<String> targetCodes = getTargetCodeByUser(user);
+        Set<String> targetValues = getTargetValueByUser(user);
 
-        return findPage4User(search, user.getUserId(), targetCodes);
+        return findPage4User(search, user.getUserId(), targetValues);
     }
 
     /**
      * 分页获取用户消息
      */
-    public PageResult<MessageCompose> findPage4User(Search search, String userId, Set<String> targetCodes) {
-        return messageUserDao.findPage4User(search, userId, targetCodes);
+    public PageResult<MessageCompose> findPage4User(Search search, String userId, Set<String> targetValues) {
+        return messageUserDao.findPage4User(search, userId, targetValues);
     }
 
     /**
@@ -381,16 +381,17 @@ public class MessageService extends BaseEntityService<Message> {
     /**
      * 获取用户的权限集合{组织机构、岗位}
      */
-    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetCodeByUser:'+#userId")
-    public Set<String> getTargetCodeByUser(SessionUser user) {
-        Set<String> targetCodes = Sets.newHashSet();
+    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetValueByUser:'+#userId")
+    public Set<String> getTargetValueByUser(SessionUser user) {
+        Set<String> targetValues = Sets.newHashSet();
 
         String userId = user.getUserId();
+        Set<String> groupItem = new HashSet<>();
         if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
             // 获取用户的组织代码清单
             ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
             if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
-                targetCodes.addAll(orgCodesResult.getData());
+                groupItem.addAll(orgCodesResult.getData());
             }
 //        // todo 没有组织，获取用户岗位上的组织
 //        ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
@@ -399,11 +400,17 @@ public class MessageService extends BaseEntityService<Message> {
 //        }
         }
 
-        ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(userId);
+        groupItem.add(user.getAccount());
+
+        // 添加群组
+        ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
         if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
-            targetCodes.addAll(groupCodeResult.getData());
+            targetValues.addAll(groupCodeResult.getData());
         }
 
-        return targetCodes;
+        // 添加用户id,获取个人点对点消息
+        targetValues.add(userId);
+
+        return targetValues;
     }
 }

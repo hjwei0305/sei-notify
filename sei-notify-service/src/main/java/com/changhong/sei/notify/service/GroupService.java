@@ -92,14 +92,14 @@ public class GroupService extends BaseEntityService<Group> {
     /**
      * 获取指定用户拥有的群组
      *
-     * @param userId 用户id
+     * @param itemCodes 群组项code
      * @return 返回指定用户拥有的群组
      */
-    public ResultData<Set<String>> getGroupCodes(String userId) {
+    public ResultData<Set<String>> getGroupCodes(Set<String> itemCodes) {
         Set<String> result = Sets.newHashSet();
-        List<Group> groups = groupUserDao.findGroups(userId);
+        List<Group> groups = groupUserDao.findGroups(itemCodes);
         if (CollectionUtils.isNotEmpty(groups)) {
-            result = groups.stream().map(Group::getCode).collect(Collectors.toSet());
+            result = groups.stream().map(Group::getId).collect(Collectors.toSet());
         }
         return ResultData.success(result);
     }

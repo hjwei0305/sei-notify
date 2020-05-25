@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 群组(GroupUser)数据库访问类
@@ -21,9 +22,9 @@ public interface GroupItemDao extends BaseEntityDao<GroupItem> {
     /**
      * 根据群组项代码获取群组
      *
-     * @param itemCode 群组项代码
+     * @param itemCodes 群组项代码
      * @return 群组集合
      */
-    @Query("select t from Group t join GroupItem u on t.id = u.groupId and u.itemCode = :itemCode where t.frozen = 0")
-    List<Group> findGroups(@Param("itemCode") String itemCode);
+    @Query("select t from Group t join GroupItem u on t.id = u.groupId and u.itemCode in :itemCode where t.frozen = 0")
+    List<Group> findGroups(@Param("itemCode") Set<String> itemCodes);
 }
