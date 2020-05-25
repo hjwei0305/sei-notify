@@ -78,9 +78,9 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupUserDtos 群组用户集合
      * @return 操作结果
      */
-    @PostMapping(path = "addGroupUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "添加群组用户", notes = "添加群组用户")
-    ResultData<String> addGroupUser(@RequestBody @Valid List<GroupUserDto> groupUserDtos);
+    @PostMapping(path = "addGroupItem", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "添加群组项", notes = "添加群组项")
+    ResultData<String> addGroupItem(@RequestBody @Valid List<GroupUserDto> groupUserDtos);
 
     /**
      * 移除群组用户
@@ -88,9 +88,9 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupUserIds 群组用户id集合
      * @return 操作结果
      */
-    @PostMapping(path = "removeGroupUser", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "移除群组用户", notes = "移除群组用户")
-    ResultData<String> removeGroupUser(@RequestBody List<String> groupUserIds);
+    @PostMapping(path = "removeGroupItem", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "移除群组项", notes = "移除群组项")
+    ResultData<String> removeGroupItem(@RequestBody List<String> groupUserIds);
 
     /**
      * 获取指定群组用户
@@ -98,9 +98,9 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupId 群组id
      * @return 返回指定群组用户对象
      */
-    @GetMapping(path = "getGroupUsers")
-    @ApiOperation(value = "获取指定群组用户", notes = "获取指定群组用户")
-    ResultData<List<GroupUserDto>> getGroupUsers(@RequestParam("groupId") String groupId);
+    @GetMapping(path = "getGroupItems")
+    @ApiOperation(value = "获取指定群组项", notes = "获取指定群组项")
+    ResultData<List<GroupUserDto>> getGroupItems(@RequestParam("groupId") String groupId);
 
     /**
      * 获取用户账号分页数据

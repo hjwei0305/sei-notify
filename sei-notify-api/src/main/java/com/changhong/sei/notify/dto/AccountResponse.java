@@ -1,14 +1,8 @@
 package com.changhong.sei.notify.dto;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * 实现功能：

@@ -129,7 +129,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 操作结果
      */
     @Override
-    public ResultData<String> addGroupUser(@Valid List<GroupUserDto> groupUserDtos) {
+    public ResultData<String> addGroupItem(@Valid List<GroupUserDto> groupUserDtos) {
         if (CollectionUtils.isNotEmpty(groupUserDtos)) {
             List<GroupItem> groupUsers = groupUserDtos.stream().map(
                     v -> modelMapper.map(v, GroupItem.class)
@@ -146,7 +146,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 操作结果
      */
     @Override
-    public ResultData<String> removeGroupUser(List<String> groupUserIds) {
+    public ResultData<String> removeGroupItem(List<String> groupUserIds) {
         return service.delGroupUser(groupUserIds);
     }
 
@@ -157,7 +157,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 返回指定群组用户对象
      */
     @Override
-    public ResultData<List<GroupUserDto>> getGroupUsers(String groupId) {
+    public ResultData<List<GroupUserDto>> getGroupItems(String groupId) {
         ResultData<List<GroupItem>> resultData = service.getGroupUsers(groupId);
         if (resultData.successful()) {
             List<GroupUserDto> list;
