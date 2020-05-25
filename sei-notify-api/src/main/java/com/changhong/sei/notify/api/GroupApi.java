@@ -7,6 +7,7 @@ import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.notify.dto.GroupDto;
 import com.changhong.sei.notify.dto.GroupUserDto;
+import com.changhong.sei.notify.dto.PositionDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -108,4 +109,12 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
     @PostMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
     ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search);
+
+    /**
+     * 分页查询岗位实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    ResultData<PageResult<PositionDto>> findPositionByPage(Search search);
 }

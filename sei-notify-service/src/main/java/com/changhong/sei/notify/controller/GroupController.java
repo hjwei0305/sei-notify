@@ -10,6 +10,7 @@ import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.api.GroupApi;
 import com.changhong.sei.notify.dto.GroupDto;
 import com.changhong.sei.notify.dto.GroupUserDto;
+import com.changhong.sei.notify.dto.PositionDto;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupItem;
 import com.changhong.sei.notify.service.GroupService;
@@ -199,6 +200,17 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
             return ResultData.success(dtoPageResult);
         }
         return ResultData.fail(resultData.getMessage());
+    }
+
+    /**
+     * 分页查询岗位实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    @Override
+    public ResultData<PageResult<PositionDto>> findPositionByPage(Search search) {
+        return basicIntegration.findPositionByPage(search);
     }
 
     /**

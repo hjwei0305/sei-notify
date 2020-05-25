@@ -3,11 +3,15 @@ package com.changhong.sei.notify.service.cust;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
-import com.changhong.sei.notify.dto.OrganizationDto;
-import com.changhong.sei.notify.dto.UserNotifyInfo;
-import com.changhong.sei.notify.dto.AccountResponse;
+import com.changhong.sei.notify.dto.*;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 实现功能：sei基础应用(basic)集成
@@ -56,4 +60,26 @@ public interface BasicIntegration {
      */
     ResultData<List<UserNotifyInfo>> findNotifyInfoByUserIds(List<String> userIds);
 
+    /**
+     * 根据岗位的id获取已分配的员工
+     * @param positionId 岗位id
+     * @return  员工列表
+     */
+    ResultData<List<EmployeeDto>> getEmployeesByPositionId(String positionId);
+
+    /**
+     * 分页查询岗位实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    ResultData<PageResult<PositionDto>> findPositionByPage(Search search);
+
+    /**
+     * 根据功能角色的id获取已分配的用户
+     *
+     * @param featureRoleId 功能角色的id
+     * @return 用户清单
+     */
+    ResultData<List<UserDto>> getUserByFeatureRole(String featureRoleId);
 }

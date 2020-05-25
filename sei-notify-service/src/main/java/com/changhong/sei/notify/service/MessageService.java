@@ -404,11 +404,16 @@ public class MessageService extends BaseEntityService<Message> {
             if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
                 groupItem.addAll(orgCodesResult.getData());
             }
-//        // todo 没有组织，获取用户岗位上的组织
-//        ResultData<List<String>> positionCodesResult = employeeClient.getEmployeePositionCodes(userId);
-//        if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-//            return positionCodesResult.getData();
-//        }
+            // 获取用户岗位代码清单
+            ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
+            if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
+                groupItem.addAll(positionCodesResult.getData());
+            }
+            // 获取用户角色代码清单
+//            ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
+//            if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
+//                groupItem.addAll(positionCodesResult.getData());
+//            }
         }
 
         groupItem.add(user.getAccount());
