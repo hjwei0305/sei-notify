@@ -2,9 +2,12 @@ package com.changhong.sei.notify.dto;
 
 import com.changhong.sei.core.dto.BaseEntityDto;
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
+import com.changhong.sei.util.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 实现功能：
@@ -37,6 +40,13 @@ public class BaseMessageDto extends BaseEntityDto implements Serializable {
      */
     @JsonSerialize(using = EnumJsonSerializer.class)
     protected Priority priority;
+
+    /**
+     * 发布时间
+     */
+    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
+    private LocalDateTime publishDate;
+    protected Boolean read = Boolean.FALSE;
 
     public NotifyType getCategory() {
         return category;
@@ -76,5 +86,22 @@ public class BaseMessageDto extends BaseEntityDto implements Serializable {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public LocalDateTime getPublishDate() {
+        return publishDate;
+    }
+
+    public BaseMessageDto setPublishDate(LocalDateTime publishDate) {
+        this.publishDate = publishDate;
+        return this;
+    }
+
+    public Boolean getRead() {
+        return read;
+    }
+
+    public void setRead(Boolean read) {
+        this.read = read;
     }
 }

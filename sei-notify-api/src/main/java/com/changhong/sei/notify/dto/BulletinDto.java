@@ -73,7 +73,6 @@ public class BulletinDto extends BaseMessageDto {
      * 附件id
      */
     private Set<String> docIds;
-    private Boolean read = Boolean.FALSE;
 
     public Boolean getRelease() {
         return release;
@@ -153,14 +152,6 @@ public class BulletinDto extends BaseMessageDto {
 
     public void setDocIds(Set<String> docIds) {
         this.docIds = docIds;
-    }
-
-    public Boolean getRead() {
-        return read;
-    }
-
-    public void setRead(Boolean read) {
-        this.read = read;
     }
 
     public String getTargetCode() {

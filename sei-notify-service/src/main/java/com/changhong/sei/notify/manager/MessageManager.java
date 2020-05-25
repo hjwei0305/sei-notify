@@ -6,6 +6,7 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.enums.UserType;
@@ -25,12 +26,14 @@ import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <strong>实现功能:</strong>
@@ -51,6 +54,8 @@ public class MessageManager {
     private GroupService groupService;
     @Autowired
     private BasicIntegration basicIntegration;
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * 未读消息数
@@ -277,6 +282,66 @@ public class MessageManager {
         }
         SessionUser user = ContextUtil.getSessionUser();
         return bulletinService.findPage4User(search, user.getUserId(), this.getTargetCodeByUser(user));
+    }
+
+    /**
+     * 用户查询通告
+     *
+     * @param search 查询参数
+     * @return 分页查询通告
+     */
+    public ResultData<PageResult<BaseMessageDto>> findMessageByPage(NotifyType notifyType, Search search) {
+        if (Objects.isNull(search)) {
+            search = Search.createSearch();
+        }
+
+        PageResult<BaseMessageDto> resultData;
+        SessionUser user = ContextUtil.getSessionUser();
+        switch (notifyType) {
+            case SEI_BULLETIN:
+                try {
+                    PageResult<BulletinCompose> pageResult = findBulletinByPage4User(search);
+                    resultData = new PageResult<>(pageResult);
+                    List<BaseMessageDto> rows = pageResult.getRows().stream().map(obj -> {
+                        BaseMessageDto dto = new BulletinDto();
+                        modelMapper.map(obj.getBulletin(), dto);
+
+                        dto.setPublishDate(obj.getBulletin().getReleaseDate());
+                        dto.setRead(obj.getUser().getRead());
+                        return dto;
+                    }).collect(Collectors.toList());
+                    resultData.setRows(rows);
+                } catch (Exception e) {
+                    LogUtil.error("用户查询通告异常！", e);
+                    // 用户查询通告异常！{0}
+                    return ResultData.fail(ContextUtil.getMessage("00018", e.getMessage()));
+                }
+                break;
+            case SEI_REMIND:
+                search.addFilter(new SearchFilter(Remind.FIELD_USER_ID, user.getUserId()));
+                try {
+                    PageResult<Remind> pageResult = remindService.findByPage(search);
+                    resultData = new PageResult<>(pageResult);
+                    List<BaseMessageDto> rows = pageResult.getRows().stream().map(obj -> {
+                        BaseMessageDto dto = new BulletinDto();
+                        modelMapper.map(obj, dto);
+
+                        dto.setPublishDate(obj.getRemindDate());
+                        dto.setRead(obj.getRead());
+                        return dto;
+                    }).collect(Collectors.toList());
+                    resultData.setRows(rows);
+                } catch (Exception e) {
+                    LogUtil.error("用户查询提醒异常！", e);
+                    // 用户查询提醒异常！{0}
+                    return ResultData.fail(ContextUtil.getMessage("00026", e.getMessage()));
+                }
+                break;
+            default:
+                resultData = new PageResult<>();
+        }
+
+        return ResultData.success(resultData);
     }
 
     /**

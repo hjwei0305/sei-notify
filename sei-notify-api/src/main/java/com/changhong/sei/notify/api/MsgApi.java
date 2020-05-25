@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * <strong>实现功能:</strong>
- * <p>通告消息管理API接口</p>
+ * <p>站内消息管理API接口</p>
  *
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-15 17:11
@@ -56,7 +56,7 @@ public interface MsgApi {
      * @return 查询结果
      */
     @GetMapping(path = "unreadData")
-    @ApiOperation(value = "获取用户未读数据", notes = "获取当前用户的所有未读消息数据")
+    @ApiOperation(value = "获取当前会话用户未读消息", notes = "获取当前会话用户的所有未读消息数据")
     ResultData<Map<String, List<BaseMessageDto>>> unreadData();
 
     /**
@@ -66,7 +66,7 @@ public interface MsgApi {
      * @return 操作结果
      */
     @PostMapping(path = "read")
-    @ApiOperation(value = "用户阅读", notes = "用户已阅读,变更阅读状态")
+    @ApiOperation(value = "阅读消息", notes = "消息已阅读,变更阅读状态")
     ResultData<String> read(@RequestParam("category") NotifyType category, @RequestParam("id") String id);
 
     /**
@@ -76,7 +76,7 @@ public interface MsgApi {
      * @return 操作结果
      */
     @GetMapping(path = "detail")
-    @ApiOperation(value = "用户查看", notes = "用户查看通告内容")
+    @ApiOperation(value = "查看消息", notes = "查看消息内容")
     ResultData<BaseMessageDto> detail(@RequestParam("category") NotifyType category, @RequestParam("id") String id);
 
     /**
@@ -84,15 +84,15 @@ public interface MsgApi {
      * @return 操作结果
      */
     @GetMapping(path = "getFirstUnreadBulletin")
-    @ApiOperation(value = "默认获取优先级高的通告", notes = "获取当前用户优先级最高的通告")
+    @ApiOperation(value = "默认获取优先级高的通告", notes = "登录时获取当前用户优先级最高的通告并打开")
     ResultData<BaseMessageDto> getFirstUnreadBulletin();
 
     /**
-     * 用户查询通告
+     * 按类型查询消息
      * @param search 查询参数
      * @return 查询结果
      */
     @PostMapping(path = "findMessageByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "用户查询通告", notes = "一般用户分页查询通告")
-    ResultData<PageResult<BulletinDto>> findBulletinByPage4User(@RequestBody Search search);
+    @ApiOperation(value = "按类型分页查询消息", notes = "按类型分页查询消息")
+    ResultData<PageResult<BaseMessageDto>> findMessageByPage(@RequestParam("category") NotifyType category, @RequestBody Search search);
 }

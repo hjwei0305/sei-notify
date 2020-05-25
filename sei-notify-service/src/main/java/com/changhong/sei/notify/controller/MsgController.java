@@ -29,19 +29,20 @@ import java.util.stream.Collectors;
 
 /**
  * <strong>实现功能:</strong>
- * <p>通告消息管理的服务实现</p>
+ * <p>站内消息管理的服务实现</p>
  *
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-15 17:16
  */
 @RestController
-@Api(value = "MsgApi", tags = "通告消息管理API服务")
-@RequestMapping(path = "bulletinMsg", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@Api(value = "MsgApi", tags = "站内消息管理API服务")
+@RequestMapping(path = "message", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class MsgController implements MsgApi {
     @Autowired
     private MessageManager msgService;
     @Autowired
     private ModelMapper modelMapper;
+
     /**
      * 获取优先级枚举值清单
      *
@@ -71,7 +72,7 @@ public class MsgController implements MsgApi {
     public ResultData<Long> unreadCount() {
         Long unread;
         try {
-           unread = msgService.unreadCount();
+            unread = msgService.unreadCount();
         } catch (Exception e) {
             e.printStackTrace();
             LogUtil.error("获取未读消息数异常！", e);
@@ -180,24 +181,7 @@ public class MsgController implements MsgApi {
      * @return 查询结果
      */
     @Override
-    public ResultData<PageResult<BulletinDto>> findBulletinByPage4User(Search search) {
-        PageResult<BulletinDto> resultData;
-        try {
-            PageResult<BulletinCompose> pageResult = msgService.findBulletinByPage4User(search);
-            resultData = new PageResult<>(pageResult);
-            List<BulletinDto> rows = pageResult.getRows().stream().map(obj -> {
-                BulletinDto dto = new BulletinDto();
-                modelMapper.map(obj.getBulletin(), dto);
-
-                dto.setRead(obj.getUser().getRead());
-                return dto;
-            }).collect(Collectors.toList());
-            resultData.setRows(rows);
-        } catch (Exception e) {
-            LogUtil.error("用户查询通告异常！", e);
-            // 用户查询通告异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("00018", e.getMessage()));
-        }
-        return ResultData.success(resultData);
+    public ResultData<PageResult<BaseMessageDto>> findMessageByPage(NotifyType category, Search search) {
+        return msgService.findMessageByPage(category, search);
     }
 }
