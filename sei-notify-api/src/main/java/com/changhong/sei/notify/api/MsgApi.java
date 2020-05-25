@@ -24,7 +24,7 @@ import java.util.Map;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-15 17:11
  */
-@FeignClient(name = "sei-notify", path = "bulletinMsg")
+@FeignClient(name = "sei-notify", path = "message")
 public interface MsgApi {
 
     /**
@@ -92,7 +92,7 @@ public interface MsgApi {
      * @param search 查询参数
      * @return 查询结果
      */
-    @PostMapping(path = "findBulletinByPage4User", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "findMessageByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "用户查询通告", notes = "一般用户分页查询通告")
     ResultData<PageResult<BulletinDto>> findBulletinByPage4User(@RequestBody Search search);
 }
