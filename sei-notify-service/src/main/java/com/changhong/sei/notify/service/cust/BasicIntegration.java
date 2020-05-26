@@ -79,11 +79,4 @@ public interface BasicIntegration {
      */
     ResultData<List<String>> getUserIdsByRole(Set<String> featureRoleCode);
 
-    /**
-     * 分页查询岗位实体
-     *
-     * @param search 查询参数
-     * @return 分页查询结果
-     */
-    ResultData<PageResult<FeatureRoleDto>> findFeatureRoleByPage(Search search);
 }

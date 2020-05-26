@@ -1,12 +1,11 @@
 package com.changhong.sei.notify.api;
 
 import com.changhong.sei.core.api.BaseEntityApi;
-import com.changhong.sei.core.api.FindAllApi;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.notify.dto.GroupDto;
-import com.changhong.sei.notify.dto.GroupUserDto;
+import com.changhong.sei.notify.dto.GroupItemDto;
 import com.changhong.sei.notify.dto.PositionDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -81,7 +80,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      */
     @PostMapping(path = "addGroupItem", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "添加群组项", notes = "添加群组项")
-    ResultData<String> addGroupItem(@RequestBody @Valid List<GroupUserDto> groupUserDtos);
+    ResultData<String> addGroupItem(@RequestBody @Valid List<GroupItemDto> groupUserDtos);
 
     /**
      * 移除群组用户
@@ -101,14 +100,14 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      */
     @GetMapping(path = "getGroupItems")
     @ApiOperation(value = "获取指定群组项", notes = "获取指定群组项")
-    ResultData<List<GroupUserDto>> getGroupItems(@RequestParam("groupId") String groupId);
+    ResultData<List<GroupItemDto>> getGroupItems(@RequestParam("groupId") String groupId);
 
     /**
      * 获取用户账号分页数据
      */
     @PostMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
-    ResultData<PageResult<GroupUserDto>> getUserAccounts(@RequestBody Search search);
+    ResultData<PageResult<GroupItemDto>> getUserAccounts(@RequestBody Search search);
 
     /**
      * 分页查询岗位实体

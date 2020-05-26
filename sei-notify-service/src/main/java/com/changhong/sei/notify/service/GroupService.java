@@ -144,15 +144,6 @@ public class GroupService extends BaseEntityService<Group> {
                             LogUtil.error(resultData.getMessage());
                         }
                         break;
-                    case ROLE:
-                        codeSet = items.stream().map(GroupItem::getItemCode).collect(Collectors.toSet());
-                        resultData = integration.getUserIdsByRole(codeSet);
-                        if (resultData.successful()) {
-                            result = resultData.getData();
-                        } else {
-                            LogUtil.error(resultData.getMessage());
-                        }
-                        break;
                     default:
 
                 }

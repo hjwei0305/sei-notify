@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
  * @since 2020-05-22 11:04:28
  */
 @ApiModel(description = "群组DTO")
-public class GroupUserDto extends BaseEntityDto {
+public class GroupItemDto extends BaseEntityDto {
     private static final long serialVersionUID = 755755634778478503L;
     /**
      * 群组id

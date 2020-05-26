@@ -137,16 +137,4 @@ public class BasicIntegrationCustBase implements BasicIntegration {
         }, featureRoleCodes);
     }
 
-    /**
-     * 分页查询岗位实体
-     *
-     * @param search 查询参数
-     * @return 分页查询结果
-     */
-    @Override
-    public ResultData<PageResult<FeatureRoleDto>> findFeatureRoleByPage(Search search) {
-        return apiTemplate.postByAppModuleCode(basicServiceName, "/featureRole/findByPage", new ParameterizedTypeReference<ResultData<PageResult<FeatureRoleDto>>>() {
-        }, search);
-    }
-
 }

@@ -23,10 +23,5 @@ public enum GroupCategory {
      * 岗位
      */
     @Remark("岗位")
-    POS,
-    /**
-     * 角色
-     */
-    @Remark("角色")
-    ROLE
+    POS
 }

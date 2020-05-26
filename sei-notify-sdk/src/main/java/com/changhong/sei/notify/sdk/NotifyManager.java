@@ -58,7 +58,7 @@ public class NotifyManager {
     public ResultData<List<String>> getReceiverIdsByGroup(String groupCode) {
         Map<String, String> params = new HashMap<>();
         params.put("groupCode", groupCode);
-        return apiTemplate.getByAppModuleCode("sei-notify", "/position/getUserIdsByGroup", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByAppModuleCode("sei-notify", "/group/getUserIdsByGroup", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
     }
 
@@ -73,7 +73,7 @@ public class NotifyManager {
     }
 
     /**
-     * 按岗位获取接收者
+     * 按角色获取接收者
      */
     public ResultData<List<String>> getReceiverIdsByRole(String featureRoleCode) {
         Map<String, String> params = new HashMap<>();

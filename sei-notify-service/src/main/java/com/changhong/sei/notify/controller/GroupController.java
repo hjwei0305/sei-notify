@@ -9,7 +9,7 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.api.GroupApi;
 import com.changhong.sei.notify.dto.GroupDto;
-import com.changhong.sei.notify.dto.GroupUserDto;
+import com.changhong.sei.notify.dto.GroupItemDto;
 import com.changhong.sei.notify.dto.PositionDto;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupItem;
@@ -130,7 +130,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 操作结果
      */
     @Override
-    public ResultData<String> addGroupItem(@Valid List<GroupUserDto> groupUserDtos) {
+    public ResultData<String> addGroupItem(@Valid List<GroupItemDto> groupUserDtos) {
         if (CollectionUtils.isNotEmpty(groupUserDtos)) {
             List<GroupItem> groupUsers = groupUserDtos.stream().map(
                     v -> modelMapper.map(v, GroupItem.class)
@@ -158,13 +158,13 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 返回指定群组用户对象
      */
     @Override
-    public ResultData<List<GroupUserDto>> getGroupItems(String groupId) {
+    public ResultData<List<GroupItemDto>> getGroupItems(String groupId) {
         ResultData<List<GroupItem>> resultData = service.getGroupUsers(groupId);
         if (resultData.successful()) {
-            List<GroupUserDto> list;
+            List<GroupItemDto> list;
             List<GroupItem> groupUsers = resultData.getData();
             if (CollectionUtils.isNotEmpty(groupUsers)) {
-                list = groupUsers.stream().map(v -> modelMapper.map(v, GroupUserDto.class)).collect(Collectors.toList());
+                list = groupUsers.stream().map(v -> modelMapper.map(v, GroupItemDto.class)).collect(Collectors.toList());
             } else {
                 list = Lists.newArrayList();
             }
@@ -178,23 +178,23 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * 获取用户账号分页数据
      */
     @Override
-    public ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search) {
+    public ResultData<PageResult<GroupItemDto>> getUserAccounts(Search search) {
         search.setQuickSearchProperties(Sets.newHashSet("account", "name"));
         ResultData<PageResult<AccountResponse>> resultData = basicIntegration.findAccountByPage(search);
         if (resultData.successful()) {
             PageResult<AccountResponse> pageResult = resultData.getData();
             List<AccountResponse> accounts = pageResult.getRows();
 
-            GroupUserDto dto;
-            List<GroupUserDto> list = new ArrayList<>();
+            GroupItemDto dto;
+            List<GroupItemDto> list = new ArrayList<>();
             for (AccountResponse account : accounts) {
-                dto = new GroupUserDto();
+                dto = new GroupItemDto();
                 dto.setItemId(account.getUserId());
                 dto.setItemCode(account.getAccount());
                 dto.setItemName(account.getName());
                 list.add(dto);
             }
-            PageResult<GroupUserDto> dtoPageResult = new PageResult<>(pageResult);
+            PageResult<GroupItemDto> dtoPageResult = new PageResult<>(pageResult);
             dtoPageResult.setRows(list);
 
             return ResultData.success(dtoPageResult);

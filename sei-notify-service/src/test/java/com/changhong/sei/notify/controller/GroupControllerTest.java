@@ -6,7 +6,7 @@ import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.dto.GroupDto;
-import com.changhong.sei.notify.dto.GroupUserDto;
+import com.changhong.sei.notify.dto.GroupItemDto;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class GroupControllerTest extends BaseUnitTest {
     @Test
     public void addUserAccounts() {
         String json = "[{\"userAccount\":\"sei\",\"userId\":\"8f9f3a92-3f82-11e7-ac6f-005056930c6b\",\"groupId\":\"C9399501-9BF8-11EA-9F72-0242C0A8460B\",\"userName\":\"全局管理员\"}]";
-        List<GroupUserDto> groupUserDtos = JsonUtils.fromJson2List(json, GroupUserDto.class);
+        List<GroupItemDto> groupUserDtos = JsonUtils.fromJson2List(json, GroupItemDto.class);
         ResultData<String> resultData = controller.addGroupItem(groupUserDtos);
         LOG.debug(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
@@ -47,7 +47,7 @@ public class GroupControllerTest extends BaseUnitTest {
         String json = "{\"quickSearchValue\":\"admin\",\"quickSearchProperties\":[\"userName\",\"userAccount\"],\"pageInfo\":{\"page\":1,\"rows\":15}}";
         Search search = JsonUtils.fromJson(json, Search.class);
 //        search.setQuickSearchValue("admin");
-        ResultData<PageResult<GroupUserDto>> resultData = controller.getUserAccounts(search);
+        ResultData<PageResult<GroupItemDto>> resultData = controller.getUserAccounts(search);
         LOG.debug(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }
