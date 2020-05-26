@@ -73,10 +73,6 @@ public class MessageDto extends BaseEntityDto implements Serializable {
      * 发布人
      */
     private String publishUserName;
-    /**
-     * 是否有效
-     */
-    protected Boolean effective = Boolean.TRUE;
 
     protected Boolean read = Boolean.FALSE;
     /**
@@ -187,14 +183,6 @@ public class MessageDto extends BaseEntityDto implements Serializable {
 
     public void setPublishUserName(String publishUserName) {
         this.publishUserName = publishUserName;
-    }
-
-    public Boolean getEffective() {
-        return effective;
-    }
-
-    public void setEffective(Boolean effective) {
-        this.effective = effective;
     }
 
     public Boolean getRead() {

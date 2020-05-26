@@ -44,22 +44,16 @@ public class Bulletin extends BaseEntity implements ITenant {
     /**
      * 撤销时间
      */
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_TIME_FORMAT)
     @Column(name = "cancel_date")
     private LocalDateTime cancelDate;
     /**
      * 生效时间
      */
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_DATE_FORMAT)
     @Column(name = "effective_date")
     private LocalDate effectiveDate;
     /**
      * 失效时间
      */
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @JsonFormat(timezone = DateUtils.DEFAULT_TIMEZONE, pattern = DateUtils.DEFAULT_DATE_FORMAT)
     @Column(name = "invalid_date")
     private LocalDate invalidDate;
 
