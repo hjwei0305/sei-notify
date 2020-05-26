@@ -153,11 +153,13 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             ResultData<Message> resultData = messageService.detail(bulletin.getMsgId());
             if (resultData.successful()) {
                 result.setMessage(resultData.getData());
+
+                return ResultData.success(result);
             } else {
                 return ResultData.fail(resultData.getMessage());
             }
         }
-        return ResultData.success(result);
+        return ResultData.fail(id + " - 消息不存在");
     }
 
 }
