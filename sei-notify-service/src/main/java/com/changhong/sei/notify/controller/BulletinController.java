@@ -126,8 +126,10 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         OperateResult result;
         try {
             Message message = new Message();
+            message.setId(bulletin.getMsgId());
             message.setCategory(NotifyType.SEI_BULLETIN);
             message.setSubject(bulletinDto.getSubject());
+            message.setContentId(bulletinDto.getContentId());
             message.setContent(bulletinDto.getContent());
             message.setTargetType(bulletinDto.getTargetType());
             message.setTargetValue(bulletinDto.getTargetValue());
