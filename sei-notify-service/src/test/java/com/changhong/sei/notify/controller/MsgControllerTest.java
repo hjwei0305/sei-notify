@@ -30,7 +30,9 @@ public class MsgControllerTest extends BaseUnitTest {
 
     @Test
     public void findMessageByPage() {
-        Search search = Search.createSearch();
+//        Search search = Search.createSearch();
+        String json = "{\"quickSearchValue\":\"\",\"quickSearchProperties\":[\"subject\"],\"pageInfo\":{\"page\":1,\"rows\":30},\"sortOrders\":[],\"filters\":[{\"fieldName\":\"category\",\"value\":\"SEI_BULLETIN\",\"operator\":\"EQ\"}]}";
+        Search search = JsonUtils.fromJson(json, Search.class);
         ResultData<PageResult<MessageDto>> result = controller.findMessageByPage(search);
         System.out.println(JsonUtils.toJson(result));
         Assert.assertTrue(result.successful());

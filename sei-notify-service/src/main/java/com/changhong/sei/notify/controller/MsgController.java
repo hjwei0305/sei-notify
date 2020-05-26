@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -168,13 +169,18 @@ public class MsgController implements MsgApi {
         PageResult<MessageCompose> pageResult = messageService.findPage4User(search, ContextUtil.getSessionUser());
 
         MessageDto dto;
+        List<MessageCompose> composes = pageResult.getRows();
+        List<MessageDto> dtos = new ArrayList<>(composes.size());
         PageResult<MessageDto> result = new PageResult<>(pageResult);
-        for (MessageCompose compose : pageResult.getRows()) {
+        for (MessageCompose compose : composes) {
             dto = modelMapper.map(compose.getMessage(), MessageDto.class);
             if (Objects.nonNull(compose.getUser())) {
                 dto.setRead(compose.getUser().getRead());
             }
+            dtos.add(dto);
         }
+        result.setRows(dtos);
+        composes.clear();
 
         return ResultData.success(result);
     }
