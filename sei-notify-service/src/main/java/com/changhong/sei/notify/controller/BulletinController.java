@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,10 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
     @PostMapping(path = "findByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "分页查询消息通告实体", notes = "分页查询消息通告实体")
     public ResultData<PageResult<BulletinDto>> findByPage(Search search) {
+        if (Objects.isNull(search)) {
+            search = Search.createSearch();
+        }
+        search.addFilter(new SearchFilter(Message.FIELD_CATEGORY, NotifyType.SEI_BULLETIN));
         PageResult<Message> pageResult = messageService.findByPage(search);
         PageResult<BulletinDto> dtoPageResult = new PageResult<>(pageResult);
         List<Message> rows = pageResult.getRows();

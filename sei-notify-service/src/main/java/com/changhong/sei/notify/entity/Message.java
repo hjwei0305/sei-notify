@@ -27,6 +27,7 @@ import java.util.Set;
 public class Message extends BaseEntity implements ITenant {
     private static final long serialVersionUID = 8454048674835991508L;
     public static final String FIELD_DEL = "del";
+    public static final String FIELD_CATEGORY = "category";
 
     /**
      * 消息通知类型
