@@ -94,12 +94,14 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             for (BulletinDto dto : dtos) {
                 Bulletin bulletin = map.get(dto.getId());
                 dto.setMsgId(dto.getId());
-                dto.setId(bulletin.getId());
-                dto.setCancelDate(bulletin.getCancelDate());
-                dto.setCancelUserName(bulletin.getCancelUserName());
-                dto.setCancelUserAccount(bulletin.getCancelUserAccount());
-                dto.setEffectiveDate(bulletin.getEffectiveDate());
-                dto.setInvalidDate(bulletin.getInvalidDate());
+                if (Objects.nonNull(bulletin)) {
+                    dto.setId(bulletin.getId());
+                    dto.setCancelDate(bulletin.getCancelDate());
+                    dto.setCancelUserName(bulletin.getCancelUserName());
+                    dto.setCancelUserAccount(bulletin.getCancelUserAccount());
+                    dto.setEffectiveDate(bulletin.getEffectiveDate());
+                    dto.setInvalidDate(bulletin.getInvalidDate());
+                }
             }
             ids.clear();
             bulletins.clear();
