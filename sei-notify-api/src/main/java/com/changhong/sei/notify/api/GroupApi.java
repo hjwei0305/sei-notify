@@ -115,6 +115,8 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param search 查询参数
      * @return 分页查询结果
      */
+    @PostMapping(path = "findPositionByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "分页查询岗位实体", notes = "分页查询岗位实体")
     ResultData<PageResult<PositionDto>> findPositionByPage(@RequestBody Search search);
 
     /**
