@@ -214,6 +214,17 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     }
 
     /**
+     * 根据群组获取用户id集合
+     *
+     * @param groupCode 群组代码
+     * @return 用户id集合
+     */
+    @Override
+    public ResultData<List<String>> getUserIdsByGroup(String groupCode) {
+        return service.getUserIdsByGroup(groupCode);
+    }
+
+    /**
      * 将数据实体转换成DTO（不含内容属性）
      *
      * @param entity 业务实体

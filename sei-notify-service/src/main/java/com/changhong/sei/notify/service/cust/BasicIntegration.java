@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 实现功能：sei基础应用(basic)集成
@@ -61,11 +62,9 @@ public interface BasicIntegration {
     ResultData<List<UserNotifyInfo>> findNotifyInfoByUserIds(List<String> userIds);
 
     /**
-     * 根据岗位的id获取已分配的员工
-     * @param positionId 岗位id
-     * @return  员工列表
+     * 按岗位获取接收者
      */
-    ResultData<List<EmployeeDto>> getEmployeesByPositionId(String positionId);
+    ResultData<List<String>> getUserIdsByPosition(Set<String> positionCode);
 
     /**
      * 分页查询岗位实体
@@ -76,10 +75,15 @@ public interface BasicIntegration {
     ResultData<PageResult<PositionDto>> findPositionByPage(Search search);
 
     /**
-     * 根据功能角色的id获取已分配的用户
-     *
-     * @param featureRoleId 功能角色的id
-     * @return 用户清单
+     * 按岗位获取接收者
      */
-    ResultData<List<UserDto>> getUserByFeatureRole(String featureRoleId);
+    ResultData<List<String>> getUserIdsByRole(Set<String> featureRoleCode);
+
+    /**
+     * 分页查询岗位实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    ResultData<PageResult<FeatureRoleDto>> findFeatureRoleByPage(Search search);
 }

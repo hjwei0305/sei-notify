@@ -9,6 +9,8 @@ import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.manager.NotifyManager;
 import com.changhong.sei.notify.service.MessageService;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,7 @@ import java.util.Objects;
  */
 @Component("SEI_REMIND")
 public class RemindManager implements NotifyManager {
+    private static final Logger LOG = LoggerFactory.getLogger(RemindManager.class);
     @Autowired
     private MessageService messageService;
 
@@ -33,6 +36,7 @@ public class RemindManager implements NotifyManager {
      */
     @Override
     public ResultData<String> send(SendMessage message) {
+        LOG.info("收到消息[{}],开始执行发送站内提醒消息", message);
         Message messageObj;
         //收件人清单
         List<UserNotifyInfo> receivers = message.getReceivers();
@@ -56,6 +60,7 @@ public class RemindManager implements NotifyManager {
             }
 
             ResultData<String> result = messageService.sendMessage(message.getContent(), message.getDocIds(), messages);
+            LOG.info("站内提醒消息发送结果: {}", result.getMessage());
             return result;
         } else {
             return ResultData.fail("消息接收人不能为空.");

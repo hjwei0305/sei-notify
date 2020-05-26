@@ -1,19 +1,24 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.dao.GroupDao;
 import com.changhong.sei.notify.dao.GroupItemDao;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupItem;
+import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,6 +35,8 @@ public class GroupService extends BaseEntityService<Group> {
     private GroupDao dao;
     @Autowired
     private GroupItemDao groupUserDao;
+    @Autowired
+    private BasicIntegration integration;
 
     @Override
     protected BaseEntityDao<Group> getDao() {
@@ -101,6 +108,57 @@ public class GroupService extends BaseEntityService<Group> {
         if (CollectionUtils.isNotEmpty(groups)) {
             result = groups.stream().map(Group::getId).collect(Collectors.toSet());
         }
+        return ResultData.success(result);
+    }
+
+    /**
+     * 根据群组获取用户id集合
+     *
+     * @param groupCode 群组代码
+     * @return 用户id集合
+     */
+    public ResultData<List<String>> getUserIdsByGroup(String groupCode) {
+        List<String> result = new ArrayList<>();
+        Group group = dao.findByProperty(Group.FIELD_CODE, groupCode);
+        if (Objects.nonNull(group)) {
+            if (group.getFrozen()) {
+                return ResultData.fail(ContextUtil.getMessage("群组[{0}]已被冻结", groupCode));
+            }
+            Set<String> codeSet;
+            ResultData<List<String>> resultData;
+            List<GroupItem> items = groupUserDao.findListByProperty(GroupItem.FIELD_GROUP_ID, group.getId());
+            if (CollectionUtils.isNotEmpty(items)) {
+                switch (group.getCategory()) {
+                    case USER:
+                        result = items.stream().map(GroupItem::getItemId).collect(Collectors.toList());
+                        break;
+                    case ORG:
+
+                        break;
+                    case POS:
+                        codeSet = items.stream().map(GroupItem::getItemCode).collect(Collectors.toSet());
+                        resultData = integration.getUserIdsByPosition(codeSet);
+                        if (resultData.successful()) {
+                            result = resultData.getData();
+                        } else {
+                            LogUtil.error(resultData.getMessage());
+                        }
+                        break;
+                    case ROLE:
+                        codeSet = items.stream().map(GroupItem::getItemCode).collect(Collectors.toSet());
+                        resultData = integration.getUserIdsByRole(codeSet);
+                        if (resultData.successful()) {
+                            result = resultData.getData();
+                        } else {
+                            LogUtil.error(resultData.getMessage());
+                        }
+                        break;
+                    default:
+
+                }
+            }
+        }
+
         return ResultData.success(result);
     }
 }

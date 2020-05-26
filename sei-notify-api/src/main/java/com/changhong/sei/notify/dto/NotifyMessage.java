@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.dto;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -62,6 +63,7 @@ public class NotifyMessage implements Serializable, MessageContent {
     public NotifyMessage(String subject) {
         this.subject = subject;
     }
+    
     public NotifyMessage(String subject, String content) {
         this.subject = subject;
         this.content = content;
@@ -159,6 +161,16 @@ public class NotifyMessage implements Serializable, MessageContent {
         }
         if (StringUtils.isNotBlank(userId)) {
             receiverIds.add(userId);
+        }
+        return receiverIds;
+    }
+
+    public List<String> addReceiverIds(Collection<String> userIds) {
+        if (Objects.isNull(receiverIds)) {
+            receiverIds = new ArrayList<>();
+        }
+        if (CollectionUtils.isNotEmpty(userIds)) {
+            receiverIds.addAll(userIds);
         }
         return receiverIds;
     }

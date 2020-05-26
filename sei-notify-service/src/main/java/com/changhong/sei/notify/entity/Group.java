@@ -24,6 +24,7 @@ import java.io.Serializable;
 @DynamicUpdate
 public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, Serializable {
     private static final long serialVersionUID = 182142067251684618L;
+    public static final String FIELD_CODE = "code";
     /**
      * 类别
      */

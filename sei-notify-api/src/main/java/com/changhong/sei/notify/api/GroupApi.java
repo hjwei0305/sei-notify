@@ -108,7 +108,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      */
     @PostMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
-    ResultData<PageResult<GroupUserDto>> getUserAccounts(Search search);
+    ResultData<PageResult<GroupUserDto>> getUserAccounts(@RequestBody Search search);
 
     /**
      * 分页查询岗位实体
@@ -116,5 +116,15 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param search 查询参数
      * @return 分页查询结果
      */
-    ResultData<PageResult<PositionDto>> findPositionByPage(Search search);
+    ResultData<PageResult<PositionDto>> findPositionByPage(@RequestBody Search search);
+
+    /**
+     * 根据群组获取用户id集合
+     *
+     * @param groupCode 群组代码
+     * @return 用户id集合
+     */
+    @GetMapping(path = "getUserIdsByGroup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据群组获取用户id集合", notes = "根据群组获取用户id集合")
+    ResultData<List<String>> getUserIdsByGroup(@RequestParam("groupCode") String groupCode);
 }
