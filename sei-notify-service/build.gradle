@@ -16,17 +16,17 @@ dependencyManagement {
 
 dependencies {
     // 本项目依赖模块
-    implementation project(':sei-notify-api')
+    compile project(':sei-notify-api')
     // SEI平台依赖包
-    implementation("com.changhong.sei:sei-service-starter:$sei_version")
-    implementation("com.changhong.sei:sei-mq-starter:$sei_version")
-    implementation("com.changhong.sei:sei-edm-sdk:$sei_version")
+    compile("com.changhong.sei:sei-service-starter:$sei_version")
+    compile("com.changhong.sei:sei-mq-starter:$sei_version")
+    compile("com.changhong.sei:sei-edm-sdk:$sei_version")
     // 第三方组件依赖包
-    implementation("mysql:mysql-connector-java:$mysqlVersion")
+    compile("mysql:mysql-connector-java:$mysqlVersion")
     //
-    implementation("org.hibernate:hibernate-java8:5.3.7.Final")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.hibernate:hibernate-java8:5.3.7.Final")
+    compile("org.springframework.boot:spring-boot-starter-mail")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     // 测试依赖包
     testImplementation(
