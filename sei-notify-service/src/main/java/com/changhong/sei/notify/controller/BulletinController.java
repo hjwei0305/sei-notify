@@ -131,6 +131,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             message.setSubject(bulletinDto.getSubject());
             message.setContentId(bulletinDto.getContentId());
             message.setContent(bulletinDto.getContent());
+            message.setPriority(bulletinDto.getPriority());
             message.setTargetType(bulletinDto.getTargetType());
             message.setTargetValue(bulletinDto.getTargetValue());
             message.setTargetName(bulletinDto.getTargetName());
