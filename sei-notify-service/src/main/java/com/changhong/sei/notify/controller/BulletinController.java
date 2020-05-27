@@ -225,8 +225,15 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             if (resultData.successful()) {
                 BulletinCompose compose = resultData.getData();
 
-                BulletinDto dto = getModelMapper().map(compose.getBulletin(), BulletinDto.class);
-                dto.setContent(compose.getMessage().getContent());
+                BulletinDto dto = modelMapper.map(compose.getMessage(), BulletinDto.class);
+                Bulletin bulletin = compose.getBulletin();
+                dto.setId(bulletin.getId());
+                dto.setMsgId(bulletin.getMsgId());
+                dto.setInvalidDate(bulletin.getInvalidDate());
+                dto.setEffectiveDate(bulletin.getEffectiveDate());
+                dto.setCancelUserAccount(bulletin.getCancelUserAccount());
+                dto.setCancelUserName(bulletin.getCancelUserName());
+                dto.setCancelDate(bulletin.getCancelDate());
                 return ResultData.success(dto);
             } else {
                 return ResultData.fail(resultData.getMessage());
