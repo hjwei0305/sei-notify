@@ -16,6 +16,7 @@ import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.MessageService;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -148,14 +149,18 @@ public class MsgController implements MsgApi {
      */
     @Override
     public ResultData<MessageDto> getFirstUnreadMessage() {
+        MessageDto dto = null;
         try {
             Message message = messageService.getFirstUnreadMessage(ContextUtil.getSessionUser());
-            return ResultData.success(modelMapper.map(message, MessageDto.class));
+            if (Objects.nonNull(message) && StringUtils.isNotBlank(message.getId())) {
+                dto = modelMapper.map(message, MessageDto.class);
+            }
         } catch (Exception e) {
             LogUtil.error("默认获取优先级高的通告异常！", e);
             // 默认获取优先级高的通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00017", e.getMessage()));
         }
+        return ResultData.success(dto);
     }
 
     /**
