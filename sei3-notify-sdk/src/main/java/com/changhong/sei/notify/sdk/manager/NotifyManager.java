@@ -118,14 +118,15 @@ public class NotifyManager implements ApplicationContextAware {
     /**
      * 按岗位获取接收者
      */
-    public ResponseData<List<String>> getReceiverIdsByPosition(String positionCode) {
+    public ResponseData<List<String>> getReceiverIdsByPosition(String orgCode, String positionCode) {
         Map<String, String> params = new HashMap<>();
-        params.put("positionCodes", positionCode);
+        params.put("orgCode", orgCode);
+        params.put("positionCode", positionCode);
 
         ResponseData<List<String>> resultData;
         HttpClientResult result;
         try {
-            result = HttpClientUtils.doGet(getBasicServiceUrl() + "/position/getUserIdsByPositionCode", getHeaders(), params);
+            result = HttpClientUtils.doGet(getBasicServiceUrl() + "/position/getUserIdsByOrgCodePositionCode", getHeaders(), params);
             resultData = JsonUtils.fromJson(result.getContent(), ResponseData.class);
         } catch (Exception e) {
             LOG.error("发送平台消息通知异常", e);

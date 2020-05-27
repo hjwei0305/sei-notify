@@ -4,13 +4,11 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.sdk.manager.NotifyManager;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * 实现功能：

@@ -1,6 +1,7 @@
-package com.changhong.sei.notify.sdk;
+package com.changhong.sei.notify.sdk.config;
 
 import com.changhong.sei.apitemplate.ApiTemplate;
+import com.changhong.sei.notify.sdk.manager.NotifyManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

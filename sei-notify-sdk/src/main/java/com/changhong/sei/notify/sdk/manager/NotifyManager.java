@@ -1,4 +1,4 @@
-package com.changhong.sei.notify.sdk;
+package com.changhong.sei.notify.sdk.manager;
 
 import com.changhong.sei.apitemplate.ApiTemplate;
 import com.changhong.sei.core.dto.ResultData;
@@ -83,10 +83,11 @@ public class NotifyManager implements ApplicationContextAware {
     /**
      * 按岗位获取接收者
      */
-    public ResultData<List<String>> getReceiverIdsByPosition(String positionCode) {
+    public ResultData<List<String>> getReceiverIdsByPosition(String orgCode, String positionCode) {
         Map<String, String> params = new HashMap<>();
+        params.put("orgCode", orgCode);
         params.put("positionCodes", positionCode);
-        return apiTemplate.getByUrl(getBasicServiceUrl() + "/position/getUserIdsByPositionCode", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByUrl(getBasicServiceUrl() + "/position/getUserIdsByOrgCodePositionCode", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
     }
 
