@@ -78,9 +78,23 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         }
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
-            Set<String> msgIds = bulletins.stream().map(Bulletin::getMsgId).collect(Collectors.toSet());
             SessionUser user = ContextUtil.getSessionUser();
-            messageService.publishMessage(msgIds, user.getAccount(), user.getUserName());
+            String account = user.getAccount();
+            String userName = user.getUserName();
+            LocalDateTime now = LocalDateTime.now();
+
+            Set<String> msgIds = new HashSet<>();
+            for (Bulletin bulletin : bulletins) {
+                msgIds.add(bulletin.getMsgId());
+
+                bulletin.setPublish(Boolean.TRUE);
+                bulletin.setPublishUserAccount(account);
+                bulletin.setPublishUserName(userName);
+                bulletin.setPublishDate(now);
+            }
+            dao.save(bulletins);
+
+            messageService.publishMessage(msgIds, account, userName);
         }
         return OperateResult.operationSuccess();
     }
@@ -102,12 +116,19 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             LocalDateTime date = LocalDateTime.now();
             Set<String> msgIds = new HashSet<>();
             SessionUser sessionUser = ContextUtil.getSessionUser();
+            String account = sessionUser.getAccount();
+            String userName = sessionUser.getUserName();
             for (Bulletin bulletin : bulletins) {
                 msgIds.add(bulletin.getMsgId());
 
                 bulletin.setCancelDate(date);
-                bulletin.setCancelUserAccount(sessionUser.getAccount());
-                bulletin.setCancelUserName(sessionUser.getUserName());
+                bulletin.setCancelUserAccount(account);
+                bulletin.setCancelUserName(userName);
+
+                bulletin.setPublish(Boolean.FALSE);
+                bulletin.setPublishUserAccount(null);
+                bulletin.setPublishUserName(null);
+                bulletin.setPublishDate(null);
             }
             dao.save(bulletins);
 
