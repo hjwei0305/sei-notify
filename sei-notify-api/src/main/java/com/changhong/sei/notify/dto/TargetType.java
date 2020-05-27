@@ -11,6 +11,12 @@ import com.changhong.sei.annotation.Remark;
 public enum TargetType {
 
     /**
+     * 系统
+     */
+    @Remark("系统")
+    SYSTEM,
+
+    /**
      * 群组
      */
     @Remark("群组")

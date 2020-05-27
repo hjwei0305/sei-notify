@@ -2,7 +2,6 @@ package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
 import com.changhong.sei.core.entity.BaseEntity;
-import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.dto.TargetType;
@@ -24,9 +23,8 @@ import java.util.Set;
 @Table(name = "message")
 @DynamicInsert
 @DynamicUpdate
-public class Message extends BaseEntity implements ITenant {
+public class Message extends BaseEntity {
     private static final long serialVersionUID = 8454048674835991508L;
-    public static final String FIELD_DEL = "del";
     public static final String FIELD_CATEGORY = "category";
 
     /**
@@ -36,11 +34,6 @@ public class Message extends BaseEntity implements ITenant {
     @Column(name = "notify_type")
     @JsonSerialize(using = EnumJsonSerializer.class)
     private NotifyType category;
-    /**
-     * 租户代码
-     */
-    @Column(name = "tenant_code")
-    private String tenantCode;
     /**
      * 消息主题
      */
@@ -123,6 +116,11 @@ public class Message extends BaseEntity implements ITenant {
      */
     @Column(name = "del_user_name")
     protected String delUserName;
+    /**
+     * 业务属性
+     */
+    @Column(name = "biz_value")
+    protected String bizValue;
 
     /**
      * 内容
@@ -134,16 +132,6 @@ public class Message extends BaseEntity implements ITenant {
      */
     @Transient
     private Set<String> docIds;
-
-    @Override
-    public String getTenantCode() {
-        return tenantCode;
-    }
-
-    @Override
-    public void setTenantCode(String tenantCode) {
-        this.tenantCode = tenantCode;
-    }
 
     public NotifyType getCategory() {
         return category;
@@ -273,6 +261,14 @@ public class Message extends BaseEntity implements ITenant {
         this.delUserName = delUserName;
     }
 
+    public String getBizValue() {
+        return bizValue;
+    }
+
+    public void setBizValue(String bizValue) {
+        this.bizValue = bizValue;
+    }
+    
     public String getContent() {
         return content;
     }

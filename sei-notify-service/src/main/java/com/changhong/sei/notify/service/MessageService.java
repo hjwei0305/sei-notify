@@ -14,11 +14,13 @@ import com.changhong.sei.notify.dao.MessageDao;
 import com.changhong.sei.notify.dao.MessageUserDao;
 import com.changhong.sei.notify.dto.MessageDto;
 import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
+import com.changhong.sei.util.EnumUtils;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -79,6 +81,11 @@ public class MessageService extends BaseEntityService<Message> {
             return ResultData.fail("00002");
         }
         Set<String> docIds = message.getDocIds();
+        // 处理系统消息
+        if (TargetType.SYSTEM == message.getTargetType()) {
+            message.setTargetValue(TargetType.SYSTEM.name());
+            message.setTargetName(EnumUtils.getEnumItemRemark(TargetType.class, TargetType.SYSTEM));
+        }
 
         ContentBody body = new ContentBody(content);
         String id = message.getId();
@@ -394,8 +401,6 @@ public class MessageService extends BaseEntityService<Message> {
      */
     @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetValueByUser:'+#userId")
     public Set<String> getTargetValueByUser(SessionUser user) {
-        Set<String> targetValues = Sets.newHashSet();
-
         String userId = user.getUserId();
         Set<String> groupItem = new HashSet<>();
         if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
@@ -409,15 +414,11 @@ public class MessageService extends BaseEntityService<Message> {
             if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
                 groupItem.addAll(positionCodesResult.getData());
             }
-            // 获取用户角色代码清单
-//            ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
-//            if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-//                groupItem.addAll(positionCodesResult.getData());
-//            }
         }
 
         groupItem.add(user.getAccount());
 
+        Set<String> targetValues = Sets.newHashSet();
         // 添加群组
         ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
         if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
@@ -426,6 +427,8 @@ public class MessageService extends BaseEntityService<Message> {
 
         // 添加用户id,获取个人点对点消息
         targetValues.add(userId);
+        // 添加系统消息
+        targetValues.add(TargetType.SYSTEM.name());
 
         return targetValues;
     }
