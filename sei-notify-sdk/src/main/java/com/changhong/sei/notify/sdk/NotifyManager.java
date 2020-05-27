@@ -6,6 +6,9 @@ import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.*;
@@ -16,12 +19,27 @@ import java.util.*;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-04-20 22:42
  */
-public class NotifyManager {
+public class NotifyManager implements ApplicationContextAware {
 
     private final ApiTemplate apiTemplate;
 
     public NotifyManager(ApiTemplate apiTemplate) {
         this.apiTemplate = apiTemplate;
+    }
+
+    private ApplicationContext context;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
+    }
+
+    private String getNotifyServiceUrl() {
+        return context.getEnvironment().getProperty("sei.notify.service.url", "http://10.4.208.86:20001/sei-notify");
+    }
+
+    private String getBasicServiceUrl() {
+        return context.getEnvironment().getProperty("sei.basic.service.url", "http://10.4.208.86:20004/sei-basic");
     }
 
     /**
@@ -46,7 +64,7 @@ public class NotifyManager {
         }
         message.setNotifyTypes(notifyTypes);
 
-        ResultData<String> resultData = apiTemplate.postByAppModuleCode("sei-notify", "/notify/send",
+        ResultData<String> resultData = apiTemplate.postByUrl(getNotifyServiceUrl() + "/notify/send",
                 new ParameterizedTypeReference<ResultData<String>>() {
                 }, message);
         return resultData;
@@ -58,7 +76,7 @@ public class NotifyManager {
     public ResultData<List<String>> getReceiverIdsByGroup(String groupCode) {
         Map<String, String> params = new HashMap<>();
         params.put("groupCode", groupCode);
-        return apiTemplate.getByAppModuleCode("sei-notify", "/group/getUserIdsByGroup", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByUrl(getNotifyServiceUrl() + "/group/getUserIdsByGroup", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
     }
 
@@ -68,7 +86,7 @@ public class NotifyManager {
     public ResultData<List<String>> getReceiverIdsByPosition(String positionCode) {
         Map<String, String> params = new HashMap<>();
         params.put("positionCodes", positionCode);
-        return apiTemplate.getByAppModuleCode("sei-basic", "/position/getUserIdsByPositionCode", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByUrl(getBasicServiceUrl() + "/position/getUserIdsByPositionCode", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
     }
 
@@ -78,7 +96,7 @@ public class NotifyManager {
     public ResultData<List<String>> getReceiverIdsByRole(String featureRoleCode) {
         Map<String, String> params = new HashMap<>();
         params.put("featureRoleCodes", featureRoleCode);
-        return apiTemplate.getByAppModuleCode("sei-basic", "/featureRole/getUserIdsByFeatureRole", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByUrl(getBasicServiceUrl() + "/featureRole/getUserIdsByFeatureRole", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
     }
 }

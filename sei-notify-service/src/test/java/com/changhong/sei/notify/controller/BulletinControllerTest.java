@@ -6,6 +6,7 @@ import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
+import com.changhong.sei.notify.dto.BulletinDto;
 import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.util.EnumUtils;
 import org.junit.Assert;
@@ -39,6 +40,20 @@ public class BulletinControllerTest extends BaseUnitTest {
         ResultData resultData = controller.findByPage(search);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
+    }
+
+    @Test
+    public void getBulletin() {
+        ResultData<BulletinDto> resultData = controller.getBulletin("FF6F6CC9-9F25-11EA-8047-0242C0A8460B");
+        System.out.println(resultData);
+    }
+
+    @Test
+    public void saveBulletin() {
+        String json = "{\"id\":\"3D53412C-9EEF-11EA-8209-0242C0A8460B\",\"category\":\"SEI_BULLETIN\",\"notifyTypeRemark\":\"SEI通告\",\"subject\":\"test\",\"contentId\":\"1F9119D1-9F04-11EA-BAED-7A0E7E43C4D7\",\"content\":\"<p>23456的</p>\",\"targetValue\":\"79287D7B-9E6A-11EA-A0BA-0242C0A8460B\",\"targetName\":\"组织组1\",\"targetType\":\"GROUP\",\"targetTypeRemark\":\"群组\",\"priority\":\"General\",\"priorityRemark\":\"一般\",\"publish\":false,\"publishDate\":null,\"publishUserAccount\":null,\"publishUserName\":null,\"effective\":true,\"read\":false,\"readDate\":null,\"readNum\":0,\"docIds\":[],\"msgId\":\"1F93D8F2-9F04-11EA-BAED-7A0E7E43C4D7\",\"cancelUserAccount\":null,\"cancelUserName\":null,\"cancelDate\":null,\"effectiveDate\":\"2020-05-22\",\"invalidDate\":\"2020-06-27\"}";
+        BulletinDto bulletinDto = JsonUtils.fromJson(json, BulletinDto.class);
+        ResultData<String> data = controller.saveBulletin(bulletinDto);
+        System.out.println(data);
     }
 
     @Test

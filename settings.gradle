@@ -3,4 +3,5 @@ include 'sei-notify-service'
 include 'sei-notify-api'
 include 'api-test'
 include 'sei-notify-sdk'
+include 'sei3-notify-sdk'
 

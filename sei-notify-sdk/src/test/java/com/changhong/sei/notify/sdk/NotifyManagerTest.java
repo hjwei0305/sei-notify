@@ -35,4 +35,10 @@ public class NotifyManagerTest extends BaseUnitTest {
         ResultData<String> result = notifyManager.send(message);
         System.out.println(result);
     }
+
+    @Test
+    public void getReceiverIdsByGroup() {
+        ResultData<List<String>> result = notifyManager.getReceiverIdsByGroup("user");
+        System.out.println(result);
+    }
 }
