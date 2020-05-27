@@ -319,6 +319,8 @@ public class MessageService extends BaseEntityService<Message> {
                     message.setContent(body.getContent());
                 }
             }
+        } else {
+            message = new Message();
         }
         return message;
     }

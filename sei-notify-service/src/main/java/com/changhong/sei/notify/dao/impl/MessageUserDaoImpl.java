@@ -79,7 +79,7 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         query.setMaxResults(1);
         List<Message> messageList = query.getResultList();
         if (CollectionUtils.isEmpty(messageList)) {
-            return null;
+            return new Message();
         } else {
             return messageList.get(0);
         }

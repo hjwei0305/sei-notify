@@ -5,7 +5,6 @@ import com.changhong.sei.core.controller.BaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
-import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
@@ -18,11 +17,9 @@ import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.service.BulletinService;
-import com.changhong.sei.notify.service.MessageService;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <strong>实现功能:</strong>
@@ -52,8 +47,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
     @Autowired
     private BulletinService service;
     @Autowired
-    private MessageService messageService;
-    @Autowired
     private BasicIntegration basicIntegration;
     @Autowired
     private ModelMapper modelMapper;
@@ -62,7 +55,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
     public BaseEntityService<Bulletin> getService() {
         return service;
     }
-
 
     /**
      * 分页查询消息通告实体
@@ -77,39 +69,9 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         if (Objects.isNull(search)) {
             search = Search.createSearch();
         }
-        search.addFilter(new SearchFilter(Message.FIELD_CATEGORY, NotifyType.SEI_BULLETIN));
-        PageResult<Message> pageResult = messageService.findByPage(search);
-        PageResult<BulletinDto> dtoPageResult = new PageResult<>(pageResult);
-        List<Message> rows = pageResult.getRows();
-        if (CollectionUtils.isNotEmpty(rows)) {
+        PageResult<Bulletin> bulletinPageResult = service.findByPage(search);
 
-            List<BulletinDto> dtos = rows.stream().map(obj -> {
-                BulletinDto dto = modelMapper.map(obj, BulletinDto.class);
-                return dto;
-            }).collect(Collectors.toList());
-
-            Set<String> ids = rows.stream().map(Message::getId).collect(Collectors.toSet());
-            List<Bulletin> bulletins = service.findByFilter(new SearchFilter("msgId", ids, SearchFilter.Operator.IN));
-            Map<String, Bulletin> map = bulletins.stream().collect(Collectors.toMap(Bulletin::getMsgId, obj -> obj));
-            for (BulletinDto dto : dtos) {
-                Bulletin bulletin = map.get(dto.getId());
-                dto.setMsgId(dto.getId());
-                if (Objects.nonNull(bulletin)) {
-                    dto.setId(bulletin.getId());
-                    dto.setCancelDate(bulletin.getCancelDate());
-                    dto.setCancelUserName(bulletin.getCancelUserName());
-                    dto.setCancelUserAccount(bulletin.getCancelUserAccount());
-                    dto.setEffectiveDate(bulletin.getEffectiveDate());
-                    dto.setInvalidDate(bulletin.getInvalidDate());
-                }
-            }
-            ids.clear();
-            bulletins.clear();
-            map.clear();
-            dtoPageResult.setRows(dtos);
-        }
-
-        return ResultData.success(dtoPageResult);
+        return convertToDtoPageResult(bulletinPageResult);
     }
 
     /**
