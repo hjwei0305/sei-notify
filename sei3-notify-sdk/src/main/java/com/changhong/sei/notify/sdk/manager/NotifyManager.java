@@ -1,9 +1,11 @@
 package com.changhong.sei.notify.sdk.manager;
 
+import com.changhong.sei.notify.dto.EmailMessage;
 import com.changhong.sei.notify.sdk.common.HttpClientResult;
 import com.changhong.sei.notify.sdk.common.HttpClientUtils;
-import com.changhong.sei.notify.sdk.dto.NotifyMessage;
-import com.changhong.sei.notify.sdk.dto.NotifyType;
+import com.changhong.sei.notify.dto.NotifyMessage;
+import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.dto.SmsMessage;
 import com.ecmp.util.JsonUtils;
 import com.ecmp.vo.ResponseData;
 import org.apache.commons.collections.CollectionUtils;
@@ -40,7 +42,7 @@ public class NotifyManager implements ApplicationContextAware {
     }
 
     private String getNotifyServiceUrl() {
-        return context.getEnvironment().getProperty("sei.notify.service.url", "http://10.4.208.86:20001/sei-notify");
+        return context.getEnvironment().getProperty("sei.notify.service.url", "http://10.4.69.39:19007/sei-notify");
     }
 
     private String getBasicServiceUrl() {
@@ -91,6 +93,56 @@ public class NotifyManager implements ApplicationContextAware {
         } catch (Exception e) {
             LOG.error("发送平台消息通知异常", e);
             resultData = ResponseData.operationFailure("发送平台消息通知异常");
+        }
+
+        return resultData;
+    }
+
+    /**
+     * 发送平台短信通知
+     */
+    public ResponseData<String> sendSms(SmsMessage message) {
+        if (CollectionUtils.isEmpty(message.getPhoneNums())) {
+            return ResponseData.operationFailure("接收人不能为空.");
+        }
+
+        if (StringUtils.isBlank(message.getContent()) && StringUtils.isBlank(message.getContentTemplateCode())) {
+            return ResponseData.operationFailure("消息内容不能为空.");
+        }
+
+        ResponseData<String> resultData;
+        HttpClientResult result;
+        try {
+            result = HttpClientUtils.doPostJson(getNotifyServiceUrl() + "/notify/sendSms", JsonUtils.toJson(message));
+            resultData = JsonUtils.fromJson(result.getContent(), ResponseData.class);
+        } catch (Exception e) {
+            LOG.error("发送平台短信通知异常", e);
+            resultData = ResponseData.operationFailure("发送平台短信通知异常");
+        }
+
+        return resultData;
+    }
+
+    /**
+     * 发送一封电子邮件
+     */
+    public ResponseData<String> sendEmail(EmailMessage message) {
+        if (CollectionUtils.isEmpty(message.getReceivers())) {
+            return ResponseData.operationFailure("接收人不能为空.");
+        }
+
+        if (StringUtils.isBlank(message.getContent()) && StringUtils.isBlank(message.getContentTemplateCode())) {
+            return ResponseData.operationFailure("消息内容不能为空.");
+        }
+
+        ResponseData<String> resultData;
+        HttpClientResult result;
+        try {
+            result = HttpClientUtils.doPostJson(getNotifyServiceUrl() + "/notify/sendEmail", JsonUtils.toJson(message));
+            resultData = JsonUtils.fromJson(result.getContent(), ResponseData.class);
+        } catch (Exception e) {
+            LOG.error("发送平台短信通知异常", e);
+            resultData = ResponseData.operationFailure("发送平台短信通知异常");
         }
 
         return resultData;

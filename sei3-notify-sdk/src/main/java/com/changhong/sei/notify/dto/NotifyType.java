@@ -1,4 +1,4 @@
-package com.changhong.sei.notify.sdk.dto;
+package com.changhong.sei.notify.dto;
 
 /**
  * 实现功能：消息通知类型

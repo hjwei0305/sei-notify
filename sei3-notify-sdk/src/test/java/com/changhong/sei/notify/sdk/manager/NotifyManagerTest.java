@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.sdk.manager;
 
-import com.changhong.sei.notify.sdk.dto.NotifyMessage;
-import com.changhong.sei.notify.sdk.dto.NotifyType;
+import com.changhong.sei.notify.dto.NotifyMessage;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.ecmp.context.ContextUtil;
 import com.ecmp.enums.UserAuthorityPolicy;
 import com.ecmp.enums.UserType;
@@ -52,7 +52,7 @@ public class NotifyManagerTest {
         message.setContent("测试内容");
 
         message.addReceiverId("B54E8964-D14D-11E8-A64B-0242C0A8441B");
-        message.addNotifyType(NotifyType.SEI_REMIND);
+        message.addNotifyType(NotifyType.SMS);
 
         ResponseData<String> result = notifyManager.send(message);
         System.out.println(result);

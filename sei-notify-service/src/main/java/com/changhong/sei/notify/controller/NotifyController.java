@@ -6,11 +6,9 @@ import com.changhong.sei.core.mq.MqProducer;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.exception.ServiceException;
 import com.changhong.sei.notify.api.NotifyApi;
-import com.changhong.sei.notify.dto.NotifyMessage;
-import com.changhong.sei.notify.dto.NotifyType;
-import com.changhong.sei.notify.dto.SendMessage;
-import com.changhong.sei.notify.dto.UserNotifyInfo;
+import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.manager.ContentBuilder;
+import com.changhong.sei.notify.manager.email.EmailManager;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -37,6 +36,8 @@ public class NotifyController implements NotifyApi {
     private BasicIntegration basicIntegration;
     @Autowired
     private ContentBuilder contentBuilder;
+    @Autowired
+    private EmailManager emailManager;
     /**
      * 注入消息队列生产者
      */
@@ -116,6 +117,93 @@ public class NotifyController implements NotifyApi {
             String sendJson = JsonUtils.toJson(sendMessage);
             mqProducer.send(notifyType.name(), sendJson);
         }
+        return ResultData.success("ok");
+    }
+
+    /**
+     * 发送一封电子邮件
+     *
+     * @param emailMessage 电子邮件消息
+     */
+    @Override
+    public ResultData<String> sendEmail(EmailMessage emailMessage) {
+        // 通过模板生成内容
+        contentBuilder.build(emailMessage);
+
+        if (Objects.isNull(mqProducer)) {
+            // 直接发送
+            emailManager.send(emailMessage);
+        } else {
+            // 队列发送
+            EmailAccount sender = emailMessage.getSender();
+            List<EmailAccount> receiveAccounts = emailMessage.getReceivers();
+            List<UserNotifyInfo> receivers = new ArrayList<>();
+            if (receiveAccounts != null && receiveAccounts.size() > 0) {
+                UserNotifyInfo info;
+                for (EmailAccount account : receiveAccounts) {
+                    info = UserNotifyInfo.builder()
+                            .setUserName(account.getName())
+                            .setEmail(account.getAddress());
+                    receivers.add(info);
+                }
+            }
+
+            SendMessage sendMessage = SendMessage.builder()
+                    .setContent(emailMessage.getContent())
+                    .setSubject(emailMessage.getSubject())
+                    .setSender(UserNotifyInfo.builder().setUserName(sender.getName()).setEmail(sender.getAddress()))
+                    .setReceivers(receivers);
+
+            // JSON序列化
+            String message = JsonUtils.toJson(sendMessage);
+            mqProducer.send(NotifyType.EMAIL.name(), message);
+        }
+        return ResultData.success("OK");
+    }
+
+    /**
+     * 发送平台短信通知
+     *
+     * @param message 短信通知
+     */
+    @Override
+    public ResultData<String> sendSms(@Valid SmsMessage message) {
+        //检查消息通知方式
+        if (message == null) {
+            // 发送的消息类型以及内容不能为空
+            return ResultData.fail("00022");
+        }
+        //检查收件人是否存在
+        List<String> phoneNums = message.getPhoneNums();
+        if (CollectionUtils.isEmpty(phoneNums)) {
+            // 发送消息的收件人不能为空
+            return ResultData.fail("00023");
+        }
+        Set<String> numSet = new HashSet<>(phoneNums);
+        if (CollectionUtils.isEmpty(numSet)) {
+            // 发送消息的收件人不能为空
+            return ResultData.fail("00023");
+        }
+
+        UserNotifyInfo info;
+        List<UserNotifyInfo> receivers = new ArrayList<>();
+        for (String num : numSet) {
+            info = new UserNotifyInfo();
+            info.setMobile(num);
+            receivers.add(info);
+        }
+        // 生成消息
+        contentBuilder.build(message);
+        //消息内容
+        String content = message.getContent();
+        // 构造统一发送的消息
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setContent(content);
+        sendMessage.setReceivers(receivers);
+
+        // 循环通知方式，循环发送
+        String sendJson = JsonUtils.toJson(sendMessage);
+        mqProducer.send(NotifyType.SMS.name(), sendJson);
         return ResultData.success("ok");
     }
 }

@@ -4,12 +4,11 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.commons.util.EncodeUtils;
+import com.changhong.sei.notify.dto.SendMessage;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.manager.NotifyManager;
-import com.changhong.sei.notify.dto.SendMessage;
 import org.apache.commons.collections.MapUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -19,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -53,8 +51,10 @@ public class MatrixSmsManager implements NotifyManager {
         LOG.debug("模拟发送短信：{}", message.getContent());
         try {
             HttpClient httpclient = new DefaultHttpClient();
+
+            String uri = ContextUtil.getProperty("sei.notify.sms.host", "https://ccp-sms-api.changhong.com/v1/sms/");
 //            String uri = "http://api.chiq-cloud.com/v1/sms/";
-            String uri = "https://ccp-sms-api.changhong.com/v1/sms/";
+//            String uri = "https://ccp-sms-api.changhong.com/v1/sms/";
 //            String uri = "https://ccp-sms-api.changhong.com/";
 
             HttpPost httppost = new HttpPost(uri);
@@ -88,16 +88,16 @@ public class MatrixSmsManager implements NotifyManager {
                 String id = MapUtils.getString(obj, "id");
                 String version = MapUtils.getString(obj, "version");
             }
-        } catch (ClientProtocolException e) {
-        } catch (IOException e) {
         } catch (Exception e) {
+            LOG.error("发送短信异常", e);
+            return ResultData.fail("发送短信异常");
         }
         return ResultData.success("OK");
     }
 
     public static String sign(String uri) throws UnsupportedEncodingException {
-        String ak = ContextUtil.getProperty("sei.sms.appKey", "1659d01555254cd482d3e2a7b1856388");
-        String sk = ContextUtil.getProperty("sei.sms.secretKey", "e2e7edc042cd42cd82dc88fc753a2cb9");
+        String ak = ContextUtil.getProperty("sei.notify.sms.appKey", "1659d01555254cd482d3e2a7b1856388");
+        String sk = ContextUtil.getProperty("sei.notify.sms.secretKey", "e2e7edc042cd42cd82dc88fc753a2cb9");
         String timestamp = String.valueOf(System.currentTimeMillis());
         String nonce = EncodeUtils.getRandomString(8);
 

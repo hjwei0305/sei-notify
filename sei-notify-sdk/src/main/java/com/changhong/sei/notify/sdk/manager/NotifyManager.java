@@ -2,8 +2,10 @@ package com.changhong.sei.notify.sdk.manager;
 
 import com.changhong.sei.apitemplate.ApiTemplate;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.notify.dto.EmailMessage;
 import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.dto.SmsMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -65,6 +67,42 @@ public class NotifyManager implements ApplicationContextAware {
         message.setNotifyTypes(notifyTypes);
 
         ResultData<String> resultData = apiTemplate.postByUrl(getNotifyServiceUrl() + "/notify/send",
+                new ParameterizedTypeReference<ResultData<String>>() {
+                }, message);
+        return resultData;
+    }
+
+    /**
+     * 发送平台短信通知
+     */
+    public ResultData<String> sendSms(SmsMessage message) {
+        if (CollectionUtils.isEmpty(message.getPhoneNums())) {
+            return ResultData.fail("接收人不能为空.");
+        }
+
+        if (StringUtils.isBlank(message.getContent()) && StringUtils.isBlank(message.getContentTemplateCode())) {
+            return ResultData.fail("消息内容不能为空.");
+        }
+
+        ResultData<String> resultData = apiTemplate.postByUrl(getNotifyServiceUrl() + "/notify/sendSms",
+                new ParameterizedTypeReference<ResultData<String>>() {
+                }, message);
+        return resultData;
+    }
+
+    /**
+     * 发送一封电子邮件
+     */
+    public ResultData<String> sendEmail(EmailMessage message) {
+        if (CollectionUtils.isEmpty(message.getReceivers())) {
+            return ResultData.fail("接收人不能为空.");
+        }
+
+        if (StringUtils.isBlank(message.getContent()) && StringUtils.isBlank(message.getContentTemplateCode())) {
+            return ResultData.fail("消息内容不能为空.");
+        }
+
+        ResultData<String> resultData = apiTemplate.postByUrl(getNotifyServiceUrl() + "/notify/sendEmail",
                 new ParameterizedTypeReference<ResultData<String>>() {
                 }, message);
         return resultData;
