@@ -22,8 +22,8 @@ public class MatrixSmsManagerTest extends BaseUnitTest {
     @Test
     public void send() {
         SendMessage msg = new SendMessage();
-        msg.setContent("测试短信Test");
-        msg.setSubject("测试");
+        msg.setContent("空调滤网积灰严重，请立即清洗");
+        msg.setSubject("空调滤网积灰严重，请立即清洗");
         UserNotifyInfo info = new UserNotifyInfo();
         info.setMobile("18608081023");
         msg.setReceivers(Lists.newArrayList(info));

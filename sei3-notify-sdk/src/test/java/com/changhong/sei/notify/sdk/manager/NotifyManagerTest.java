@@ -2,12 +2,14 @@ package com.changhong.sei.notify.sdk.manager;
 
 import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
+import com.changhong.sei.notify.dto.SmsMessage;
 import com.ecmp.context.ContextUtil;
 import com.ecmp.enums.UserAuthorityPolicy;
 import com.ecmp.enums.UserType;
 import com.ecmp.vo.LoginStatus;
 import com.ecmp.vo.ResponseData;
 import com.ecmp.vo.SessionUser;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,6 +57,15 @@ public class NotifyManagerTest {
         message.addNotifyType(NotifyType.SMS);
 
         ResponseData<String> result = notifyManager.send(message);
+        System.out.println(result);
+    }
+
+    @Test
+    public void sendSms() {
+        SmsMessage message = new SmsMessage();
+        message.setContent("测试内容");
+        message.setPhoneNums(Lists.newArrayList("18608081023"));
+        ResponseData<String> result = notifyManager.sendSms(message);
         System.out.println(result);
     }
 

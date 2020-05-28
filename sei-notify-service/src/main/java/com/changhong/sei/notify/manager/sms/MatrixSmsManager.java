@@ -2,6 +2,7 @@ package com.changhong.sei.notify.manager.sms;
 
 import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.commons.util.EncodeUtils;
 import com.changhong.sei.notify.dto.SendMessage;
@@ -64,6 +65,16 @@ public class MatrixSmsManager implements NotifyManager {
             httppost.addHeader("User-Agent", "imgfornote");
             Map<String, String> obj = new HashMap<>();
 
+            /*
+            curl --location --request POST 'http://ccp-sms-api.changhong.com/v1/sms/' \
+                --header 'Authorization: OAuth realm="http://ccp-sms-api.changhong.com/v1/sms/",oauth_consumer_key="1659d01555254cd482d3e2a7b1856388",oauth_signature="UtoLF01g9Ro78GWY6fzt0R%2B2YrI%3D",oauth_signature_method="HMAC-SHA1",oauth_nonce="zZyWBiQP",oauth_timestamp="1590651960403",oauth_version="1.0"' \
+                --header 'Content-Type: application/json' \
+                --data-raw '{
+                 "userNumber":"18080260070",
+                 "content":"空调滤网积灰严重，请立即清洗"
+                }'
+             */
+
             // 排重
             Set<String> numSet = new HashSet<>();
             for (UserNotifyInfo info : message.getReceivers()) {
@@ -83,11 +94,11 @@ public class MatrixSmsManager implements NotifyManager {
             //返回json格式： {"id": "27JpL~j4vsL0LX00E00005","version": "abc"}
             String rev = EntityUtils.toString(response.getEntity());
             LOG.info("Response: {}, Status: {}", rev, code);
-            if (code == 200) {
-                obj = JsonUtils.fromJson(rev, Map.class);
-                String id = MapUtils.getString(obj, "id");
-                String version = MapUtils.getString(obj, "version");
-            }
+//            if (code == 200) {
+//                obj = JsonUtils.fromJson(rev, Map.class);
+//                String id = MapUtils.getString(obj, "id");
+//                String version = MapUtils.getString(obj, "version");
+//            }
         } catch (Exception e) {
             LOG.error("发送短信异常", e);
             return ResultData.fail("发送短信异常");
@@ -110,13 +121,6 @@ public class MatrixSmsManager implements NotifyManager {
         arr[4] = OAUTH_TIMESTAMP + "=" + URLEncoder.encode(timestamp.toString(), "UTF-8");
 
         Arrays.sort(arr);
-
-//        Map<String, String> oauth = new TreeMap<>();
-//        oauth.put(OAUTH_CONSUMER_KEY, ak);
-//        oauth.put(OAUTH_NONCE, nonce);
-//        oauth.put(OAUTH_SIGNATURE_METHOD, "HMAC-SHA1");
-//        oauth.put(OAUTH_VERSION, "1.0");
-//        oauth.put(OAUTH_TIMESTAMP, timestamp);
 
         String baseString = join(arr, "&");
         LOG.debug("签名拼接字符串: {}", baseString);
@@ -146,7 +150,9 @@ public class MatrixSmsManager implements NotifyManager {
                 .append(timestamp)
                 .append("\",")
                 .append(OAUTH_VERSION)
-                .append("=\"1.0");
+                .append("=\"1.0\"");
+
+        LogUtil.info("短信签名: {}", stringBuffer);
 
         return stringBuffer.toString();
     }
