@@ -82,7 +82,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      */
     @Override
     public ResultData<String> saveBulletin(BulletinDto bulletinDto) {
-        System.out.println(ContextUtil.getSessionUser());
         // DTO转换为Entity
         Bulletin bulletin = convertToEntity(bulletinDto);
         // 执行业务逻辑
@@ -162,7 +161,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         try {
             result = service.deleteBulletin(ids);
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("删除通告异常！", e);
             // 删除通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00011", e.getMessage()));

@@ -33,10 +33,10 @@ public class RemindManager implements NotifyManager {
     @Autowired
     private MessageService messageService;
 
-    @Value("${sei.mock.user.tenant-code}")
-    private String tenant;
-    @Value("${sei.mock.user.account}")
-    private String account;
+//    @Value("${sei.mock.user.tenant-code}")
+//    private String tenant;
+//    @Value("${sei.mock.user.account}")
+//    private String account;
 
     /**
      * 发送消息通知
@@ -51,10 +51,10 @@ public class RemindManager implements NotifyManager {
         List<UserNotifyInfo> receivers = message.getReceivers();
         if (CollectionUtils.isNotEmpty(receivers)) {
             try {
-                ThreadLocalHolder.begin();
+//                ThreadLocalHolder.begin();
 
-                SessionUser user = MockUserHelper.mockUser(tenant, account);
-                LOG.info("当前模拟会话用户: {}", user);
+//                SessionUser user = MockUserHelper.mockUser(tenant, account);
+//                LOG.info("当前模拟会话用户: {}", user);
 
                 int i = 0;
                 UserNotifyInfo sender = message.getSender();
@@ -80,8 +80,8 @@ public class RemindManager implements NotifyManager {
             } catch (Exception e) {
                 LOG.error("发送提醒消息异常", e);
                 return ResultData.fail("发送提醒消息异常:" + e.getMessage());
-            } finally {
-                ThreadLocalHolder.end();
+//            } finally {
+//                ThreadLocalHolder.end();
             }
         } else {
             return ResultData.fail("消息接收人不能为空.");

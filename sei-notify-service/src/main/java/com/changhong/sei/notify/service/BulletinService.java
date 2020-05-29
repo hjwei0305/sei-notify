@@ -152,10 +152,19 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             return OperateResult.operationFailure("00006");
         }
         List<Bulletin> bulletins = dao.findAllById(ids);
-        if (!CollectionUtils.isEmpty(bulletins)) {
+        if (CollectionUtils.isNotEmpty(bulletins)) {
+            for (Bulletin bulletin : bulletins) {
+                if (bulletin.getPublish()) {
+                    // 通告已发布不能删除
+                    return OperateResult.operationFailure("00028");
+                }
+            }
+
             SessionUser user = ContextUtil.getSessionUser();
             Set<String> msgIds = bulletins.stream().map(Bulletin::getMsgId).collect(Collectors.toSet());
             messageService.delMessage(msgIds, user.getAccount(), user.getUserName());
+
+            dao.delete(ids);
         }
         return OperateResult.operationSuccess();
     }
