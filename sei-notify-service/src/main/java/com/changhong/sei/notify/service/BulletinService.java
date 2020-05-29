@@ -4,6 +4,8 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.context.SessionUser;
 import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
+import com.changhong.sei.core.dto.serach.Search;
+import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.notify.dao.BulletinDao;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -36,8 +39,6 @@ public class BulletinService extends BaseEntityService<Bulletin> {
     private BulletinDao dao;
     @Autowired
     private MessageService messageService;
-    @Autowired
-    private MessageUserDao bulletinUserDao;
 
     @Override
     protected BaseEntityDao<Bulletin> getDao() {
@@ -190,6 +191,27 @@ public class BulletinService extends BaseEntityService<Bulletin> {
             }
         }
         return ResultData.fail(id + " - 消息不存在");
+    }
+
+    @Transactional
+    public ResultData<Integer> updateEffective() {
+        int count = 0;
+        // 失效时间大于当天
+        Search search = Search.createSearch();
+        search.addFilter(new SearchFilter("effective", Boolean.TRUE));
+        search.addFilter(new SearchFilter("invalidDate", LocalDate.now(), SearchFilter.Operator.LT));
+        List<Bulletin> bulletins = dao.findByFilters(search);
+        if (CollectionUtils.isNotEmpty(bulletins)) {
+            Set<String> msgIds = bulletins.stream().map(Bulletin::getMsgId).collect(Collectors.toSet());
+            List<Message> messages = messageService.findByIds(msgIds);
+            if (CollectionUtils.isNotEmpty(messages)) {
+                for (Message message : messages) {
+                    message.setEffective(Boolean.FALSE);
+                }
+                messageService.save(messages);
+            }
+        }
+        return ResultData.success(count);
     }
 
 }

@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -62,7 +61,13 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
     public List<Message> getUnreadMessage(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select t from Message t ");
-        return getUnReadQuery(jpql, userId, targetValues, "", "").getResultList();
+
+        Query query = getUnReadQuery(jpql, userId, targetValues, "", "");
+
+        query.setFirstResult(0);
+        // 设置最大返回未读消息数
+        query.setMaxResults(10);
+        return query.getResultList();
     }
 
     @Override
@@ -84,6 +89,52 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
             return messageList.get(0);
         }
     }
+
+//    /**
+//     * 分页获取用户消息(首页用)
+//     */
+//    @Override
+//    public PageResult<Message> findMessageByPage4User(Search search, String userId, Set<String> targetCodes) {
+//        PageInfo pageInfo = search.getPageInfo();
+//        if (Objects.isNull(pageInfo)) {
+//            pageInfo = new PageInfo();
+//        }
+//
+//        StringBuilder where = new StringBuilder();
+//        where.append(" from Message b left join MessageUser u on b.id = u.msgId and u.userId = :userId ");
+//        where.append(" where b.del = 0 and b.effective = 1 and b.publish = 1  and b.targetValue in :targetValues ");
+//
+//        StringBuilder jpql = new StringBuilder();
+//        jpql.append("select count(1) ").append(where);
+//        Query countQuery = entityManager.createQuery(jpql.toString());
+//        countQuery.setParameter("userId", userId);
+//        countQuery.setParameter("targetValues", targetCodes);
+//
+//        List<Message> messages = null;
+//        Long countNum = (Long) countQuery.getSingleResult();
+//        if (Objects.nonNull(countNum)) {
+//            jpql.delete(0, jpql.length());
+//            jpql.append("select b ").append(where);
+//            // 排序
+//            jpql.append(" order by b.priority, b.publishDate desc ");
+//
+//            Query query = entityManager.createQuery(jpql.toString());
+//            query.setParameter("userId", userId);
+//            query.setParameter("targetValues", targetCodes);
+//
+//            query.setFirstResult(pageInfo.getPage() - 1);
+//            query.setMaxResults(pageInfo.getRows());
+//
+//            messages = (List<Message>) query.getResultList();
+//        }
+//
+//        PageResult<Message> pageResult = new PageResult<>();
+//        pageResult.setRows(messages);
+//        pageResult.setTotal((int) Math.ceil((double) countNum / (double) pageInfo.getRows()));
+//        pageResult.setRecords(countNum.intValue());
+//        pageResult.setPage(pageInfo.getPage());
+//        return pageResult;
+//    }
 
     @Override
     public PageResult<MessageCompose> findPage4User(Search search, String userId, Set<String> targetCodes) {
@@ -158,7 +209,8 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
             // 排序
             List<SearchOrder> orders = search.getSortOrders();
             if (CollectionUtils.isNotEmpty(orders)) {
-                jpql.append(" order by b.publish ");
+//                jpql.append(" order by b.publish ");
+                jpql.append(" order by b.priority, b.publishDate desc ");
                 for (SearchOrder order : orders) {
                     if (StringUtils.equals("read", order.getProperty())) {
                         jpql.append(", u.").append(order.getProperty()).append(" ").append(order.getDirection().name());

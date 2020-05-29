@@ -99,4 +99,14 @@ public interface MsgApi {
     @PostMapping(path = "findMessageByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "按类型分页查询消息", notes = "按类型分页查询消息")
     ResultData<PageResult<MessageDto>> findMessageByPage(@RequestBody Search search);
+
+    /**
+     * 按类型查询有效消息
+     *
+     * @param search 查询参数
+     * @return 查询结果
+     */
+    @PostMapping(path = "findEffectiveMessageByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "按类型分页查询有效消息", notes = "按类型分页查询有效消息")
+    ResultData<PageResult<MessageDto>> findMessageByPage4Index(@RequestBody Search search);
 }

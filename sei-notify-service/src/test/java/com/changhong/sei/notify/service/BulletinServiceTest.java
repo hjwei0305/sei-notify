@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.service;
 
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.dto.TargetType;
@@ -54,5 +55,11 @@ public class BulletinServiceTest extends BaseUnitTest {
 
     @Test
     public void getBulletin() {
+    }
+
+    @Test
+    public void updateEffective() {
+        ResultData<Integer> resultData = service.updateEffective();
+        System.out.println(resultData);
     }
 }

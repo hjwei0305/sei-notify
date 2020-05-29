@@ -102,6 +102,11 @@ public class Bulletin extends BaseEntity implements ITenant {
     @Column(name = "cancel_date")
     private LocalDateTime cancelDate;
     /**
+     * 是否有效
+     */
+    @Column(name = "is_effective")
+    protected Boolean effective = Boolean.TRUE;
+    /**
      * 生效时间
      */
     @Column(name = "effective_date")
@@ -224,6 +229,14 @@ public class Bulletin extends BaseEntity implements ITenant {
 
     public void setCancelDate(LocalDateTime cancelDate) {
         this.cancelDate = cancelDate;
+    }
+
+    public Boolean getEffective() {
+        return effective;
+    }
+
+    public void setEffective(Boolean effective) {
+        this.effective = effective;
     }
 
     public LocalDate getEffectiveDate() {
