@@ -82,6 +82,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      */
     @Override
     public ResultData<String> saveBulletin(BulletinDto bulletinDto) {
+        System.out.println(ContextUtil.getSessionUser());
         // DTO转换为Entity
         Bulletin bulletin = convertToEntity(bulletinDto);
         // 执行业务逻辑
