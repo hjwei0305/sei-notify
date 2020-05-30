@@ -1,6 +1,5 @@
 package com.changhong.sei.notify.controller;
 
-import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.mq.MqProducer;
@@ -137,10 +136,6 @@ public class NotifyController implements NotifyApi {
         } else {
             // 队列发送
             EmailAccount sender = emailMessage.getSender();
-            if (Objects.isNull(sender)) {
-                // 发送消息的发件人不能为空
-                return ResultData.fail(ContextUtil.getMessage("00027"));
-            }
             List<EmailAccount> receiveAccounts = emailMessage.getReceivers();
             List<UserNotifyInfo> receivers = new ArrayList<>();
             if (receiveAccounts != null && receiveAccounts.size() > 0) {
@@ -156,8 +151,10 @@ public class NotifyController implements NotifyApi {
             SendMessage sendMessage = SendMessage.builder()
                     .setContent(emailMessage.getContent())
                     .setSubject(emailMessage.getSubject())
-                    .setSender(UserNotifyInfo.builder().setUserName(sender.getName()).setEmail(sender.getAddress()))
                     .setReceivers(receivers);
+            if (Objects.nonNull(sender)) {
+                sendMessage.setSender(UserNotifyInfo.builder().setUserName(sender.getName()).setEmail(sender.getAddress()));
+            }
 
             // JSON序列化
             String message = JsonUtils.toJson(sendMessage);
