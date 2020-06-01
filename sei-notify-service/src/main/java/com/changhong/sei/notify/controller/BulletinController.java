@@ -97,6 +97,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             message.setTargetType(bulletinDto.getTargetType());
             message.setTargetValue(bulletinDto.getTargetValue());
             message.setTargetName(bulletinDto.getTargetName());
+            message.setDocIds(bulletinDto.getDocIds());
 
             result = service.saveBulletin(bulletin, message);
         } catch (Exception e) {
