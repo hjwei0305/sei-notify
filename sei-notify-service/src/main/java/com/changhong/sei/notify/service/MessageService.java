@@ -87,30 +87,23 @@ public class MessageService extends BaseEntityService<Message> {
             message.setTargetName(EnumUtils.getEnumItemRemark(TargetType.class, TargetType.SYSTEM));
         }
 
-        ContentBody body = new ContentBody(content);
+        ContentBody body = null;
         String id = message.getId();
-        if (StringUtils.isBlank(id)) {
-            // 保存内容
-            contentBodyService.save(body);
-            message.setContentId(body.getId());
-            // 保存通告
-            dao.save(message);
-        } else {
-            // 编辑
-            Message editMessage = dao.findOne(id);
-            if (Objects.isNull(editMessage)) {
-                // 编辑失败,通告【{0}】不存在!
-                return ResultData.fail(ContextUtil.getMessage("00003", id));
-            }
+        if (StringUtils.isNotBlank(id)) {
             // 删除原内容
             String contentId = message.getContentId();
             if (StringUtils.isNotBlank(contentId)) {
-                contentBodyService.delete(contentId);
+                //contentBodyService.delete(contentId);
+                body = contentBodyService.findOne(contentId);
             }
-            // 保存内容
-            contentBodyService.save(body);
-            message.setContentId(body.getId());
         }
+        if (Objects.isNull(body)) {
+            body = new ContentBody();
+        }
+        body.setContent(content);
+        // 保存内容
+        contentBodyService.save(body);
+        message.setContentId(body.getId());
         dao.save(message);
 
         //绑定附件  注意:这里是通过内容id关联附件
