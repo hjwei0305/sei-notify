@@ -23,15 +23,15 @@ public class UserMiniAppPushTime extends BaseEntity {
     /**
      * 用户Id
      */
-    @Column(name = "userId", length = 36, nullable = false)
+    @Column(name = "user_id", length = 36, nullable = false)
     private String userId;
     /**
-     * 用户
+     * 用户账号
      */
     @Column(name = "user_account")
     private String userAccount;
     /**
-     * 用户
+     * 用户名称
      */
     @Column(name = "user_name")
     private String userName;
@@ -39,7 +39,7 @@ public class UserMiniAppPushTime extends BaseEntity {
     /**
      * 微信小程序openId
      */
-    @Column(name = "mini_program_openId",unique = true)
+    @Column(name = "mini_program_open_id",unique = true)
     private String miniProgramOpenId;
 
     /**
