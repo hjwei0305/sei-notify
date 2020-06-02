@@ -49,5 +49,11 @@ public enum NotifyType {
      * 微信
      */
     @Remark("微信")
-    WeChat;
+    WeChat,
+
+    /**
+     * 微信小程序
+     */
+    @Remark("微信小程序")
+    MiniApp;
 }

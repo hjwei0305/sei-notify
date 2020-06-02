@@ -10,6 +10,7 @@ import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.manager.ContentBuilder;
 import com.changhong.sei.notify.manager.email.EmailManager;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
+import com.changhong.sei.util.EnumUtils;
 import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -114,6 +115,14 @@ public class NotifyController implements NotifyApi {
         Set<NotifyType> notifyTypeSet = new HashSet<>(message.getNotifyTypes());
         // 循环通知方式，循环发送
         for (NotifyType notifyType : notifyTypeSet) {
+            //微信/小程序单独处理模板
+            if (NotifyType.WeChat.equals(notifyType)||NotifyType.MiniApp.equals(notifyType)){
+                message.setContentTemplateCode(message.getContentTemplateCode()+"_"+ EnumUtils.getEnumItemName(NotifyType.class,notifyType.ordinal()).toUpperCase());
+                contentBuilder.build(message);
+                sendMessage.setContent(message.getContent());
+            }else {
+                sendMessage.setContent(content);
+            }
             String sendJson = JsonUtils.toJson(sendMessage);
             mqProducer.send(notifyType.name(), sendJson);
         }
