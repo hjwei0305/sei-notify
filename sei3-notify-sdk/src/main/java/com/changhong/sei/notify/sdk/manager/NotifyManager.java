@@ -65,7 +65,7 @@ public class NotifyManager implements ApplicationContextAware {
 
     /**
      * 发送平台消息通知
-     * 目前支持: NotifyType.EMAIL - 邮件, NotifyType.SMS - 短信, NotifyType.SEI_REMIND - 站内提醒(默认)
+     * 目前支持: NotifyType.EMAIL - 邮件, NotifyType.SMS - 短信, NotifyType.SEI_REMIND - 站内提醒(默认), NotifyType.MiniApp - 微信小程序
      *
      * @param message 发送的通知消息
      */

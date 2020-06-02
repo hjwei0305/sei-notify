@@ -40,5 +40,10 @@ public enum NotifyType {
     /**
      * 微信
      */
-    WeChat;
+    WeChat,
+
+    /**
+     * 微信小程序
+     */
+    MiniApp;
 }
