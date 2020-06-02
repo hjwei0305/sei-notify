@@ -11,6 +11,7 @@ import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.manager.NotifyManager;
 import com.changhong.sei.notify.service.MessageService;
+import com.changhong.sei.notify.service.UserMiniAppPushTimeService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -34,6 +35,8 @@ public class MiniAppManager implements NotifyManager {
 
     @Autowired(required = false)
     private WxMaService wxService;
+    @Autowired
+    private UserMiniAppPushTimeService userMiniAppPushTimeService;
 
     /**
      * 发送消息通知
@@ -58,6 +61,7 @@ public class MiniAppManager implements NotifyManager {
                         if (StringUtils.isNotEmpty(openId)){
                             wxMaSubscribeMessage.setToUser(openId);
                             wxService.getMsgService().sendSubscribeMsg(wxMaSubscribeMessage);
+                            userMiniAppPushTimeService.subtract(receiver,openId);
                         }
                     }
                 }
