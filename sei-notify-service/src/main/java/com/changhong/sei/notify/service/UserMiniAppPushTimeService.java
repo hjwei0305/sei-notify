@@ -124,4 +124,19 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
         return ResultData.success(userMiniAppPushTime);
     }
 
+    /**
+     * 重置推送次数为0
+     *
+     * @param openId 小程序openId
+     * @return 结果
+     */
+    public ResultData<String> reset(String openId) {
+        UserMiniAppPushTime userMiniAppPushTime = dao.findByMiniProgramOpenId(openId);
+        if (Objects.nonNull(userMiniAppPushTime)) {
+            userMiniAppPushTime.setPushTime(0);
+            dao.save(userMiniAppPushTime);
+        }
+        return ResultData.success("ok");
+    }
+
 }

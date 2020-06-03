@@ -77,4 +77,15 @@ public class UserMiniAppPushTimeController extends BaseEntityController<UserMini
     public ResultData<String> subtract(String openId) {
         return service.subtract(openId);
     }
+
+    /**
+     * 重置推送次数为0
+     *
+     * @param openId 小程序openId
+     * @return 结果
+     */
+    @Override
+    public ResultData<String> reset(String openId) {
+        return service.reset(openId);
+    }
 }

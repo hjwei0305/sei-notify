@@ -52,4 +52,13 @@ public interface UserMiniAppPushTimeApi extends BaseEntityApi<UserMiniAppPushTim
     @ApiOperation("推送次数减一")
     @GetMapping(path = "subtract")
     ResultData<String> subtract(@RequestParam("openId") String openId);
+
+    /**
+     * 重置推送次数为0
+     * @param openId 小程序openId
+     * @return 结果
+     */
+    @ApiOperation("重置推送次数为0")
+    @GetMapping(path = "reset")
+    ResultData<String> reset(@RequestParam("openId") String openId);
 }
