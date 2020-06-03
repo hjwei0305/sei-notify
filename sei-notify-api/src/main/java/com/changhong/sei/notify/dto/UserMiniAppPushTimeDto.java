@@ -39,4 +39,44 @@ public class UserMiniAppPushTimeDto extends BaseEntityDto implements Serializabl
      * 剩余推送次数
      */
     private Integer pushTime = 0;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getMiniProgramOpenId() {
+        return miniProgramOpenId;
+    }
+
+    public void setMiniProgramOpenId(String miniProgramOpenId) {
+        this.miniProgramOpenId = miniProgramOpenId;
+    }
+
+    public Integer getPushTime() {
+        return pushTime;
+    }
+
+    public void setPushTime(Integer pushTime) {
+        this.pushTime = pushTime;
+    }
 }
