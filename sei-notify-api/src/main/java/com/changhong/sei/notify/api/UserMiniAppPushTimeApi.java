@@ -27,6 +27,15 @@ import javax.validation.Valid;
 public interface UserMiniAppPushTimeApi extends BaseEntityApi<UserMiniAppPushTimeDto>{
 
     /**
+     * 获取剩余推送次数
+     * @param openId 小程序openId
+     * @return 结果
+     */
+    @ApiOperation("获取剩余推送次数")
+    @GetMapping(path = "findByOpenId")
+    ResultData<UserMiniAppPushTimeDto> findByOpenId(@RequestParam("openId") String openId);
+
+    /**
      * 推送次数加一
      * @param openId 小程序openId
      * @return 结果

@@ -41,6 +41,22 @@ public class UserMiniAppPushTimeController extends BaseEntityController<UserMini
     }
 
     /**
+     * 获取剩余推送次数
+     *
+     * @param openId 小程序openId
+     * @return 结果
+     */
+    @Override
+    public ResultData<UserMiniAppPushTimeDto> findByOpenId(String openId) {
+        ResultData<UserMiniAppPushTime> resultData = service.findByOpenId(openId);
+        if (resultData.successful()){
+            return ResultData.success(convertToDto(resultData.getData()));
+        }else {
+            return ResultData.fail(resultData.getMessage());
+        }
+    }
+
+    /**
      * 推送次数加一
      *
      * @param openId 小程序openId

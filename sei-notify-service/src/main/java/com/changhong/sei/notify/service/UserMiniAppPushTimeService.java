@@ -7,6 +7,7 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.dao.ContentTemplateDao;
 import com.changhong.sei.notify.dao.UserMiniAppPushTimeDao;
+import com.changhong.sei.notify.dto.UserMiniAppPushTimeDto;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.entity.ContentTemplate;
 import com.changhong.sei.notify.entity.UserMiniAppPushTime;
@@ -97,6 +98,20 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
         }
         dao.save(userMiniAppPushTime);
         return ResultData.success("ok");
+    }
+
+    /**
+     * 获取剩余推送次数
+     * @param openId 小程序openId
+     * @return 结果
+     */
+    public ResultData<UserMiniAppPushTime> findByOpenId(String openId){
+        UserMiniAppPushTime userMiniAppPushTime =  dao.findByMiniProgramOpenId(openId);
+        if (Objects.nonNull(userMiniAppPushTime)){
+            return ResultData.success(userMiniAppPushTime);
+        }else {
+            return ResultData.fail("指定数据不存在");
+        }
     }
 
 }
