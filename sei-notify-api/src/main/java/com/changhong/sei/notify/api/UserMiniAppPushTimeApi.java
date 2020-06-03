@@ -31,6 +31,7 @@ public interface UserMiniAppPushTimeApi extends BaseEntityApi<UserMiniAppPushTim
      * @param openId 小程序openId
      * @return 结果
      */
+    @ApiOperation("推送次数加一")
     @GetMapping(path = "plus")
     ResultData<String> plus(@RequestParam("openId") String openId);
 
@@ -39,6 +40,7 @@ public interface UserMiniAppPushTimeApi extends BaseEntityApi<UserMiniAppPushTim
      * @param openId 小程序openId
      * @return 结果
      */
+    @ApiOperation("推送次数减一")
     @GetMapping(path = "subtract")
     ResultData<String> subtract(@RequestParam("openId") String openId);
 }
