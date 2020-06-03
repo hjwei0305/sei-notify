@@ -36,12 +36,13 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
 
     /**
      * 推送次数加一
+     *
      * @param openId 小程序openId
      * @return 结果
      */
-    public ResultData<String> plus(String openId){
-        UserMiniAppPushTime userMiniAppPushTime =  dao.findByMiniProgramOpenId(openId);
-        if (Objects.isNull(userMiniAppPushTime)){
+    public ResultData<String> plus(String openId) {
+        UserMiniAppPushTime userMiniAppPushTime = dao.findByMiniProgramOpenId(openId);
+        if (Objects.isNull(userMiniAppPushTime)) {
             SessionUser user = ContextUtil.getSessionUser();
             userMiniAppPushTime = new UserMiniAppPushTime();
             userMiniAppPushTime.setUserId(user.getUserId());
@@ -49,8 +50,8 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
             userMiniAppPushTime.setUserName(user.getUserName());
             userMiniAppPushTime.setMiniProgramOpenId(openId);
             userMiniAppPushTime.setPushTime(1);
-        }else {
-            userMiniAppPushTime.setPushTime(userMiniAppPushTime.getPushTime()+1);
+        } else {
+            userMiniAppPushTime.setPushTime(userMiniAppPushTime.getPushTime() + 1);
         }
         dao.save(userMiniAppPushTime);
         return ResultData.success("ok");
@@ -58,21 +59,22 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
 
     /**
      * 推送次数减一
+     *
      * @param userNotifyInfo 接收人
-     * @param openId 小程序openId
+     * @param openId         小程序openId
      * @return 结果
      */
-    public ResultData<String> subtract(UserNotifyInfo userNotifyInfo,String openId){
-        UserMiniAppPushTime userMiniAppPushTime =  dao.findByMiniProgramOpenId(openId);
-        if (Objects.isNull(userMiniAppPushTime)){
+    public ResultData<String> subtract(UserNotifyInfo userNotifyInfo, String openId) {
+        UserMiniAppPushTime userMiniAppPushTime = dao.findByMiniProgramOpenId(openId);
+        if (Objects.isNull(userMiniAppPushTime)) {
             userMiniAppPushTime = new UserMiniAppPushTime();
             userMiniAppPushTime.setUserId(userNotifyInfo.getUserId());
             userMiniAppPushTime.setUserAccount(userNotifyInfo.getUserAccount());
             userMiniAppPushTime.setUserName(userNotifyInfo.getUserName());
             userMiniAppPushTime.setMiniProgramOpenId(openId);
             userMiniAppPushTime.setPushTime(0);
-        }else {
-            userMiniAppPushTime.setPushTime(userMiniAppPushTime.getPushTime()-1);
+        } else {
+            userMiniAppPushTime.setPushTime(userMiniAppPushTime.getPushTime() - 1);
         }
         dao.save(userMiniAppPushTime);
         return ResultData.success("ok");
@@ -80,12 +82,13 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
 
     /**
      * 推送次数减一
+     *
      * @param openId 小程序openId
      * @return 结果
      */
-    public ResultData<String> subtract(String openId){
-        UserMiniAppPushTime userMiniAppPushTime =  dao.findByMiniProgramOpenId(openId);
-        if (Objects.isNull(userMiniAppPushTime)){
+    public ResultData<String> subtract(String openId) {
+        UserMiniAppPushTime userMiniAppPushTime = dao.findByMiniProgramOpenId(openId);
+        if (Objects.isNull(userMiniAppPushTime)) {
             SessionUser user = ContextUtil.getSessionUser();
             userMiniAppPushTime = new UserMiniAppPushTime();
             userMiniAppPushTime.setUserId(user.getUserId());
@@ -93,8 +96,8 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
             userMiniAppPushTime.setUserName(user.getUserName());
             userMiniAppPushTime.setMiniProgramOpenId(openId);
             userMiniAppPushTime.setPushTime(0);
-        }else {
-            userMiniAppPushTime.setPushTime(userMiniAppPushTime.getPushTime()-1);
+        } else {
+            userMiniAppPushTime.setPushTime(userMiniAppPushTime.getPushTime() - 1);
         }
         dao.save(userMiniAppPushTime);
         return ResultData.success("ok");
@@ -102,16 +105,23 @@ public class UserMiniAppPushTimeService extends BaseEntityService<UserMiniAppPus
 
     /**
      * 获取剩余推送次数
+     *
      * @param openId 小程序openId
      * @return 结果
      */
-    public ResultData<UserMiniAppPushTime> findByOpenId(String openId){
-        UserMiniAppPushTime userMiniAppPushTime =  dao.findByMiniProgramOpenId(openId);
-        if (Objects.nonNull(userMiniAppPushTime)){
-            return ResultData.success(userMiniAppPushTime);
-        }else {
-            return ResultData.fail("指定数据不存在");
+    public ResultData<UserMiniAppPushTime> findByOpenId(String openId) {
+        UserMiniAppPushTime userMiniAppPushTime = dao.findByMiniProgramOpenId(openId);
+        if (Objects.isNull(userMiniAppPushTime)) {
+            //新用户返回0
+            SessionUser user = ContextUtil.getSessionUser();
+            userMiniAppPushTime = new UserMiniAppPushTime();
+            userMiniAppPushTime.setUserId(user.getUserId());
+            userMiniAppPushTime.setUserAccount(user.getAccount());
+            userMiniAppPushTime.setUserName(user.getUserName());
+            userMiniAppPushTime.setMiniProgramOpenId(openId);
+            userMiniAppPushTime.setPushTime(0);
         }
+        return ResultData.success(userMiniAppPushTime);
     }
 
 }
