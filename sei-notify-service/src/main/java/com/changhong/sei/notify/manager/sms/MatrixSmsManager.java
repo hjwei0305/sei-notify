@@ -8,12 +8,11 @@ import com.changhong.sei.notify.commons.util.EncodeUtils;
 import com.changhong.sei.notify.dto.SendMessage;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
 import com.changhong.sei.notify.manager.NotifyManager;
-import org.apache.commons.collections.MapUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,6 @@ import java.util.*;
 public class MatrixSmsManager implements NotifyManager {
     private static final Logger LOG = LoggerFactory.getLogger(MatrixSmsManager.class);
 
-    public static final String TIMESTAMP = "timestamp";
     public static final String OAUTH_SIGNATURE = "oauth_signature";
     public static final String OAUTH_SIGNATURE_METHOD = "oauth_signature_method";
     public static final String OAUTH_CONSUMER_KEY = "oauth_consumer_key";
@@ -51,36 +49,23 @@ public class MatrixSmsManager implements NotifyManager {
     public ResultData<String> send(SendMessage message) {
         LOG.debug("模拟发送短信：{}", message.getContent());
         try {
-            HttpClient httpclient = new DefaultHttpClient();
+            HttpClient httpclient = HttpClientBuilder.create().build();
 
             String uri = ContextUtil.getProperty("sei.notify.sms.host", "https://ccp-sms-api.changhong.com/v1/sms/");
-//            String uri = "http://api.chiq-cloud.com/v1/sms/";
-//            String uri = "https://ccp-sms-api.changhong.com/v1/sms/";
-//            String uri = "https://ccp-sms-api.changhong.com/";
 
             HttpPost httppost = new HttpPost(uri);
-
-            httppost.addHeader("Authorization", sign(uri)); //认证token
+            //认证token
+            httppost.addHeader("Authorization", sign(uri));
             httppost.addHeader("Content-Type", "application/json");
             httppost.addHeader("User-Agent", "imgfornote");
             Map<String, String> obj = new HashMap<>();
-
-            /*
-            curl --location --request POST 'http://ccp-sms-api.changhong.com/v1/sms/' \
-                --header 'Authorization: OAuth realm="http://ccp-sms-api.changhong.com/v1/sms/",oauth_consumer_key="1659d01555254cd482d3e2a7b1856388",oauth_signature="UtoLF01g9Ro78GWY6fzt0R%2B2YrI%3D",oauth_signature_method="HMAC-SHA1",oauth_nonce="zZyWBiQP",oauth_timestamp="1590651960403",oauth_version="1.0"' \
-                --header 'Content-Type: application/json' \
-                --data-raw '{
-                 "userNumber":"18080260070",
-                 "content":"空调滤网积灰严重，请立即清洗"
-                }'
-             */
 
             // 排重
             Set<String> numSet = new HashSet<>();
             for (UserNotifyInfo info : message.getReceivers()) {
                 numSet.add(info.getMobile());
             }
-            String[] strs = numSet.toArray(new String[numSet.size()]);
+            String[] strs = numSet.toArray(new String[0]);
 
             //手机号
             obj.put("userNumber", join(strs, ","));
@@ -106,7 +91,7 @@ public class MatrixSmsManager implements NotifyManager {
         return ResultData.success("OK");
     }
 
-    public static String sign(String uri) throws UnsupportedEncodingException {
+    private static String sign(String uri) throws UnsupportedEncodingException {
         String ak = ContextUtil.getProperty("sei.notify.sms.appKey", "1659d01555254cd482d3e2a7b1856388");
         String sk = ContextUtil.getProperty("sei.notify.sms.secretKey", "e2e7edc042cd42cd82dc88fc753a2cb9");
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -152,19 +137,19 @@ public class MatrixSmsManager implements NotifyManager {
                 .append(OAUTH_VERSION)
                 .append("=\"1.0\"");
 
-        LogUtil.info("短信签名: {}", stringBuffer);
+        LogUtil.debug("短信签名: {}", stringBuffer);
 
         return stringBuffer.toString();
     }
 
     private static String join(String[] strs, String flag) {
-        StringBuilder str_buff = new StringBuilder();
+        StringBuilder strBuff = new StringBuilder();
         for (int i = 0, len = strs.length; i < len; i++) {
-            str_buff.append(strs[i]);
+            strBuff.append(strs[i]);
             if (i < len - 1) {
-                str_buff.append(flag);
+                strBuff.append(flag);
             }
         }
-        return str_buff.toString();
+        return strBuff.toString();
     }
 }

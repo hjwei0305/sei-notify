@@ -52,7 +52,8 @@ public class NotifyControllerTest extends BaseUnitTest {
     private EmailMessage builderMessage(){
         EmailMessage message = new EmailMessage();
         message.setSubject("Test 测试发送邮件");
-        message.setSender(new EmailAccount("王锦光","wangjg@changhong.com"));
+//        message.setSender(new EmailAccount("马超","chao2.ma@changhong.com"));
+//        message.setSender(new EmailAccount("马超", ""));
         // message.setContent("Test 测试邮件内容");
         //测试模板
         message.setContentTemplateCode("EMAIL_TEMPLATE_REGIST");
@@ -62,7 +63,7 @@ public class NotifyControllerTest extends BaseUnitTest {
         params.put("password","123456");
         message.setContentTemplateParams(params);
         List<EmailAccount> receivers = new ArrayList<>();
-        receivers.add(new EmailAccount("王锦光","elegancelight@qq.com"));
+        receivers.add(new EmailAccount("马超","87540704@qq.com"));
         message.setReceivers(receivers);
         return message;
     }
@@ -70,6 +71,6 @@ public class NotifyControllerTest extends BaseUnitTest {
     @Test
     public void sendEmail() throws Exception{
         controller.sendEmail(builderMessage());
-        //Thread.sleep(30*1000);
+        Thread.sleep(30*1000);
     }
 }

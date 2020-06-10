@@ -1,8 +1,6 @@
 package com.changhong.sei.notify.sdk.manager;
 
-import com.changhong.sei.notify.dto.NotifyMessage;
-import com.changhong.sei.notify.dto.NotifyType;
-import com.changhong.sei.notify.dto.SmsMessage;
+import com.changhong.sei.notify.dto.*;
 import com.ecmp.context.ContextUtil;
 import com.ecmp.enums.UserAuthorityPolicy;
 import com.ecmp.enums.UserType;
@@ -17,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 实现功能：
@@ -66,6 +63,36 @@ public class NotifyManagerTest {
         message.setContent("测试内容");
         message.setPhoneNums(Lists.newArrayList("18608081023"));
         ResponseData<String> result = notifyManager.sendSms(message);
+        System.out.println(result);
+    }
+
+    @Test
+    public void sendEmail() {
+        EmailMessage message = new EmailMessage();
+        message.setSubject("Test 测试发送邮件");
+        message.setContent("测试内容");
+
+        message.setReceivers(Lists.newArrayList(new EmailAccount("马超", "87540704@qq.com")));
+        ResponseData<String> result = notifyManager.sendEmail(message);
+        System.out.println(result);
+    }
+
+    @Test
+    public void sendEmail1() {
+        EmailMessage message = new EmailMessage();
+        message.setSubject("Test 测试发送邮件");
+        // message.setContent("测试内容");
+        //测试模板
+        message.setContentTemplateCode("EMAIL_TEMPLATE_REGIST");
+        Map<String,Object> params = new HashMap<>();
+        params.put("userName","宝宝");
+        params.put("account","baobao");
+        params.put("password","123456");
+        message.setContentTemplateParams(params);
+        List<EmailAccount> receivers = new ArrayList<>();
+        receivers.add(new EmailAccount("马超","87540704@qq.com"));
+        message.setReceivers(receivers);
+        ResponseData<String> result = notifyManager.sendEmail(message);
         System.out.println(result);
     }
 

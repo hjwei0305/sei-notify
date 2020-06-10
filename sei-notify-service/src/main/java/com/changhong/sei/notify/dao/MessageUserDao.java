@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 实现功能：
@@ -25,4 +27,6 @@ public interface MessageUserDao extends BaseEntityDao<MessageUser>, MessageUserE
     void deleteByMsgIdIn(Collection<String> msgIds);
 
     MessageUser findByMsgIdAndUserId(String msgId, String userId);
+
+    List<MessageUser> findByMsgIdInAndUserId(Set<String> msgIds, String userId);
 }

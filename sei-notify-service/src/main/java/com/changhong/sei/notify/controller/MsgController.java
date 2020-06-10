@@ -23,10 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <strong>实现功能:</strong>
@@ -111,6 +108,44 @@ public class MsgController implements MsgApi {
         OperateResult operateResult;
         try {
             operateResult = messageService.read(msgId);
+        } catch (Exception e) {
+            LogUtil.error("执行用户阅读异常！", e);
+            // 执行用户阅读异常！{0}
+            return ResultData.fail(ContextUtil.getMessage("00015", e.getMessage()));
+        }
+        return ResultDataUtil.convertFromOperateResult(operateResult);
+    }
+
+    /**
+     * 用户阅读
+     *
+     * @param msgIds 消息Id集合
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<String> readSelected(Set<String> msgIds) {
+        OperateResult operateResult;
+        try {
+            operateResult = messageService.updateReadState(msgIds, Boolean.TRUE);
+        } catch (Exception e) {
+            LogUtil.error("执行用户阅读异常！", e);
+            // 执行用户阅读异常！{0}
+            return ResultData.fail(ContextUtil.getMessage("00015", e.getMessage()));
+        }
+        return ResultDataUtil.convertFromOperateResult(operateResult);
+    }
+
+    /**
+     * 用户阅读
+     *
+     * @param msgIds 消息Id集合
+     * @return 操作结果
+     */
+    @Override
+    public ResultData<String> unreadSelected(Set<String> msgIds) {
+        OperateResult operateResult;
+        try {
+            operateResult = messageService.updateReadState(msgIds, Boolean.FALSE);
         } catch (Exception e) {
             LogUtil.error("执行用户阅读异常！", e);
             // 执行用户阅读异常！{0}

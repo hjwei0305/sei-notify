@@ -4,8 +4,9 @@ import com.changhong.sei.core.entity.BaseEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * <strong>实现功能:</strong>

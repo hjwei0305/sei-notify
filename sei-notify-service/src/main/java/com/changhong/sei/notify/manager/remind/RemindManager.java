@@ -51,11 +51,6 @@ public class RemindManager implements NotifyManager {
         List<UserNotifyInfo> receivers = message.getReceivers();
         if (CollectionUtils.isNotEmpty(receivers)) {
             try {
-//                ThreadLocalHolder.begin();
-
-//                SessionUser user = MockUserHelper.mockUser(tenant, account);
-//                LOG.info("当前模拟会话用户: {}", user);
-
                 int i = 0;
                 UserNotifyInfo sender = message.getSender();
                 Message[] messages = new Message[receivers.size()];
@@ -80,8 +75,6 @@ public class RemindManager implements NotifyManager {
             } catch (Exception e) {
                 LOG.error("发送提醒消息异常", e);
                 return ResultData.fail("发送提醒消息异常:" + e.getMessage());
-//            } finally {
-//                ThreadLocalHolder.end();
             }
         } else {
             return ResultData.fail("消息接收人不能为空.");

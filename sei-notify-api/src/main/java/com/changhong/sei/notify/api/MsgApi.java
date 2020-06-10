@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <strong>实现功能:</strong>
@@ -70,6 +71,22 @@ public interface MsgApi {
     @PostMapping(path = "read")
     @ApiOperation(value = "阅读消息", notes = "消息已阅读,变更阅读状态")
     ResultData<String> read(@RequestParam("msgId") String msgId);
+
+    /**
+     * 用户阅读
+     *
+     * @param msgIds 消息Id集合
+     * @return 操作结果
+     */
+    ResultData<String> readSelected(Set<String> msgIds);
+
+    /**
+     * 用户阅读
+     *
+     * @param msgIds 消息Id集合
+     * @return 操作结果
+     */
+    ResultData<String> unreadSelected(Set<String> msgIds);
 
     /**
      * 用户查看

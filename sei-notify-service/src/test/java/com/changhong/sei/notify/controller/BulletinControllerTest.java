@@ -8,14 +8,12 @@ import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.dto.BulletinDto;
 import com.changhong.sei.notify.dto.TargetType;
-import com.changhong.sei.util.EnumUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 实现功能:
@@ -50,7 +48,7 @@ public class BulletinControllerTest extends BaseUnitTest {
 
     @Test
     public void saveBulletin() {
-        String json = "{\"id\":\"3D53412C-9EEF-11EA-8209-0242C0A8460B\",\"category\":\"SEI_BULLETIN\",\"notifyTypeRemark\":\"SEI通告\",\"subject\":\"test\",\"contentId\":\"1F9119D1-9F04-11EA-BAED-7A0E7E43C4D7\",\"content\":\"<p>23456的</p>\",\"targetValue\":\"79287D7B-9E6A-11EA-A0BA-0242C0A8460B\",\"targetName\":\"组织组1\",\"targetType\":\"GROUP\",\"targetTypeRemark\":\"群组\",\"priority\":\"General\",\"priorityRemark\":\"一般\",\"publish\":false,\"publishDate\":null,\"publishUserAccount\":null,\"publishUserName\":null,\"effective\":true,\"read\":false,\"readDate\":null,\"readNum\":0,\"docIds\":[],\"msgId\":\"1F93D8F2-9F04-11EA-BAED-7A0E7E43C4D7\",\"cancelUserAccount\":null,\"cancelUserName\":null,\"cancelDate\":null,\"effectiveDate\":\"2020-05-22\",\"invalidDate\":\"2020-06-27\"}";
+        String json = "{\"id\":\"206468D1-A148-11EA-81A4-0242C0A8460B\",\"category\":\"SEI_BULLETIN\",\"notifyTypeRemark\":\"通告\",\"subject\":\"fdfdfd\",\"contentId\":\"2F3CCF95-A3D4-11EA-B186-0242C0A8460B\",\"content\":\"<p>fdsgdfgdg</p>\",\"targetValue\":\"SYSTEM\",\"targetName\":\"SYSTEM\",\"targetType\":\"SYSTEM\",\"targetTypeRemark\":\"系统\",\"priority\":\"Urgent\",\"priorityRemark\":\"紧急\",\"publish\":false,\"publishDate\":null,\"publishUserAccount\":null,\"publishUserName\":null,\"read\":false,\"readDate\":null,\"readNum\":0,\"docIds\":[\"5ed4bb1d53ee5500017e9a21\"],\"msgId\":\"20630940-A148-11EA-81A4-0242C0A8460B\",\"cancelUserAccount\":null,\"cancelUserName\":null,\"cancelDate\":null,\"effectiveDate\":\"2020-05-29\",\"invalidDate\":\"2020-06-30\",\"Attachments\":[{\"uid\":\"rc-upload-1590994193854-5\",\"lastModified\":1590658788720,\"lastModifiedDate\":\"2020-05-28T09:39:48.720Z\",\"name\":\"Image_00041.jpg\",\"size\":714848,\"type\":\"image/jpeg\",\"percent\":100,\"originFileObj\":{\"uid\":\"rc-upload-1590994193854-5\"},\"status\":\"done\",\"response\":{\"docId\":\"5ed4bb1d53ee5500017e9a21\",\"fileName\":\"Image_00041.jpg\",\"documentType\":\"Image\",\"ocrData\":null},\"xhr\":{\"uid\":\"rc-upload-1590994193854-5\"},\"thumbUrl\":\"/edm-service/file/thumbnail?docId=5ed4bb1d53ee5500017e9a21\",\"ocrData\":null,\"id\":\"5ed4bb1d53ee5500017e9a21\",\"fileSize\":\"698.09KB\",\"uploadedTime\":\"2020-06-01 16:23:36\"}]}";
         BulletinDto bulletinDto = JsonUtils.fromJson(json, BulletinDto.class);
         ResultData<String> data = controller.saveBulletin(bulletinDto);
         System.out.println(data);

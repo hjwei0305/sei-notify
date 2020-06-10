@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -344,24 +345,74 @@ public class MessageService extends BaseEntityService<Message> {
         if (StringUtils.isNotBlank(msgId)) {
             SessionUser user = ContextUtil.getSessionUser();
             String userId = user.getUserId();
-            LocalDateTime date = LocalDateTime.now();
             MessageUser messageUser = messageUserDao.findByMsgIdAndUserId(msgId, userId);
             if (Objects.isNull(messageUser)) {
                 messageUser = new MessageUser();
             }
             messageUser.setMsgId(msgId);
-            messageUser.setRead(Boolean.TRUE);
-            messageUser.setReadDate(date);
-            messageUser.setReadNum(messageUser.getReadNum() + 1);
-            messageUser.setUserId(userId);
-            messageUser.setUserAccount(user.getAccount());
-            messageUser.setUserName(user.getUserName());
-            messageUser.setUserType(user.getUserType());
+            builderMessageUser(messageUser, user, Boolean.TRUE);
             messageUserDao.save(messageUser);
             return OperateResult.operationSuccess();
         } else {
             return OperateResult.operationFailure("参数不能为空!");
         }
+    }
+
+    /**
+     * 用户阅读消息
+     *
+     * @param msgIds 消息id集合
+     * @return 返回结果
+     */
+    public OperateResult updateReadState(Set<String> msgIds, boolean isRead) {
+        if (CollectionUtils.isNotEmpty(msgIds)) {
+            SessionUser user = ContextUtil.getSessionUser();
+            String userId = user.getUserId();
+
+            MessageUser messageUser;
+            List<MessageUser> messageUserList = new ArrayList<>();
+            List<MessageUser> messageUsers = messageUserDao.findByMsgIdInAndUserId(msgIds, userId);
+            if (CollectionUtils.isNotEmpty(messageUsers)) {
+                Map<String, MessageUser> messageUserMap = messageUsers.stream().collect(Collectors.toMap(MessageUser::getMsgId, obj -> obj));
+                for (String msgId : msgIds) {
+                    messageUser = messageUserMap.get(msgId);
+
+                    if (Objects.isNull(messageUser)) {
+                        messageUser = new MessageUser();
+                        messageUser.setMsgId(msgId);
+                    }
+
+                    builderMessageUser(messageUser, user, isRead);
+
+                    messageUserList.add(messageUser);
+                }
+            } else {
+                for (String msgId : msgIds) {
+                    messageUser = new MessageUser();
+                    messageUser.setMsgId(msgId);
+
+                    builderMessageUser(messageUser, user, isRead);
+
+                    messageUserList.add(messageUser);
+                }
+            }
+            if (CollectionUtils.isNotEmpty(messageUserList)) {
+                messageUserDao.save(messageUserList);
+            }
+            return OperateResult.operationSuccess();
+        } else {
+            return OperateResult.operationFailure("参数不能为空!");
+        }
+    }
+
+    private void builderMessageUser(MessageUser messageUser, SessionUser user, boolean read) {
+        messageUser.setRead(read);
+        messageUser.setReadDate(LocalDateTime.now());
+        messageUser.setReadNum(messageUser.getReadNum() + 1);
+        messageUser.setUserId(user.getUserId());
+        messageUser.setUserAccount(user.getAccount());
+        messageUser.setUserName(user.getUserName());
+        messageUser.setUserType(user.getUserType());
     }
 
     /**
