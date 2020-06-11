@@ -74,12 +74,12 @@ public class MessageService extends BaseEntityService<Message> {
     public ResultData<Message> saveMessage(Message message) {
         if (Objects.isNull(message)) {
             // 维护的通告以及内容不能为空！
-            return ResultData.fail("00002");
+            return ResultData.fail(ContextUtil.getMessage("00002"));
         }
         String content = message.getContent();
         if (Objects.isNull(content)) {
             // 维护的通告以及内容不能为空！
-            return ResultData.fail("00002");
+            return ResultData.fail(ContextUtil.getMessage("00002"));
         }
         Set<String> docIds = message.getDocIds();
         // 处理系统消息
@@ -127,11 +127,11 @@ public class MessageService extends BaseEntityService<Message> {
     public ResultData<String> sendMessage(String content, Set<String> docIds, Message... messages) {
         if (Objects.isNull(messages)) {
             // 维护的通告以及内容不能为空！
-            return ResultData.fail("00002");
+            return ResultData.fail(ContextUtil.getMessage("00002"));
         }
         if (Objects.isNull(content)) {
             // 维护的通告以及内容不能为空！
-            return ResultData.fail("00002");
+            return ResultData.fail(ContextUtil.getMessage("00002"));
         }
 
         ContentBody body = new ContentBody(content);
@@ -172,7 +172,7 @@ public class MessageService extends BaseEntityService<Message> {
     public ResultData<String> publishMessage(Set<String> ids, String publishUserAccount, String publishUserName) {
         if (CollectionUtils.isEmpty(ids)) {
             // 发布通告参数不能为空!
-            return ResultData.fail("00004");
+            return ResultData.fail(ContextUtil.getMessage("00004"));
         }
         List<Message> messages = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(messages)) {
@@ -198,7 +198,7 @@ public class MessageService extends BaseEntityService<Message> {
     public ResultData<String> cancelPublishMessage(Set<String> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             // 发布通告参数不能为空!
-            return ResultData.fail("00004");
+            return ResultData.fail(ContextUtil.getMessage("00004"));
         }
         List<Message> messages = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(messages)) {
@@ -223,7 +223,7 @@ public class MessageService extends BaseEntityService<Message> {
     public ResultData<String> delMessage(Set<String> ids, String delUserAccount, String delUserName) {
         if (CollectionUtils.isEmpty(ids)) {
             // 发布通告参数不能为空!
-            return ResultData.fail("00004");
+            return ResultData.fail(ContextUtil.getMessage("00004"));
         }
         List<Message> messages = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(messages)) {

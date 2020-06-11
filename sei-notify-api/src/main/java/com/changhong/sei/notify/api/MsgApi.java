@@ -73,20 +73,24 @@ public interface MsgApi {
     ResultData<String> read(@RequestParam("msgId") String msgId);
 
     /**
-     * 用户阅读
+     * 标记选中消息为已读
      *
      * @param msgIds 消息Id集合
      * @return 操作结果
      */
-    ResultData<String> readSelected(Set<String> msgIds);
+    @PostMapping(path = "readSelected")
+    @ApiOperation(value = "标记选中消息为已读", notes = "标记选中消息为已读")
+    ResultData<String> readSelected(@RequestBody Set<String> msgIds);
 
     /**
-     * 用户阅读
+     * 标记选中消息为未读
      *
      * @param msgIds 消息Id集合
      * @return 操作结果
      */
-    ResultData<String> unreadSelected(Set<String> msgIds);
+    @PostMapping(path = "unreadSelected")
+    @ApiOperation(value = "标记选中消息为未读", notes = "标记选中消息为未读")
+    ResultData<String> unreadSelected(@RequestBody Set<String> msgIds);
 
     /**
      * 用户查看
