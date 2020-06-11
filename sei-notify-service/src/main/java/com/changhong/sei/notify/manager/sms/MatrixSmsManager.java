@@ -71,16 +71,6 @@ public class MatrixSmsManager implements NotifyManager {
         List<MessageHistory> histories = new ArrayList<>();
 
         try {
-            HttpClient httpclient = HttpClientBuilder.create().build();
-
-//            String smsHost = ContextUtil.getProperty("sei.notify.sms.host", "https://ccp-sms-api.changhong.com/v1/sms/");
-            HttpPost httppost = new HttpPost(smsHost);
-            //认证token
-            httppost.addHeader("Authorization", sign(smsHost));
-            httppost.addHeader("Content-Type", "application/json");
-            httppost.addHeader("User-Agent", "imgfornote");
-            Map<String, String> obj = new HashMap<>();
-
             // 排重
             Set<String> numSet = new HashSet<>();
             for (UserNotifyInfo info : message.getReceivers()) {
@@ -94,10 +84,20 @@ public class MatrixSmsManager implements NotifyManager {
                 history.setTargetName(info.getUserName());
                 histories.add(history);
             }
-            String[] strs = numSet.toArray(new String[0]);
+            String[] numbers = numSet.toArray(new String[0]);
+
+            HttpClient httpclient = HttpClientBuilder.create().build();
+
+//            String smsHost = ContextUtil.getProperty("sei.notify.sms.host", "https://ccp-sms-api.changhong.com/v1/sms/");
+            HttpPost httppost = new HttpPost(smsHost);
+            //认证token
+            httppost.addHeader("Authorization", sign(smsHost));
+            httppost.addHeader("Content-Type", "application/json");
+            httppost.addHeader("User-Agent", "imgfornote");
+            Map<String, String> obj = new HashMap<>();
 
             //手机号
-            obj.put("userNumber", join(strs, ","));
+            obj.put("userNumber", join(numbers, ","));
             //短信内容,签名默认【四川长虹】
             obj.put("content", message.getContent());
             httppost.setEntity(new StringEntity(JsonUtils.toJson(obj), "UTF-8"));
@@ -115,6 +115,8 @@ public class MatrixSmsManager implements NotifyManager {
 //            }
             return ResultData.success("OK");
         } catch (Exception e) {
+            success = Boolean.FALSE;
+            log = e.getMessage();
             LOG.error("发送短信异常", e);
             return ResultData.fail("发送短信异常");
         } finally {
