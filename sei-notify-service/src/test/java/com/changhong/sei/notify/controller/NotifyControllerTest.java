@@ -56,11 +56,15 @@ public class NotifyControllerTest extends BaseUnitTest {
 //        message.setSender(new EmailAccount("马超", ""));
         // message.setContent("Test 测试邮件内容");
         //测试模板
-        message.setContentTemplateCode("EMAIL_TEMPLATE_REGIST");
+        message.setContentTemplateCode("EMAIL_INQUIRY_PUBLISH");
         Map<String,Object> params = new HashMap<>();
-        params.put("userName","宝宝");
-        params.put("account","baobao");
-        params.put("password","123456");
+        params.put("supplierName","宝宝");
+        params.put("corporationName","baobao");
+        params.put("name","123456");
+        params.put("code","123456");
+        params.put("quoteEndDate","123456");
+        params.put("inquiryUserName","123456");
+        params.put("inquiryUserContact","123456");
         message.setContentTemplateParams(params);
         List<EmailAccount> receivers = new ArrayList<>();
         receivers.add(new EmailAccount("马超","87540704@qq.com"));

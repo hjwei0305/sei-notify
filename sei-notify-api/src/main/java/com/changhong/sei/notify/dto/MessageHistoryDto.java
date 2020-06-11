@@ -1,16 +1,13 @@
 package com.changhong.sei.notify.dto;
 
-import java.util.Date;
 import com.changhong.sei.core.dto.BaseEntityDto;
+import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * 消息历史(MessageHistory)DTO类
@@ -25,7 +22,8 @@ private static final long serialVersionUID = 179365424315447841L;
      * 通知类型
      */
     @ApiModelProperty(value = "通知类型")
-    private String notifyType;
+    @JsonSerialize(using = EnumJsonSerializer.class)
+    private NotifyType category;
     /**
      * 主题
      */
@@ -37,15 +35,11 @@ private static final long serialVersionUID = 179365424315447841L;
     @ApiModelProperty(value = "内容id")
     private String contentId;
     /**
-     * 优先级
-     */
-    @ApiModelProperty(value = "优先级")
-    private String priority_;
-    /**
      * 目标类型
      */
     @ApiModelProperty(value = "目标类型")
-    private String targetType;
+    @JsonSerialize(using = EnumJsonSerializer.class)
+    private TargetType targetType = TargetType.PERSONAL;
     /**
      * 目标对象id
      */
@@ -62,20 +56,10 @@ private static final long serialVersionUID = 179365424315447841L;
     @ApiModelProperty(value = "是否发布")
     private Boolean sendStatus;
     /**
-     * 发布人
-     */
-    @ApiModelProperty(value = "发布人")
-    private String sendUserAccount;
-    /**
-     * 发布人
-     */
-    @ApiModelProperty(value = "发布人")
-    private String sendUserName;
-    /**
      * 发布时间
      */
     @ApiModelProperty(value = "发布时间")
-    private Date sendDate;
+    private LocalDateTime sendDate;
     /**
      * 删除人id
      */
@@ -87,15 +71,25 @@ private static final long serialVersionUID = 179365424315447841L;
     @ApiModelProperty(value = "业务属性")
     private String bizValue;
 
-        
-    public String getNotifyType() {
-        return notifyType;
+    /**
+     * 内容
+     */
+    @ApiModelProperty(value = "内容")
+    protected String content;
+    /**
+     * 附件id
+     */
+    @ApiModelProperty(value = "附件id")
+    private Set<String> docIds;
+
+    public NotifyType getCategory() {
+        return category;
     }
 
-    public void setNotifyType(String notifyType) {
-        this.notifyType = notifyType;
+    public void setCategory(NotifyType category) {
+        this.category = category;
     }
-        
+
     public String getSubject() {
         return subject;
     }
@@ -103,7 +97,7 @@ private static final long serialVersionUID = 179365424315447841L;
     public void setSubject(String subject) {
         this.subject = subject;
     }
-        
+
     public String getContentId() {
         return contentId;
     }
@@ -111,23 +105,15 @@ private static final long serialVersionUID = 179365424315447841L;
     public void setContentId(String contentId) {
         this.contentId = contentId;
     }
-        
-    public String getPriority_() {
-        return priority_;
-    }
 
-    public void setPriority_(String priority_) {
-        this.priority_ = priority_;
-    }
-        
-    public String getTargetType() {
+    public TargetType getTargetType() {
         return targetType;
     }
 
-    public void setTargetType(String targetType) {
+    public void setTargetType(TargetType targetType) {
         this.targetType = targetType;
     }
-        
+
     public String getTargetValue() {
         return targetValue;
     }
@@ -135,7 +121,7 @@ private static final long serialVersionUID = 179365424315447841L;
     public void setTargetValue(String targetValue) {
         this.targetValue = targetValue;
     }
-        
+
     public String getTargetName() {
         return targetName;
     }
@@ -143,7 +129,7 @@ private static final long serialVersionUID = 179365424315447841L;
     public void setTargetName(String targetName) {
         this.targetName = targetName;
     }
-        
+
     public Boolean getSendStatus() {
         return sendStatus;
     }
@@ -151,31 +137,15 @@ private static final long serialVersionUID = 179365424315447841L;
     public void setSendStatus(Boolean sendStatus) {
         this.sendStatus = sendStatus;
     }
-        
-    public String getSendUserAccount() {
-        return sendUserAccount;
-    }
 
-    public void setSendUserAccount(String sendUserAccount) {
-        this.sendUserAccount = sendUserAccount;
-    }
-        
-    public String getSendUserName() {
-        return sendUserName;
-    }
-
-    public void setSendUserName(String sendUserName) {
-        this.sendUserName = sendUserName;
-    }
-        
-    public Date getSendDate() {
+    public LocalDateTime getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(Date sendDate) {
+    public void setSendDate(LocalDateTime sendDate) {
         this.sendDate = sendDate;
     }
-        
+
     public String getSendLog() {
         return sendLog;
     }
@@ -183,7 +153,7 @@ private static final long serialVersionUID = 179365424315447841L;
     public void setSendLog(String sendLog) {
         this.sendLog = sendLog;
     }
-        
+
     public String getBizValue() {
         return bizValue;
     }
@@ -192,4 +162,19 @@ private static final long serialVersionUID = 179365424315447841L;
         this.bizValue = bizValue;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Set<String> getDocIds() {
+        return docIds;
+    }
+
+    public void setDocIds(Set<String> docIds) {
+        this.docIds = docIds;
+    }
 }

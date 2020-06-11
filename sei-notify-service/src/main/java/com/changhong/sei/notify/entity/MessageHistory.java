@@ -66,16 +66,6 @@ private static final long serialVersionUID = -26932064614327653L;
     @Column(name = "send_status")
     private Boolean sendStatus;
     /**
-     * 发布人
-     */
-    @Column(name = "send_user_account")
-    private String sendUserAccount;
-    /**
-     * 发布人
-     */
-    @Column(name = "send_user_name")
-    private String sendUserName;
-    /**
      * 发布时间
      */
     @Column(name = "send_date")
@@ -156,22 +146,6 @@ private static final long serialVersionUID = -26932064614327653L;
 
     public void setSendStatus(Boolean sendStatus) {
         this.sendStatus = sendStatus;
-    }
-
-    public String getSendUserAccount() {
-        return sendUserAccount;
-    }
-
-    public void setSendUserAccount(String sendUserAccount) {
-        this.sendUserAccount = sendUserAccount;
-    }
-
-    public String getSendUserName() {
-        return sendUserName;
-    }
-
-    public void setSendUserName(String sendUserName) {
-        this.sendUserName = sendUserName;
     }
 
     public LocalDateTime getSendDate() {

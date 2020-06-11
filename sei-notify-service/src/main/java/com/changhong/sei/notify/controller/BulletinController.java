@@ -63,8 +63,6 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
      * @return 分页查询结果
      */
     @Override
-    @PostMapping(path = "findByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "分页查询消息通告实体", notes = "分页查询消息通告实体")
     public ResultData<PageResult<BulletinDto>> findByPage(Search search) {
         if (Objects.isNull(search)) {
             search = Search.createSearch();
