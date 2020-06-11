@@ -1,8 +1,10 @@
 package com.changhong.sei.notify.service;
 
 import com.changhong.sei.core.context.ContextUtil;
+import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.test.BaseUnitTest;
 import com.changhong.sei.notify.entity.Message;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,5 +39,12 @@ public class MessageServiceTest extends BaseUnitTest {
     public void getFirstUnreadMessage() {
         Message datas = service.getFirstUnreadMessage(ContextUtil.getSessionUser());
         System.out.println(datas);
+    }
+
+    @Test
+    public void updateReadState() {
+        String msgId = "20630940-A148-11EA-81A4-0242C0A8460B";
+        ResultData<String> result = service.updateReadState(Sets.newHashSet(msgId), false);
+        System.out.println(result);
     }
 }

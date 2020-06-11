@@ -124,15 +124,13 @@ public class MsgController implements MsgApi {
      */
     @Override
     public ResultData<String> readSelected(Set<String> msgIds) {
-        OperateResult operateResult;
         try {
-            operateResult = messageService.updateReadState(msgIds, Boolean.TRUE);
+            return messageService.updateReadState(msgIds, Boolean.TRUE);
         } catch (Exception e) {
             LogUtil.error("执行用户阅读异常！", e);
             // 执行用户阅读异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00015", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult);
     }
 
     /**
@@ -143,15 +141,13 @@ public class MsgController implements MsgApi {
      */
     @Override
     public ResultData<String> unreadSelected(Set<String> msgIds) {
-        OperateResult operateResult;
         try {
-            operateResult = messageService.updateReadState(msgIds, Boolean.FALSE);
+            return messageService.updateReadState(msgIds, Boolean.FALSE);
         } catch (Exception e) {
             LogUtil.error("执行用户阅读异常！", e);
             // 执行用户阅读异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00015", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(operateResult);
     }
 
     /**

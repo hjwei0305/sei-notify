@@ -341,6 +341,7 @@ public class MessageService extends BaseEntityService<Message> {
      * @param msgId 消息id
      * @return 返回结果
      */
+    @Transactional(rollbackFor = Exception.class)
     public OperateResult read(String msgId) {
         if (StringUtils.isNotBlank(msgId)) {
             SessionUser user = ContextUtil.getSessionUser();
@@ -364,7 +365,8 @@ public class MessageService extends BaseEntityService<Message> {
      * @param msgIds 消息id集合
      * @return 返回结果
      */
-    public OperateResult updateReadState(Set<String> msgIds, boolean isRead) {
+    @Transactional(rollbackFor = Exception.class)
+    public ResultData<String> updateReadState(Set<String> msgIds, boolean isRead) {
         if (CollectionUtils.isNotEmpty(msgIds)) {
             SessionUser user = ContextUtil.getSessionUser();
             String userId = user.getUserId();
@@ -399,9 +401,9 @@ public class MessageService extends BaseEntityService<Message> {
             if (CollectionUtils.isNotEmpty(messageUserList)) {
                 messageUserDao.save(messageUserList);
             }
-            return OperateResult.operationSuccess();
+            return ResultData.success("OK");
         } else {
-            return OperateResult.operationFailure("参数不能为空!");
+            return ResultData.fail("参数不能为空!");
         }
     }
 
