@@ -70,7 +70,7 @@ public class MiniAppManager implements NotifyManager {
                 //循环推送消息
                 for (UserNotifyInfo receiver : receivers) {
                     history = new MessageHistory();
-                    history.setCategory(NotifyType.EMAIL);
+                    history.setCategory(NotifyType.MiniApp);
                     history.setSubject(StringUtils.isNotBlank(message.getSubject()) ? message.getSubject() : StringUtils.left(message.getContent(), 100));
                     history.setTargetType(TargetType.PERSONAL);
                     history.setTargetValue(receiver.getMiniProgramOpenId());
