@@ -1,9 +1,8 @@
 package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
-import com.changhong.sei.core.entity.BaseAuditableEntity;
+import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.notify.dto.NotifyType;
-import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.dto.TargetType;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.DynamicInsert;
@@ -24,7 +23,7 @@ import java.util.Set;
 @Table(name = "message_history")
 @DynamicInsert
 @DynamicUpdate
-public class MessageHistory extends BaseAuditableEntity implements Serializable {
+public class MessageHistory extends BaseEntity implements Serializable {
 private static final long serialVersionUID = -26932064614327653L;
     /**
      * 消息通知类型
