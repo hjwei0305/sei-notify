@@ -73,7 +73,7 @@ public class MiniAppManager implements NotifyManager {
                     history.setCategory(NotifyType.EMAIL);
                     history.setSubject(StringUtils.isNotBlank(message.getSubject()) ? message.getSubject() : StringUtils.left(message.getContent(), 100));
                     history.setTargetType(TargetType.PERSONAL);
-                    history.setTargetValue(StringUtils.isNotBlank(receiver.getUserAccount()) ? receiver.getUserAccount() : receiver.getMiniProgramOpenId());
+                    history.setTargetValue(receiver.getMiniProgramOpenId());
                     history.setTargetName(receiver.getUserName());
 
                     if (StringUtils.isNotEmpty(receiver.getMiniProgramOpenId())) {
