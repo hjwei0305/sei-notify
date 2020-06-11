@@ -2,11 +2,10 @@ package com.changhong.sei.notify.manager.email;
 
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
-import com.changhong.sei.notify.dto.EmailAccount;
-import com.changhong.sei.notify.dto.EmailMessage;
-import com.changhong.sei.notify.dto.UserNotifyInfo;
+import com.changhong.sei.notify.dto.*;
+import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.manager.NotifyManager;
-import com.changhong.sei.notify.dto.SendMessage;
+import com.changhong.sei.notify.service.MessageHistoryService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,8 @@ public class EmailManager implements NotifyManager {
     private String senderPassword;
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private MessageHistoryService historyService;
 
     /**
      * 初始化发送邮件的消息内容
@@ -75,6 +76,13 @@ public class EmailManager implements NotifyManager {
         if (Objects.isNull(message) || CollectionUtils.isEmpty(message.getReceivers())) {
             return;
         }
+
+        boolean success = Boolean.TRUE;
+        String log = "success";
+        String content = message.getContent();
+        MessageHistory history;
+        List<MessageHistory> histories = new ArrayList<>();
+
         //初始化消息
         initMessage(message);
         try {
@@ -84,15 +92,25 @@ public class EmailManager implements NotifyManager {
             msg.setFrom(new InternetAddress(senderUsername, defaultSender));
             //设置收件人,为数组,可输入多个地址.
             List<InternetAddress> to = new ArrayList<>();
-            message.getReceivers().forEach((a) -> {
-                if (a != null) {
+            for (EmailAccount account : message.getReceivers()) {
+                if (Objects.nonNull(account)) {
+                    history = new MessageHistory();
+                    history.setCategory(NotifyType.EMAIL);
+                    history.setSubject(message.getSubject());
+                    history.setTargetType(TargetType.PERSONAL);
+                    history.setTargetValue(account.getAddress());
+                    history.setTargetName(account.getName());
+
                     try {
-                        to.add(new InternetAddress(a.getAddress(), a.getName()));
+                        to.add(new InternetAddress(account.getAddress(), account.getName()));
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        history.setSendStatus(Boolean.FALSE);
+                        history.setSendLog(e.getMessage());
                     }
+
+                    histories.add(history);
                 }
-            });
+            }
             MimeMessageHelper helper = new MimeMessageHelper(msg, true);
             // 设置收件人
             helper.setTo(to.toArray(new InternetAddress[0]));
@@ -100,7 +118,7 @@ public class EmailManager implements NotifyManager {
             //设置邮件主题,如果不是UTF-8就要转换下
             helper.setSubject(message.getSubject());
             //设置邮件内容
-            helper.setText(message.getContent(), true);
+            helper.setText(content, true);
             //发送时间
             helper.setSentDate(new Date());
             //发送邮件,使用如下方法!
@@ -108,6 +126,14 @@ public class EmailManager implements NotifyManager {
         } catch (Exception e) {
             // 记录异常日志
             LogUtil.error("发送邮件失败！", e);
+            success = Boolean.FALSE;
+            log = e.getMessage();
+        }
+
+        try {
+            historyService.recordHistory(histories, content, success, log);
+        } catch (Exception e) {
+            LogUtil.error("记录消息历史异常", e);
         }
     }
 

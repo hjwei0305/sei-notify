@@ -1,13 +1,17 @@
 package com.changhong.sei.notify.manager.sms;
 
-import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.commons.util.EncodeUtils;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.SendMessage;
+import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.notify.dto.UserNotifyInfo;
+import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.manager.NotifyManager;
+import com.changhong.sei.notify.service.MessageHistoryService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -16,6 +20,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -40,6 +46,15 @@ public class MatrixSmsManager implements NotifyManager {
     public static final String OAUTH_VERSION = "oauth_version";
     public static final String OAUTH_NONCE = "oauth_nonce";
 
+    @Value("${sei.notify.sms.host:https://ccp-sms-api.changhong.com/v1/sms/}")
+    private String smsHost;
+    @Value("${sei.notify.sms.appKey:1659d01555254cd482d3e2a7b1856388}")
+    private String smsAppKey;
+    @Value("${sei.notify.sms.secretKey:e2e7edc042cd42cd82dc88fc753a2cb9}")
+    private String smsSecretKey;
+    @Autowired
+    private MessageHistoryService historyService;
+
     /**
      * 发送消息通知
      *
@@ -48,14 +63,20 @@ public class MatrixSmsManager implements NotifyManager {
     @Override
     public ResultData<String> send(SendMessage message) {
         LOG.debug("模拟发送短信：{}", message.getContent());
+
+        boolean success = Boolean.TRUE;
+        String log = "success";
+        String content = message.getContent();
+        MessageHistory history;
+        List<MessageHistory> histories = new ArrayList<>();
+
         try {
             HttpClient httpclient = HttpClientBuilder.create().build();
 
-            String uri = ContextUtil.getProperty("sei.notify.sms.host", "https://ccp-sms-api.changhong.com/v1/sms/");
-
-            HttpPost httppost = new HttpPost(uri);
+//            String smsHost = ContextUtil.getProperty("sei.notify.sms.host", "https://ccp-sms-api.changhong.com/v1/sms/");
+            HttpPost httppost = new HttpPost(smsHost);
             //认证token
-            httppost.addHeader("Authorization", sign(uri));
+            httppost.addHeader("Authorization", sign(smsHost));
             httppost.addHeader("Content-Type", "application/json");
             httppost.addHeader("User-Agent", "imgfornote");
             Map<String, String> obj = new HashMap<>();
@@ -64,6 +85,14 @@ public class MatrixSmsManager implements NotifyManager {
             Set<String> numSet = new HashSet<>();
             for (UserNotifyInfo info : message.getReceivers()) {
                 numSet.add(info.getMobile());
+
+                history = new MessageHistory();
+                history.setCategory(NotifyType.EMAIL);
+                history.setSubject(StringUtils.isNotBlank(message.getSubject()) ? message.getSubject() : StringUtils.left(message.getContent(), 100));
+                history.setTargetType(TargetType.PERSONAL);
+                history.setTargetValue(info.getMobile());
+                history.setTargetName(info.getUserName());
+                histories.add(history);
             }
             String[] strs = numSet.toArray(new String[0]);
 
@@ -84,22 +113,28 @@ public class MatrixSmsManager implements NotifyManager {
 //                String id = MapUtils.getString(obj, "id");
 //                String version = MapUtils.getString(obj, "version");
 //            }
+            return ResultData.success("OK");
         } catch (Exception e) {
             LOG.error("发送短信异常", e);
             return ResultData.fail("发送短信异常");
+        } finally {
+            try {
+                historyService.recordHistory(histories, content, success, log);
+            } catch (Exception e) {
+                LogUtil.error("记录消息历史异常", e);
+            }
         }
-        return ResultData.success("OK");
     }
 
-    private static String sign(String uri) throws UnsupportedEncodingException {
-        String ak = ContextUtil.getProperty("sei.notify.sms.appKey", "1659d01555254cd482d3e2a7b1856388");
-        String sk = ContextUtil.getProperty("sei.notify.sms.secretKey", "e2e7edc042cd42cd82dc88fc753a2cb9");
+    private String sign(String uri) throws UnsupportedEncodingException {
+//        String ak = ContextUtil.getProperty("sei.notify.sms.appKey", "1659d01555254cd482d3e2a7b1856388");
+//        String sk = ContextUtil.getProperty("sei.notify.sms.secretKey", "e2e7edc042cd42cd82dc88fc753a2cb9");
         String timestamp = String.valueOf(System.currentTimeMillis());
         String nonce = EncodeUtils.getRandomString(8);
 
         //拼接字符串
         String[] arr = new String[5];
-        arr[0] = OAUTH_CONSUMER_KEY + "=" + URLEncoder.encode(ak, "UTF-8");
+        arr[0] = OAUTH_CONSUMER_KEY + "=" + URLEncoder.encode(smsAppKey, "UTF-8");
         arr[1] = OAUTH_NONCE + "=" + URLEncoder.encode(nonce, "UTF-8");
         arr[2] = OAUTH_SIGNATURE_METHOD + "=" + URLEncoder.encode("HMAC-SHA1", "UTF-8");
         arr[3] = OAUTH_VERSION + "=" + URLEncoder.encode("1.0", "UTF-8");
@@ -109,7 +144,7 @@ public class MatrixSmsManager implements NotifyManager {
 
         String baseString = join(arr, "&");
         LOG.debug("签名拼接字符串: {}", baseString);
-        String sign = URLEncoder.encode(EncodeUtils.hmacSha1(sk, baseString), "UTF-8");
+        String sign = URLEncoder.encode(EncodeUtils.hmacSha1(smsSecretKey, baseString), "UTF-8");
         LOG.debug("签名: {}", sign);
 //            String sign = EncodeUtils.hmac_sha1(sk,)
         //添加http头信息
@@ -118,7 +153,7 @@ public class MatrixSmsManager implements NotifyManager {
                 .append("\",")
                 .append(OAUTH_CONSUMER_KEY)
                 .append("=\"")
-                .append(ak)
+                .append(smsAppKey)
                 .append("\",")
                 .append(OAUTH_SIGNATURE)
                 .append("=\"")
