@@ -37,6 +37,16 @@ public class UserNotifyInfo implements Serializable {
      */
     private String mobile;
 
+    /**
+     * 微信openId
+     */
+    private String weChatOpenId;
+
+    /**
+     * 微信小程序openId
+     */
+    private String miniProgramOpenId;
+
     public String getUserId() {
         return userId;
     }
@@ -84,5 +94,21 @@ public class UserNotifyInfo implements Serializable {
 
     public static UserNotifyInfo builder() {
         return new UserNotifyInfo();
+    }
+
+    public String getWeChatOpenId() {
+        return weChatOpenId;
+    }
+
+    public void setWeChatOpenId(String weChatOpenId) {
+        this.weChatOpenId = weChatOpenId;
+    }
+
+    public String getMiniProgramOpenId() {
+        return miniProgramOpenId;
+    }
+
+    public void setMiniProgramOpenId(String miniProgramOpenId) {
+        this.miniProgramOpenId = miniProgramOpenId;
     }
 }

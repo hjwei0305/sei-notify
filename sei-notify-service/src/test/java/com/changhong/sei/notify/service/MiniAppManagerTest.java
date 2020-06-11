@@ -53,7 +53,7 @@ public class MiniAppManagerTest extends BaseUnitTest {
         sendMessage.setContent(content);
         List<UserNotifyInfo> receivers = new ArrayList<>();
         UserNotifyInfo userNotifyInfo = new UserNotifyInfo();
-        userNotifyInfo.setMiniProgramOpenId(Collections.singleton("oQxqY5N1p770bNI76dXUwTxMR4P8"));
+        userNotifyInfo.setMiniProgramOpenId("oQxqY5N1p770bNI76dXUwTxMR4P8");
         receivers.add(userNotifyInfo);
         sendMessage.setReceivers(receivers);
         ResultData<String> resultData = miniAppManager.send(sendMessage);

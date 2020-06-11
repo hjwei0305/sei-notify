@@ -46,7 +46,7 @@ public class MiniAppManager implements NotifyManager {
     @Override
     public ResultData<String> send(SendMessage message) {
         LOG.info("收到消息[{}],开始执行发送微信小程序提醒消息", message);
-        if (Objects.isNull(wxService)){
+        if (Objects.isNull(wxService)) {
             LOG.error("后台未配置微信小程序消息发送功能");
             return ResultData.fail("后台未配置微信小程序消息发送功能");
         }
@@ -55,21 +55,25 @@ public class MiniAppManager implements NotifyManager {
         if (CollectionUtils.isNotEmpty(receivers)) {
             try {
                 //获得内容
-                WxMaSubscribeMessage wxMaSubscribeMessage = JsonUtils.fromJson(message.getContent(),WxMaSubscribeMessage.class);
+                WxMaSubscribeMessage wxMaSubscribeMessage = JsonUtils.fromJson(message.getContent(), WxMaSubscribeMessage.class);
+                //循环推送消息
                 for (UserNotifyInfo receiver : receivers) {
-                    for (String openId : receiver.getMiniProgramOpenId()){
-                        if (StringUtils.isNotEmpty(openId)){
-                            wxMaSubscribeMessage.setToUser(openId);
-                            wxService.getMsgService().sendSubscribeMsg(wxMaSubscribeMessage);
-                            userMiniAppPushTimeService.subtract(receiver,openId);
-                        }
+                    if (StringUtils.isNotEmpty(receiver.getMiniProgramOpenId())) {
+                        wxMaSubscribeMessage.setToUser(receiver.getMiniProgramOpenId());
+                        //推送消息
+                        wxService.getMsgService().sendSubscribeMsg(wxMaSubscribeMessage);
+                        //更新推送次数-1
+                        userMiniAppPushTimeService.subtract(receiver, receiver.getMiniProgramOpenId());
+                    }else {
+                        //TODO 新增查询消息发送记录
+                        LOG.warn("用户需要发送微信小程序提醒消息,所绑定的openid为空未发送");
                     }
                 }
-                LOG.info("站内提醒消息发送成功");
-                return ResultData.success("站内提醒消息发送成功");
+                LOG.info("微信小程序提醒消息发送成功");
+                return ResultData.success("微信小程序提醒消息发送成功");
             } catch (Exception e) {
-                LOG.error("发送提醒消息异常", e);
-                return ResultData.fail("发送提醒消息异常:" + e.getMessage());
+                LOG.error("发送微信小程序提醒消息异常", e);
+                return ResultData.fail("发送微信小程序提醒消息异常:" + e.getMessage());
             }
         } else {
             return ResultData.fail("消息接收人不能为空.");
