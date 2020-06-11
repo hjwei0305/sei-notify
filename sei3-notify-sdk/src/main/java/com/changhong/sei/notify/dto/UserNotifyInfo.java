@@ -1,6 +1,7 @@
 package com.changhong.sei.notify.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * *************************************************************************************************
@@ -40,12 +41,12 @@ public class UserNotifyInfo implements Serializable {
     /**
      * 微信openId
      */
-    private String weChatOpenId;
+    private Set<String> weChatOpenId;
 
     /**
      * 微信小程序openId
      */
-    private String miniProgramOpenId;
+    private Set<String> miniProgramOpenId;
 
     public String getUserId() {
         return userId;
@@ -96,19 +97,19 @@ public class UserNotifyInfo implements Serializable {
         return new UserNotifyInfo();
     }
 
-    public String getWeChatOpenId() {
+    public Set<String> getWeChatOpenId() {
         return weChatOpenId;
     }
 
-    public void setWeChatOpenId(String weChatOpenId) {
+    public void setWeChatOpenId(Set<String> weChatOpenId) {
         this.weChatOpenId = weChatOpenId;
     }
 
-    public String getMiniProgramOpenId() {
+    public Set<String> getMiniProgramOpenId() {
         return miniProgramOpenId;
     }
 
-    public void setMiniProgramOpenId(String miniProgramOpenId) {
+    public void setMiniProgramOpenId(Set<String> miniProgramOpenId) {
         this.miniProgramOpenId = miniProgramOpenId;
     }
 }
