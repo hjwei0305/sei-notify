@@ -33,17 +33,20 @@ public class MiniAppManagerTest extends BaseUnitTest {
                 "    \"page\":\"pages/message/messageDetail?cmscontentid=123456\",\n" +
                 "    \"data\":[\n" +
                 "       {\n" +
-                "           \"name\":\"thing1\",\n" +
+                "            \"name\":\"thing1\",\n" +
+                "            \"desc\":\"通知类型\",\n" +
                 "            \"value\":\"通知\",\n" +
                 "            \"color\" :\"\"\n" +
                 "       },\n" +
                 "       {\n" +
-                "           \"name\":\"thing2\",\n" +
+                "            \"name\":\"thing2\",\n" +
+                "            \"desc\":\"通知内容\",\n" +
                 "            \"value\":\"详情\",\n" +
                 "            \"color\" :\"\"\n" +
                 "       },\n" +
                 "       {\n" +
-                "           \"name\":\"time3\",\n" +
+                "            \"name\":\"time3\",\n" +
+                "            \"desc\":\"通知时间\",\n" +
                 "            \"value\":\"2020-06-02 13:44:49\",\n" +
                 "            \"color\" :\"\"\n" +
                 "       }\n" +
@@ -54,6 +57,8 @@ public class MiniAppManagerTest extends BaseUnitTest {
         List<UserNotifyInfo> receivers = new ArrayList<>();
         UserNotifyInfo userNotifyInfo = new UserNotifyInfo();
         userNotifyInfo.setMiniProgramOpenId("oQxqY5N1p770bNI76dXUwTxMR4P8");
+        userNotifyInfo.setUserId("1D676C93-5F79-11EA-AAAA-0242C0A84410");
+        userNotifyInfo.setUserAccount("pcp001");
         receivers.add(userNotifyInfo);
         sendMessage.setReceivers(receivers);
         ResultData<String> resultData = miniAppManager.send(sendMessage);

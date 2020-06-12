@@ -38,6 +38,7 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
 
     @Transactional
     public ResultData<String> recordHistory(List<MessageHistory> histories, String content, boolean success, String log) {
+        LogUtil.debug("记录消息历史内容:{0}",content);
         String contentId;
         if (StringUtils.isNotBlank(content)) {
             ContentBody contentBody = new ContentBody(content);

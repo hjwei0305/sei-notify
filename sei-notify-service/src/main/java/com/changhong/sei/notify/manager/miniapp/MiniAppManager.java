@@ -5,10 +5,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.util.JsonUtils;
-import com.changhong.sei.notify.dto.NotifyType;
-import com.changhong.sei.notify.dto.SendMessage;
-import com.changhong.sei.notify.dto.TargetType;
-import com.changhong.sei.notify.dto.UserNotifyInfo;
+import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.manager.NotifyManager;
 import com.changhong.sei.notify.service.MessageHistoryService;
@@ -64,6 +61,15 @@ public class MiniAppManager implements NotifyManager {
         //收件人清单
         List<UserNotifyInfo> receivers = message.getReceivers();
         try {
+            //格式化模板内容
+            MiniAppTemplate template = JsonUtils.fromJson(content,MiniAppTemplate.class);
+            message.setSubject(template.getTitle());
+            List<MiniAppTemplateParam> params = template.getData();
+            StringBuilder sb  = new StringBuilder();
+            for (MiniAppTemplateParam param : params){
+                sb.append(param.getDesc()).append(":").append(param.getValue()).append("<br>");
+            }
+            content = sb.toString();
             if (CollectionUtils.isNotEmpty(receivers)) {
                 //获得内容
                 WxMaSubscribeMessage wxMaSubscribeMessage = JsonUtils.fromJson(message.getContent(), WxMaSubscribeMessage.class);
