@@ -4,7 +4,6 @@ import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
-import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.notify.dao.MessageHistoryDao;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.MessageHistory;
@@ -38,7 +37,7 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
 
     @Transactional
     public ResultData<String> recordHistory(List<MessageHistory> histories, String content, boolean success, String log) {
-        LogUtil.debug("记录消息历史内容:{0}",content);
+        LogUtil.debug("记录消息历史内容:{0}", content);
         String contentId;
         if (StringUtils.isNotBlank(content)) {
             ContentBody contentBody = new ContentBody(content);
@@ -62,5 +61,32 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
         }
         dao.save(histories);
         return ResultData.success("ok");
+    }
+
+    /**
+     * 用户查看
+     *
+     * @param id 消息id
+     * @return 返回明细
+     */
+    public ResultData<MessageHistory> detail(String id) {
+        if (StringUtils.isNotBlank(id)) {
+            MessageHistory message = dao.findOne(id);
+            if (Objects.nonNull(message)) {
+                String contentId = message.getContentId();
+                //加载内容
+                if (StringUtils.isNotBlank(contentId)) {
+                    ContentBody body = contentBodyService.findOne(contentId);
+                    if (Objects.nonNull(body)) {
+                        message.setContent(body.getContent());
+                    }
+                }
+                return ResultData.success(message);
+            } else {
+                return ResultData.fail(id + " - 消息不存在");
+            }
+        } else {
+            return ResultData.fail("参数不能为空!");
+        }
     }
 }

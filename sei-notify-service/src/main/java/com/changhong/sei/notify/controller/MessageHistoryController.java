@@ -68,17 +68,21 @@ public class MessageHistoryController implements DefaultBaseController<MessageHi
      */
     @Override
     public ResultData<MessageHistoryDto> findOne(String id) {
-        MessageHistory entity;
+        ResultData<MessageHistory> resultData;
         try {
-            entity = getService().findOne(id);
+            resultData = service.detail(id);
         } catch (Exception e) {
             LogUtil.error("获取业务实体异常！", e);
             // 获取业务实体异常！{0}
             return ResultData.fail(ContextUtil.getMessage("core_service_00005", e.getMessage()));
         }
-        // 转换数据 to DTO
-        MessageHistoryDto dto = convertToDto(entity);
-        return ResultData.success(dto);
+        if (resultData.successful()) {
+            // 转换数据 to DTO
+            MessageHistoryDto dto = convertToDto(resultData.getData());
+            return ResultData.success(dto);
+        } else {
+            return ResultData.fail(resultData.getMessage());
+        }
     }
 
     /**
