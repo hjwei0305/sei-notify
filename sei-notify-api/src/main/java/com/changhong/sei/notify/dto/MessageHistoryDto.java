@@ -21,7 +21,7 @@ private static final long serialVersionUID = 179365424315447841L;
     /**
      * 通知类型
      */
-    @ApiModelProperty(value = "通知类型")
+    @ApiModelProperty(value = "消息类型")
     @JsonSerialize(using = EnumJsonSerializer.class)
     private NotifyType category;
     /**
@@ -37,33 +37,33 @@ private static final long serialVersionUID = 179365424315447841L;
     /**
      * 目标类型
      */
-    @ApiModelProperty(value = "目标类型")
+    @ApiModelProperty(value = "接收类型")
     @JsonSerialize(using = EnumJsonSerializer.class)
     private TargetType targetType = TargetType.PERSONAL;
     /**
      * 目标对象id
      */
-    @ApiModelProperty(value = "目标对象id")
+    @ApiModelProperty(value = "接收人")
     private String targetValue;
     /**
      * 目标对象名称
      */
-    @ApiModelProperty(value = "目标对象名称")
+    @ApiModelProperty(value = "接收人名称")
     private String targetName;
     /**
      * 是否发布
      */
-    @ApiModelProperty(value = "是否发布")
+    @ApiModelProperty(value = "发送状态")
     private Boolean sendStatus;
     /**
      * 发布时间
      */
-    @ApiModelProperty(value = "发布时间")
+    @ApiModelProperty(value = "发送时间")
     private LocalDateTime sendDate;
     /**
      * 删除人id
      */
-    @ApiModelProperty(value = "删除人id")
+    @ApiModelProperty(value = "发送日志")
     private String sendLog;
     /**
      * 业务属性
