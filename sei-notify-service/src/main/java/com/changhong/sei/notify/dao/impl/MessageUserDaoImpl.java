@@ -161,7 +161,7 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
                     if (SearchFilter.Operator.EQ == filter.getOperator()) {
                         where.append(" and u.").append(filter.getFieldName()).append(" = ").append(filter.getValue());
                     } else if (SearchFilter.Operator.NU == filter.getOperator()) {
-                        where.append(" and u.").append(filter.getFieldName()).append(" is null ");
+                        where.append(" and (u.").append(filter.getFieldName()).append(" is null or u.").append(filter.getFieldName()).append(" = 0) ");
                     }
                     continue;
                 }
