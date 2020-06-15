@@ -77,11 +77,11 @@ public class MatrixSmsManager implements NotifyManager {
                 numSet.add(info.getMobile());
 
                 history = new MessageHistory();
-                history.setCategory(NotifyType.EMAIL);
+                history.setCategory(NotifyType.SMS);
                 history.setSubject(StringUtils.isNotBlank(message.getSubject()) ? message.getSubject() : StringUtils.left(message.getContent(), 100));
                 history.setTargetType(TargetType.PERSONAL);
                 history.setTargetValue(info.getMobile());
-                history.setTargetName(info.getUserName());
+                history.setTargetName(StringUtils.isNotBlank(info.getUserName()) ? info.getUserName() : info.getMobile());
                 histories.add(history);
             }
             String[] numbers = numSet.toArray(new String[0]);

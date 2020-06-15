@@ -29,6 +29,12 @@ public class MsgControllerTest extends BaseUnitTest {
     }
 
     @Test
+    public void unreadCount() {
+        ResultData<Long> resultData = controller.unreadCount();
+        System.out.println(resultData);
+    }
+
+    @Test
     public void findMessageByPage() {
 //        Search search = Search.createSearch();
         String json = "{\"quickSearchValue\":\"\",\"quickSearchProperties\":[\"subject\"],\"pageInfo\":{\"page\":1,\"rows\":30},\"sortOrders\":[],\"filters\":[{\"fieldName\":\"category\",\"value\":\"SEI_BULLETIN\",\"operator\":\"EQ\"}]}";
