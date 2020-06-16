@@ -9,7 +9,6 @@ import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.notify.dao.BulletinDao;
-import com.changhong.sei.notify.dao.MessageUserDao;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
@@ -79,10 +78,25 @@ public class BulletinService extends BaseEntityService<Bulletin> {
         }
         List<Bulletin> bulletins = dao.findAllById(ids);
         if (!CollectionUtils.isEmpty(bulletins)) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDate nowDate = now.toLocalDate();
+
+            boolean allowPublish = Boolean.TRUE;
+            for (Bulletin bulletin : bulletins) {
+                // 检查有效时间是否大于当前时间
+                if (nowDate.isAfter(bulletin.getInvalidDate())) {
+                    bulletin.setEffective(Boolean.FALSE);
+                    allowPublish = Boolean.FALSE;
+                }
+            }
+            if (!allowPublish) {
+                dao.save(bulletins);
+                return OperateResult.operationFailure("发布失败,通告有效时间小于当前时间.");
+            }
+
             SessionUser user = ContextUtil.getSessionUser();
             String account = user.getAccount();
             String userName = user.getUserName();
-            LocalDateTime now = LocalDateTime.now();
 
             Set<String> msgIds = new HashSet<>();
             for (Bulletin bulletin : bulletins) {
