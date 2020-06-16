@@ -207,10 +207,9 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
             jpql.delete(0, jpql.length());
             jpql.append("select new com.changhong.sei.notify.entity.compose.MessageCompose(b, u) ").append(where);
             // 排序
+            jpql.append(" order by b.priority, b.publishDate desc ");
             List<SearchOrder> orders = search.getSortOrders();
             if (CollectionUtils.isNotEmpty(orders)) {
-//                jpql.append(" order by b.publish ");
-                jpql.append(" order by b.priority, b.publishDate desc ");
                 for (SearchOrder order : orders) {
                     if (StringUtils.equals("read", order.getProperty())) {
                         jpql.append(", u.").append(order.getProperty()).append(" ").append(order.getDirection().name());
