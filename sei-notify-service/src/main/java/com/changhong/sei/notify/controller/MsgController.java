@@ -4,7 +4,6 @@ import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
-import com.changhong.sei.core.dto.serach.SearchFilter;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.core.utils.ResultDataUtil;
@@ -226,39 +225,4 @@ public class MsgController implements MsgApi {
         return ResultData.success(result);
     }
 
-    /**
-     * 按类型查询有效消息
-     *
-     * @param search 查询参数
-     * @return 查询结果
-     */
-    @Override
-    public ResultData<PageResult<MessageDto>> findMessageByPage4Index(Search search) {
-        if (Objects.isNull(search)) {
-            search = Search.createSearch();
-        }
-        // 查询有效消息
-        search.addFilter(new SearchFilter("effective", Boolean.TRUE));
-        PageResult<MessageCompose> pageResult = messageService.findPage4User(search, ContextUtil.getSessionUser());
-
-        MessageDto dto;
-        MessageUser user;
-        List<MessageCompose> composes = pageResult.getRows();
-        List<MessageDto> dtos = new ArrayList<>(composes.size());
-        PageResult<MessageDto> result = new PageResult<>(pageResult);
-        for (MessageCompose compose : composes) {
-            dto = modelMapper.map(compose.getMessage(), MessageDto.class);
-            user = compose.getUser();
-            if (Objects.nonNull(user)) {
-                dto.setRead(user.getRead());
-                dto.setReadDate(user.getReadDate());
-                dto.setReadNum(user.getReadNum());
-            }
-            dtos.add(dto);
-        }
-        result.setRows(dtos);
-        composes.clear();
-
-        return ResultData.success(result);
-    }
 }
