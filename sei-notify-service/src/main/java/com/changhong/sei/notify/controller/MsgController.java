@@ -13,6 +13,7 @@ import com.changhong.sei.notify.dto.MessageDto;
 import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.entity.Message;
+import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.MessageService;
 import io.swagger.annotations.Api;
@@ -205,13 +206,17 @@ public class MsgController implements MsgApi {
         PageResult<MessageCompose> pageResult = messageService.findPage4User(search, ContextUtil.getSessionUser());
 
         MessageDto dto;
+        MessageUser user;
         List<MessageCompose> composes = pageResult.getRows();
         List<MessageDto> dtos = new ArrayList<>(composes.size());
         PageResult<MessageDto> result = new PageResult<>(pageResult);
         for (MessageCompose compose : composes) {
             dto = modelMapper.map(compose.getMessage(), MessageDto.class);
-            if (Objects.nonNull(compose.getUser())) {
-                dto.setRead(compose.getUser().getRead());
+            user = compose.getUser();
+            if (Objects.nonNull(user)) {
+                dto.setRead(user.getRead());
+                dto.setReadDate(user.getReadDate());
+                dto.setReadNum(user.getReadNum());
             }
             dtos.add(dto);
         }
@@ -237,13 +242,17 @@ public class MsgController implements MsgApi {
         PageResult<MessageCompose> pageResult = messageService.findPage4User(search, ContextUtil.getSessionUser());
 
         MessageDto dto;
+        MessageUser user;
         List<MessageCompose> composes = pageResult.getRows();
         List<MessageDto> dtos = new ArrayList<>(composes.size());
         PageResult<MessageDto> result = new PageResult<>(pageResult);
         for (MessageCompose compose : composes) {
             dto = modelMapper.map(compose.getMessage(), MessageDto.class);
-            if (Objects.nonNull(compose.getUser())) {
-                dto.setRead(compose.getUser().getRead());
+            user = compose.getUser();
+            if (Objects.nonNull(user)) {
+                dto.setRead(user.getRead());
+                dto.setReadDate(user.getReadDate());
+                dto.setReadNum(user.getReadNum());
             }
             dtos.add(dto);
         }
