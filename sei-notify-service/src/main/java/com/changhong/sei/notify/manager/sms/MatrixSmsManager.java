@@ -108,11 +108,10 @@ public class MatrixSmsManager implements NotifyManager {
             //返回json格式： {"id": "27JpL~j4vsL0LX00E00005","version": "abc"}
             String rev = EntityUtils.toString(response.getEntity());
             LOG.info("Response: {}, Status: {}", rev, code);
-//            if (code == 200) {
-//                obj = JsonUtils.fromJson(rev, Map.class);
-//                String id = MapUtils.getString(obj, "id");
-//                String version = MapUtils.getString(obj, "version");
-//            }
+            if (200 != code) {
+                success = Boolean.FALSE;
+                log = rev;
+            }
             return ResultData.success("OK");
         } catch (Exception e) {
             success = Boolean.FALSE;
