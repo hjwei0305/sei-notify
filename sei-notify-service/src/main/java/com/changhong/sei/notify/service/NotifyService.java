@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -39,6 +40,8 @@ public class NotifyService {
     private ContentBuilder contentBuilder;
     @Autowired
     private EmailManager emailManager;
+    @Autowired
+    private BulletinService service;
     /**
      * 注入消息队列生产者
      */
@@ -56,6 +59,29 @@ public class NotifyService {
             // 发送的消息类型以及内容不能为空
             return ResultData.fail(ContextUtil.getMessage("00022"));
         }
+
+        for (NotifyType notifyType : message.getNotifyTypes()) {
+            if (NotifyType.SEI_BULLETIN == notifyType) {
+                BulletinDto bulletinDto = new BulletinDto();
+                bulletinDto.setSubject(message.getSubject());
+                bulletinDto.setContent(message.getContent());
+                bulletinDto.setCategory(notifyType);
+                bulletinDto.setTargetType(TargetType.SYSTEM);
+                bulletinDto.setTargetValue("SYSTEM");
+                bulletinDto.setTargetName("SYSTEM");
+                bulletinDto.setDocIds(message.getDocIds());
+                LocalDate now = LocalDate.now();
+                bulletinDto.setEffectiveDate(now);
+                bulletinDto.setInvalidDate(now.plusDays(180));
+
+                service.sendBulletin(bulletinDto);
+
+                if (message.getNotifyTypes().size() == 1) {
+                    return ResultData.success("OK");
+                }
+            }
+        }
+
         //检查收件人是否存在
         List<String> receiverIds = message.getReceiverIds();
         if (CollectionUtils.isEmpty(receiverIds)) {

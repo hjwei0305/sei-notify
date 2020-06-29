@@ -43,6 +43,16 @@ public interface BulletinApi extends FindByPageApi<BulletinDto> {
     ResultData<String> releaseBulletin(@RequestBody Set<String> ids);
 
     /**
+     * 发布通告
+     *
+     * @param bulletinDto 消息通告DTO
+     * @return 业务处理结果
+     */
+    @PostMapping(path = "sendBulletin", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "发布通告", notes = "发布通告一个消息通告")
+    ResultData<String> sendBulletin(BulletinDto bulletinDto);
+
+    /**
      * 撤销通告
      * @param ids 通告Id清单
      * @return 业务处理结果

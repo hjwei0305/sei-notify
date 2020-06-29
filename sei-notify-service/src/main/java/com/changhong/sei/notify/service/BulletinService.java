@@ -6,13 +6,20 @@ import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.dto.serach.SearchFilter;
+import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
+import com.changhong.sei.core.service.bo.OperateResultWithData;
+import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.dao.BulletinDao;
+import com.changhong.sei.notify.dto.BulletinDto;
+import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.entity.Bulletin;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
+import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +45,8 @@ public class BulletinService extends BaseEntityService<Bulletin> {
     private BulletinDao dao;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     protected BaseEntityDao<Bulletin> getDao() {
@@ -51,16 +60,54 @@ public class BulletinService extends BaseEntityService<Bulletin> {
      * @return 返回操作结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public OperateResult saveBulletin(Bulletin bulletin, Message message) {
+    public OperateResultWithData<Bulletin> saveBulletin(Bulletin bulletin, Message message) {
         ResultData<Message> resultData = messageService.saveMessage(message);
         if (resultData.successful()) {
             message = resultData.getData();
             bulletin.setMsgId(message.getId());
             dao.save(bulletin);
 
-            return OperateResult.operationSuccess();
+            return OperateResultWithData.operationSuccessWithData(bulletin);
         } else {
-            return OperateResult.operationFailure(resultData.getMessage());
+            return OperateResultWithData.operationFailure(resultData.getMessage());
+        }
+    }
+
+    /**
+     * 发布通告
+     *
+     * @param bulletinDto 消息通告DTO
+     * @return 业务处理结果
+     */
+    public ResultData<String> sendBulletin(BulletinDto bulletinDto) {
+        // DTO转换为Entity
+        Bulletin bulletin = modelMapper.map(bulletinDto, Bulletin.class);
+        try {
+            Message message = new Message();
+            message.setId(bulletinDto.getMsgId());
+            message.setCategory(NotifyType.SEI_BULLETIN);
+            message.setSubject(bulletinDto.getSubject());
+            message.setContentId(bulletinDto.getContentId());
+            message.setContent(bulletinDto.getContent());
+            message.setPriority(bulletinDto.getPriority());
+            message.setTargetType(bulletinDto.getTargetType());
+            message.setTargetValue(bulletinDto.getTargetValue());
+            message.setTargetName(bulletinDto.getTargetName());
+            message.setDocIds(bulletinDto.getDocIds());
+
+            // 执行业务逻辑
+            OperateResultWithData<Bulletin> result = this.saveBulletin(bulletin, message);
+            if (result.successful()) {
+                OperateResult result1 = this.releaseBulletin(Sets.newHashSet(result.getData().getId()));
+
+                return ResultDataUtil.convertFromOperateResult(result1);
+            } else {
+                return ResultData.fail(ContextUtil.getMessage("00009", result.getMessage()));
+            }
+        } catch (Exception e) {
+            LogUtil.error("发布通告异常！", e);
+            // 发布通告异常！{0}
+            return ResultData.fail(ContextUtil.getMessage("00009", e.getMessage()));
         }
     }
 

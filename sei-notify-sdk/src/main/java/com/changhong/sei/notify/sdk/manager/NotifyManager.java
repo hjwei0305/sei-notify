@@ -46,15 +46,11 @@ public class NotifyManager implements ApplicationContextAware {
 
     /**
      * 发送平台消息通知
-     * 目前支持: NotifyType.EMAIL - 邮件, NotifyType.SMS - 短信, NotifyType.SEI_REMIND - 站内提醒(默认)
+     * 目前支持: NotifyType.SEI_BULLETIN - 通告, NotifyType.EMAIL - 邮件, NotifyType.SMS - 短信, NotifyType.SEI_REMIND - 站内提醒(默认)
      *
      * @param message 发送的通知消息
      */
     public ResultData<String> send(NotifyMessage message) {
-        if (CollectionUtils.isEmpty(message.getReceiverIds())) {
-            return ResultData.fail("接收人不能为空.");
-        }
-
         if (StringUtils.isBlank(message.getContent()) && StringUtils.isBlank(message.getContentTemplateCode())) {
             return ResultData.fail("消息内容不能为空.");
         }
@@ -64,6 +60,14 @@ public class NotifyManager implements ApplicationContextAware {
             notifyTypes = new ArrayList<>();
             notifyTypes.add(NotifyType.SEI_REMIND);
         }
+
+        for (NotifyType notifyType : notifyTypes) {
+            // 只有通告,可以没有接受人
+            if (NotifyType.SEI_BULLETIN != notifyType && CollectionUtils.isEmpty(message.getReceiverIds())) {
+                return ResultData.fail("接收人不能为空.");
+            }
+        }
+
         message.setNotifyTypes(notifyTypes);
 
         ResultData<String> resultData = apiTemplate.postByUrl(getNotifyServiceUrl() + "/notify/send",

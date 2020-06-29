@@ -8,6 +8,7 @@ import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
+import com.changhong.sei.core.service.bo.OperateResultWithData;
 import com.changhong.sei.core.utils.ResultDataUtil;
 import com.changhong.sei.notify.api.BulletinApi;
 import com.changhong.sei.notify.dto.BulletinDto;
@@ -18,13 +19,12 @@ import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.changhong.sei.notify.service.BulletinService;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
+import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -83,7 +83,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
         // DTO转换为Entity
         Bulletin bulletin = convertToEntity(bulletinDto);
         // 执行业务逻辑
-        OperateResult result;
+        OperateResultWithData<Bulletin> result;
         try {
             Message message = new Message();
             message.setId(bulletinDto.getMsgId());
@@ -103,7 +103,7 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             // 保存消息通告异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00008", e.getMessage()));
         }
-        return ResultDataUtil.convertFromOperateResult(result);
+        return ResultDataUtil.convertFromOperateResult(result, "ok");
     }
 
     /**
@@ -124,6 +124,17 @@ public class BulletinController extends BaseEntityController<Bulletin, BulletinD
             return ResultData.fail(ContextUtil.getMessage("00009", e.getMessage()));
         }
         return ResultDataUtil.convertFromOperateResult(result);
+    }
+
+    /**
+     * 发布通告
+     *
+     * @param bulletinDto 消息通告DTO
+     * @return 业务处理结果
+     */
+    @Override
+    public ResultData<String> sendBulletin(BulletinDto bulletinDto) {
+        return service.sendBulletin(bulletinDto);
     }
 
     /**
