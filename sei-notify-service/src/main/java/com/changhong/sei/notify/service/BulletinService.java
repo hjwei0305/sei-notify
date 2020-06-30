@@ -19,7 +19,6 @@ import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.compose.BulletinCompose;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,8 +44,6 @@ public class BulletinService extends BaseEntityService<Bulletin> {
     private BulletinDao dao;
     @Autowired
     private MessageService messageService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Override
     protected BaseEntityDao<Bulletin> getDao() {
@@ -81,7 +78,14 @@ public class BulletinService extends BaseEntityService<Bulletin> {
      */
     public ResultData<String> sendBulletin(BulletinDto bulletinDto) {
         // DTO转换为Entity
-        Bulletin bulletin = modelMapper.map(bulletinDto, Bulletin.class);
+        Bulletin bulletin = new Bulletin();
+        bulletin.setSubject(bulletinDto.getSubject());
+        bulletin.setTargetType(bulletinDto.getTargetType());
+        bulletin.setTargetValue(bulletinDto.getTargetValue());
+        bulletin.setTargetName(bulletinDto.getTargetName());
+        bulletin.setPriority(bulletinDto.getPriority());
+        bulletin.setEffectiveDate(bulletinDto.getEffectiveDate());
+        bulletin.setInvalidDate(bulletinDto.getInvalidDate());
         try {
             Message message = new Message();
             message.setId(bulletinDto.getMsgId());
