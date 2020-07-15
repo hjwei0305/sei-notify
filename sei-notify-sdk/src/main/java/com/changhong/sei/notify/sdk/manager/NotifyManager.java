@@ -37,11 +37,19 @@ public class NotifyManager implements ApplicationContextAware {
     }
 
     private String getNotifyServiceUrl() {
-        return context.getEnvironment().getProperty("sei.notify.service.url", "http://10.4.208.86:20001/sei-notify");
+        String host = context.getEnvironment().getProperty("sei.notify.service.url");
+        if (StringUtils.isBlank(host)) {
+            throw new IllegalArgumentException("消息服务地址没有配置[sei.notify.service.url]");
+        }
+        return host;
     }
 
     private String getBasicServiceUrl() {
-        return context.getEnvironment().getProperty("sei.basic.service.url", "http://10.4.208.86:20004/sei-basic");
+        String host = context.getEnvironment().getProperty("sei.basic.service.url");
+        if (StringUtils.isBlank(host)) {
+            throw new IllegalArgumentException("消息服务地址没有配置[sei.notify.service.url]");
+        }
+        return host;
     }
 
     /**

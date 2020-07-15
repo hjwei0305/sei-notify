@@ -64,6 +64,7 @@ public class MatrixSmsManager implements NotifyManager {
      */
     @Override
     public ResultData<String> send(SendMessage message) {
+//        LOG.info("短信服务地址: {}, smsAppKey: {}, smsSecretKey: {}", smsHost, smsAppKey, smsSecretKey);
         LOG.debug("模拟发送短信：{}", message.getContent());
 
         boolean success = Boolean.TRUE;
