@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
@@ -36,6 +37,7 @@ import java.util.*;
  * @version 1.0.1 2020-01-18 20:23
  */
 @Component("SMS")
+@ConditionalOnProperty(name = "sei.notify.sms.enable", havingValue = "true")
 public class MatrixSmsManager implements NotifyManager {
     private static final Logger LOG = LoggerFactory.getLogger(MatrixSmsManager.class);
 
@@ -46,11 +48,11 @@ public class MatrixSmsManager implements NotifyManager {
     public static final String OAUTH_VERSION = "oauth_version";
     public static final String OAUTH_NONCE = "oauth_nonce";
 
-    @Value("${sei.notify.sms.host:https://ccp-sms-api.changhong.com/v1/sms/}")
+    @Value("${sei.notify.sms.host}")
     private String smsHost;
-    @Value("${sei.notify.sms.appKey:1659d01555254cd482d3e2a7b1856388}")
+    @Value("${sei.notify.sms.appKey}")
     private String smsAppKey;
-    @Value("${sei.notify.sms.secretKey:e2e7edc042cd42cd82dc88fc753a2cb9}")
+    @Value("${sei.notify.sms.secretKey}")
     private String smsSecretKey;
     @Autowired
     private MessageHistoryService historyService;

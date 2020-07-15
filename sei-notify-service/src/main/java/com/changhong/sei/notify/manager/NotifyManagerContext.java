@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <strong>实现功能:</strong>
@@ -36,6 +37,11 @@ public class NotifyManagerContext {
      * @param message 发送的消息
      */
     public ResultData<String> send(String notifyType, SendMessage message){
-        return strategyMap.get(notifyType).send(message);
+        NotifyManager notifyManager = strategyMap.get(notifyType);
+        if (Objects.nonNull(notifyManager)) {
+            return notifyManager.send(message);
+        } else {
+            return ResultData.fail(notifyType + " 通知类型未定义");
+        }
     }
 }
