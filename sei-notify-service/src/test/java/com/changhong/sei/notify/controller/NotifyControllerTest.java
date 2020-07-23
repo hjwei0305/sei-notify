@@ -7,6 +7,7 @@ import com.changhong.sei.notify.dto.EmailAccount;
 import com.changhong.sei.notify.dto.EmailMessage;
 import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.NotifyType;
+import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class NotifyControllerTest extends BaseUnitTest {
         List<EmailAccount> receivers = new ArrayList<>();
         receivers.add(new EmailAccount("马超","87540704@qq.com"));
         message.setReceivers(receivers);
+        message.setDocIds(Sets.newHashSet("5f0f15c834c54f00014c8c35"));
         return message;
     }
 
