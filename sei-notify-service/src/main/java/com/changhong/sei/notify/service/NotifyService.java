@@ -135,6 +135,7 @@ public class NotifyService {
         sendMessage.setContent(content);
         sendMessage.setSender(sender);
         sendMessage.setReceivers(receivers);
+        sendMessage.setDocIds(message.getDocIds());
 
         // 去重
         Set<NotifyType> notifyTypeSet = new HashSet<>(message.getNotifyTypes());
@@ -184,7 +185,8 @@ public class NotifyService {
             SendMessage sendMessage = SendMessage.builder()
                     .setContent(emailMessage.getContent())
                     .setSubject(emailMessage.getSubject())
-                    .setReceivers(receivers);
+                    .setReceivers(receivers)
+                    .setDocIds(emailMessage.getDocIds());
             if (Objects.nonNull(sender)) {
                 sendMessage.setSender(UserNotifyInfo.builder().setUserName(sender.getName()).setEmail(sender.getAddress()));
             }

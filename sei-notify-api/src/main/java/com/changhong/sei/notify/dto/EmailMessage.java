@@ -3,6 +3,7 @@ package com.changhong.sei.notify.dto;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * *************************************************************************************************
@@ -42,6 +43,10 @@ public class EmailMessage implements Serializable, MessageContent {
      * 内容模板参数
      */
     private Map<String,Object> contentTemplateParams;
+    /**
+     * 附件id（可以为空）
+     */
+    private Set<String> docIds;
 
     public String getSubject() {
         return subject;
@@ -93,5 +98,13 @@ public class EmailMessage implements Serializable, MessageContent {
 
     public void setContentTemplateParams(Map<String, Object> contentTemplateParams) {
         this.contentTemplateParams = contentTemplateParams;
+    }
+
+    public Set<String> getDocIds() {
+        return docIds;
+    }
+
+    public void setDocIds(Set<String> docIds) {
+        this.docIds = docIds;
     }
 }

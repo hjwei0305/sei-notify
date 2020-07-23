@@ -2,6 +2,8 @@ package com.changhong.sei.notify.manager.email;
 
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
+import com.changhong.sei.edm.dto.DocumentResponse;
+import com.changhong.sei.edm.sdk.DocumentManager;
 import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.manager.NotifyManager;
@@ -10,6 +12,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -17,10 +21,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * *************************************************************************************************
@@ -46,6 +47,8 @@ public class EmailManager implements NotifyManager {
     private JavaMailSender mailSender;
     @Autowired
     private MessageHistoryService historyService;
+    @Autowired
+    private DocumentManager documentManager;
 
     /**
      * 初始化发送邮件的消息内容
@@ -121,6 +124,19 @@ public class EmailManager implements NotifyManager {
             helper.setText(content, true);
             //发送时间
             helper.setSentDate(new Date());
+
+            Set<String> docIds = message.getDocIds();
+            //验证文件数据是否为空
+            if (CollectionUtils.isNotEmpty(docIds)) {
+                InputStreamSource source;
+                DocumentResponse docResponse;
+                for (String docId : docIds) {
+                    docResponse = documentManager.getDocument(docId, false);
+                    source = new ByteArrayResource(docResponse.getData());
+                    //添加附件
+                    helper.addAttachment(docResponse.getFileName(), source);
+                }
+            }
             //发送邮件,使用如下方法!
             mailSender.send(msg);
         } catch (Exception e) {
@@ -158,6 +174,7 @@ public class EmailManager implements NotifyManager {
         List<EmailAccount> emailAccounts = new ArrayList<>();
         receivers.forEach((r) -> emailAccounts.add(new EmailAccount(r.getUserName(), r.getEmail())));
         emailMsg.setReceivers(emailAccounts);
+        emailMsg.setDocIds(message.getDocIds());
         // 发送邮件
         send(emailMsg);
 
