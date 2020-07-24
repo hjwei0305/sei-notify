@@ -131,10 +131,16 @@ public class EmailManager implements NotifyManager {
                 InputStreamSource source;
                 DocumentResponse docResponse;
                 for (String docId : docIds) {
-                    docResponse = documentManager.getDocument(docId, false);
-                    source = new ByteArrayResource(docResponse.getData());
-                    //添加附件
-                    helper.addAttachment(docResponse.getFileName(), source);
+                    if (StringUtils.isNotBlank(docId)) {
+                        docResponse = documentManager.getDocument(docId, false);
+                        if (Objects.nonNull(docResponse) && Objects.nonNull(docResponse.getData())) {
+                            source = new ByteArrayResource(docResponse.getData());
+                            //添加附件
+                            helper.addAttachment(docResponse.getFileName(), source);
+                        } else {
+                            LogUtil.error("[{}]附件不存在.", docId);
+                        }
+                    }
                 }
             }
             //发送邮件,使用如下方法!
