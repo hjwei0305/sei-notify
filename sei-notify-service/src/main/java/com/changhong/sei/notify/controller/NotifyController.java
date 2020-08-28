@@ -2,9 +2,9 @@ package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.api.NotifyApi;
-import com.changhong.sei.notify.dto.EmailMessage;
-import com.changhong.sei.notify.dto.NotifyMessage;
-import com.changhong.sei.notify.dto.SmsMessage;
+import com.changhong.sei.notify.dto.*;
+import com.changhong.sei.notify.entity.Message;
+import com.changhong.sei.notify.service.MessageService;
 import com.changhong.sei.notify.service.NotifyService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 /**
  * <strong>实现功能:</strong>
@@ -27,7 +28,7 @@ import javax.validation.Valid;
 public class NotifyController implements NotifyApi {
 
     @Autowired
-   private NotifyService notifyService;
+    private NotifyService notifyService;
 
 
     /**
@@ -58,5 +59,16 @@ public class NotifyController implements NotifyApi {
     @Override
     public ResultData<String> sendEmail(EmailMessage emailMessage) {
         return notifyService.sendEmail(emailMessage);
+    }
+
+    /**
+     * 给指定一个人发送系统提醒
+     *
+     * @param message 系统提醒消息.消息类型为[SEI_REMIND]可不用再指定
+     * @return 成功返回messageId
+     */
+    @Override
+    public ResultData<String> sendRemind(NotifyMessage message) {
+        return notifyService.sendRemind(message);
     }
 }

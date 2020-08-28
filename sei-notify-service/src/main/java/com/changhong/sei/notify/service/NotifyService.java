@@ -6,20 +6,16 @@ import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.mq.MqProducer;
 import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.exception.ServiceException;
-import com.changhong.sei.notify.api.NotifyApi;
 import com.changhong.sei.notify.dto.*;
+import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.manager.ContentBuilder;
 import com.changhong.sei.notify.manager.email.EmailManager;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.changhong.sei.util.EnumUtils;
-import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -42,6 +38,8 @@ public class NotifyService {
     private EmailManager emailManager;
     @Autowired
     private BulletinService service;
+    @Autowired
+    private MessageService messageService;
     /**
      * 注入消息队列生产者
      */
@@ -142,11 +140,11 @@ public class NotifyService {
         // 循环通知方式，循环发送
         for (NotifyType notifyType : notifyTypeSet) {
             //微信/小程序单独处理模板
-            if (NotifyType.WeChat.equals(notifyType)||NotifyType.MiniApp.equals(notifyType)){
-                message.setContentTemplateCode(message.getContentTemplateCode()+"_"+ EnumUtils.getEnumItemName(NotifyType.class,notifyType.ordinal()).toUpperCase());
+            if (NotifyType.WeChat.equals(notifyType) || NotifyType.MiniApp.equals(notifyType)) {
+                message.setContentTemplateCode(message.getContentTemplateCode() + "_" + EnumUtils.getEnumItemName(NotifyType.class, notifyType.ordinal()).toUpperCase());
                 contentBuilder.build(message);
                 sendMessage.setContent(message.getContent());
-            }else {
+            } else {
                 sendMessage.setContent(content);
             }
             String sendJson = JsonUtils.toJson(sendMessage);
@@ -241,5 +239,79 @@ public class NotifyService {
         String sendJson = JsonUtils.toJson(sendMessage);
         mqProducer.send(NotifyType.SMS.name(), sendJson);
         return ResultData.success("ok");
+    }
+
+    /**
+     * 给指定一个人发送系统提醒
+     * 因要实时返回消息id,故采用直接发送
+     *
+     * @param message 系统提醒消息.消息类型为[SEI_REMIND]可不用再指定
+     * @return 成功返回messageId
+     */
+    public ResultData<String> sendRemind(NotifyMessage message) {
+        //检查收件人是否存在
+        List<String> receiverIds = message.getReceiverIds();
+        if (CollectionUtils.isEmpty(receiverIds)) {
+            // 发送消息的收件人不能为空
+            return ResultData.fail(ContextUtil.getMessage("00023"));
+        }
+        Set<String> userIds = new HashSet<>(receiverIds);
+        if (StringUtils.isNotBlank(message.getSenderId())) {
+            userIds.add(message.getSenderId());
+        }
+        if (CollectionUtils.isEmpty(userIds)) {
+            // 发送消息的收件人不能为空
+            return ResultData.fail(ContextUtil.getMessage("00023"));
+        }
+        // 调用基础服务，获取用户的消息通知信息
+        ResultData<List<UserNotifyInfo>> userInfoResult = basicIntegration.findNotifyInfoByUserIds(new ArrayList<>(userIds));
+        if (userInfoResult.failed()) {
+            // 记录异常日志
+            LogUtil.error(userInfoResult.getMessage(), new ServiceException("调用基础服务，获取用户的消息通知信息异常！"));
+            return ResultData.fail(ContextUtil.getMessage("00025"));
+        }
+        List<UserNotifyInfo> userInfos = userInfoResult.getData();
+        // 生成消息
+        contentBuilder.build(message);
+
+        UserNotifyInfo sender = null;
+        UserNotifyInfo receiver = null;
+        for (UserNotifyInfo info : userInfos) {
+            if (StringUtils.isNotBlank(message.getSenderId()) && Objects.equals(info.getUserId(), message.getSenderId())) {
+                sender = info;
+            } else {
+                receiver = info;
+            }
+        }
+        if (Objects.isNull(receiver)) {
+            // 发送消息的收件人不存在
+            return ResultData.fail(ContextUtil.getMessage("00024"));
+        }
+
+        Message msg = new Message();
+        msg.setCategory(NotifyType.SEI_REMIND);
+        //消息主题
+        msg.setSubject(message.getSubject());
+        msg.setTargetType(TargetType.PERSONAL);
+        msg.setTargetValue(receiver.getUserId());
+        msg.setTargetName(receiver.getUserName());
+
+        if (Objects.nonNull(sender)) {
+            msg.setPublishUserAccount(sender.getUserAccount());
+            msg.setPublishUserName(sender.getUserName());
+        }
+
+        // 生成消息
+        contentBuilder.build(message);
+        //消息内容
+        String content = message.getContent();
+
+        Set<String> docIds = message.getDocIds();
+        ResultData<String> resultData = messageService.sendMessage(content, docIds, msg);
+        if (resultData.successful()) {
+            return ResultData.success(msg.getId());
+        } else {
+            return resultData;
+        }
     }
 }
