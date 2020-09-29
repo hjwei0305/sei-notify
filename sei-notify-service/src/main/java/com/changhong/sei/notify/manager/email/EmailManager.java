@@ -88,6 +88,7 @@ public class EmailManager implements NotifyManager {
 
         //初始化消息
         initMessage(message);
+        Set<String> docIds = null;
         try {
             //构造MimeMessage并设置相关属性值,MimeMessage就是实际的电子邮件对象.
             MimeMessage msg = mailSender.createMimeMessage();
@@ -125,7 +126,7 @@ public class EmailManager implements NotifyManager {
             //发送时间
             helper.setSentDate(new Date());
 
-            Set<String> docIds = message.getDocIds();
+            docIds = message.getDocIds();
             //验证文件数据是否为空
             if (CollectionUtils.isNotEmpty(docIds)) {
                 InputStreamSource source;
@@ -153,7 +154,7 @@ public class EmailManager implements NotifyManager {
         }
 
         try {
-            historyService.recordHistory(histories, content, success, log);
+            historyService.recordHistory(histories, content, success, log, docIds);
         } catch (Exception e) {
             LogUtil.error("记录消息历史异常", e);
         }

@@ -17,6 +17,7 @@ import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.Message;
+import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.cust.BasicIntegration;

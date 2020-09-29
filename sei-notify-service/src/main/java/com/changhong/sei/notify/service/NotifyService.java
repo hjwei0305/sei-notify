@@ -8,10 +8,12 @@ import com.changhong.sei.core.util.JsonUtils;
 import com.changhong.sei.exception.ServiceException;
 import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.entity.Message;
+import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.manager.ContentBuilder;
 import com.changhong.sei.notify.manager.email.EmailManager;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.changhong.sei.util.EnumUtils;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ public class NotifyService {
     private BulletinService service;
     @Autowired
     private MessageService messageService;
+    @Autowired
+    private MessageHistoryService historyService;
     /**
      * 注入消息队列生产者
      */
@@ -288,6 +292,11 @@ public class NotifyService {
             return ResultData.fail(ContextUtil.getMessage("00024"));
         }
 
+        // 生成消息
+        contentBuilder.build(message);
+        //消息内容
+        String content = message.getContent();
+
         Message msg = new Message();
         msg.setCategory(NotifyType.SEI_REMIND);
         //消息主题
@@ -301,13 +310,21 @@ public class NotifyService {
             msg.setPublishUserName(sender.getUserName());
         }
 
-        // 生成消息
-        contentBuilder.build(message);
-        //消息内容
-        String content = message.getContent();
-
         Set<String> docIds = message.getDocIds();
         ResultData<String> resultData = messageService.sendMessage(content, docIds, msg);
+
+        MessageHistory history = new MessageHistory();
+        history.setCategory(NotifyType.SEI_REMIND);
+        history.setSubject(message.getSubject());
+        history.setTargetType(TargetType.PERSONAL);
+        history.setTargetValue(receiver.getUserId());
+        history.setTargetName(receiver.getUserName());
+        try {
+            historyService.recordHistory(Lists.newArrayList(history), content, resultData.successful(), resultData.getMessage(), docIds);
+        } catch (Exception e) {
+            LogUtil.error("记录消息历史异常", e);
+        }
+
         if (resultData.successful()) {
             return ResultData.success(msg.getId());
         } else {

@@ -113,7 +113,7 @@ public class MiniAppManager implements NotifyManager {
             return ResultData.fail("发送微信小程序提醒消息异常:" + e.getMessage());
         } finally {
             try {
-                historyService.recordHistory(histories, content, success, log);
+                historyService.recordHistory(histories, content, success, log, null);
             } catch (Exception e) {
                 LogUtil.error("记录消息历史异常", e);
             }

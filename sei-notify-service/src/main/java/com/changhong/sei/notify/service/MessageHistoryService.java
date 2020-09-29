@@ -4,9 +4,11 @@ import com.changhong.sei.core.dao.BaseEntityDao;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
+import com.changhong.sei.edm.sdk.DocumentManager;
 import com.changhong.sei.notify.dao.MessageHistoryDao;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.MessageHistory;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -29,6 +32,8 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
     private MessageHistoryDao dao;
     @Autowired
     private ContentBodyService contentBodyService;
+    @Autowired(required = false)
+    private DocumentManager documentManager;
 
     @Override
     protected BaseEntityDao<MessageHistory> getDao() {
@@ -36,7 +41,7 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
     }
 
     @Transactional
-    public ResultData<String> recordHistory(List<MessageHistory> histories, String content, boolean success, String log) {
+    public ResultData<String> recordHistory(List<MessageHistory> histories, String content, boolean success, String log, Set<String> docIds) {
         LogUtil.debug("记录消息历史内容:{0}", content);
         String contentId;
         if (StringUtils.isNotBlank(content)) {
@@ -60,6 +65,12 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
             }
         }
         dao.save(histories);
+
+        //绑定附件  注意:这里是通过内容id关联附件
+        if (CollectionUtils.isNotEmpty(docIds) && Objects.nonNull(documentManager)) {
+            documentManager.bindBusinessDocuments(contentId, docIds);
+        }
+
         return ResultData.success("ok");
     }
 
