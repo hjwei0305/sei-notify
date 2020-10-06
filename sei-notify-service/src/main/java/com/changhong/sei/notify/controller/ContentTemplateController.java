@@ -47,6 +47,8 @@ public class ContentTemplateController
     private ContentTemplateService service;
     @Autowired
     private ContentBuilder contentBuilder;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public BaseEntityService<ContentTemplate> getService() {
@@ -60,7 +62,7 @@ public class ContentTemplateController
      * @return 检查结果
      */
     @Override
-    public ResultData checkDto(ContentTemplateDto dto) {
+    public ResultData<?> checkDto(ContentTemplateDto dto) {
         if (Objects.isNull(dto)) {
             return ResultData.fail("输入的内容模板为空，禁止保存！");
         }
@@ -151,7 +153,6 @@ public class ContentTemplateController
             return null;
         }
         // 自定义规则
-        ModelMapper mapper = getModelMapper();
         PropertyMap<ContentTemplate, ContentTemplateDto> propertyMap = new PropertyMap<ContentTemplate, ContentTemplateDto>() {
 
             /**
@@ -162,7 +163,7 @@ public class ContentTemplateController
                 skip(destination.getContent());
             }
         };
-        mapper.addMappings(propertyMap);
-        return mapper.map(entity, ContentTemplateDto.class);
+        modelMapper.addMappings(propertyMap);
+        return modelMapper.map(entity, ContentTemplateDto.class);
     }
 }

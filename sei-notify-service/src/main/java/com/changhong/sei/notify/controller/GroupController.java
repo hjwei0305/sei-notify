@@ -1,20 +1,18 @@
 package com.changhong.sei.notify.controller;
 
-import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.controller.BaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
-import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.api.GroupApi;
+import com.changhong.sei.notify.dto.AccountResponse;
 import com.changhong.sei.notify.dto.GroupDto;
 import com.changhong.sei.notify.dto.GroupItemDto;
 import com.changhong.sei.notify.dto.PositionDto;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupItem;
 import com.changhong.sei.notify.service.GroupService;
-import com.changhong.sei.notify.dto.AccountResponse;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +42,7 @@ import java.util.stream.Collectors;
 public class GroupController extends BaseEntityController<Group, GroupDto> implements GroupApi {
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapper itemModelMapper;
     /**
      * 群组服务对象
      */
@@ -101,16 +98,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      */
     @Override
     public ResultData<List<GroupDto>> findAll() {
-        List<GroupDto> data;
-        try {
-            List<Group> entities = getService().findAll();
-            data = entities.stream().map(this::convertToDtoWithoutContent).collect(Collectors.toList());
-        } catch (Exception e) {
-            LogUtil.error("获取所有业务实体异常！", e);
-            // 获取所有业务实体异常！{0}
-            return ResultData.fail(ContextUtil.getMessage("core_service_00006", e.getMessage()));
-        }
-        return ResultData.success(data);
+        return ResultData.success(convertToDtos(service.findAll()));
     }
 
     /**
@@ -133,7 +121,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     public ResultData<String> addGroupItem(@Valid List<GroupItemDto> groupUserDtos) {
         if (CollectionUtils.isNotEmpty(groupUserDtos)) {
             List<GroupItem> groupUsers = groupUserDtos.stream().map(
-                    v -> modelMapper.map(v, GroupItem.class)
+                    v -> itemModelMapper.map(v, GroupItem.class)
             ).collect(Collectors.toList());
             return service.addGroupUsers(groupUsers);
         }
@@ -164,7 +152,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
             List<GroupItemDto> list;
             List<GroupItem> groupUsers = resultData.getData();
             if (CollectionUtils.isNotEmpty(groupUsers)) {
-                list = groupUsers.stream().map(v -> modelMapper.map(v, GroupItemDto.class)).collect(Collectors.toList());
+                list = groupUsers.stream().map(v -> itemModelMapper.map(v, GroupItemDto.class)).collect(Collectors.toList());
             } else {
                 list = Lists.newArrayList();
             }
@@ -222,19 +210,5 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     @Override
     public ResultData<List<String>> getUserIdsByGroup(String groupCode) {
         return service.getUserIdsByGroup(groupCode);
-    }
-
-    /**
-     * 将数据实体转换成DTO（不含内容属性）
-     *
-     * @param entity 业务实体
-     * @return DTO
-     */
-    private GroupDto convertToDtoWithoutContent(Group entity) {
-        if (Objects.isNull(entity)) {
-            return null;
-        }
-        // 自定义规则
-        return modelMapper.map(entity, GroupDto.class);
     }
 }

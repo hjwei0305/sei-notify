@@ -1,7 +1,7 @@
 package com.changhong.sei.notify.controller;
 
 import com.changhong.sei.core.context.ContextUtil;
-import com.changhong.sei.core.controller.DefaultBaseController;
+import com.changhong.sei.core.controller.BaseEntityController;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
@@ -28,7 +28,8 @@ import java.util.Objects;
 @RestController
 @Api(value = "MessageHistoryApi", tags = "消息历史服务")
 @RequestMapping(path = "messageHistory", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class MessageHistoryController implements DefaultBaseController<MessageHistory, MessageHistoryDto>, MessageHistoryApi {
+public class MessageHistoryController extends BaseEntityController<MessageHistory, MessageHistoryDto>
+        implements MessageHistoryApi {
     /**
      * 消息历史服务对象
      */
@@ -100,6 +101,4 @@ public class MessageHistoryController implements DefaultBaseController<MessageHi
 
         return convertToDtoPageResult(bulletinPageResult);
     }
-
-
 }
