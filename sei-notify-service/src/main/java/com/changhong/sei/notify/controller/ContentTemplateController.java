@@ -47,8 +47,26 @@ public class ContentTemplateController
     private ContentTemplateService service;
     @Autowired
     private ContentBuilder contentBuilder;
-    @Autowired
-    private ModelMapper modelMapper;
+
+    /**
+     * 定义没有内容的模板转换
+     */
+    private static final ModelMapper templateModelMapper;
+    static {
+        templateModelMapper = new ModelMapper();
+        // 自定义规则
+        PropertyMap<ContentTemplate, ContentTemplateDto> propertyMap = new PropertyMap<ContentTemplate, ContentTemplateDto>() {
+
+            /**
+             * Called by ModelMapper to configure mappings as defined in the PropertyMap.
+             */
+            @Override
+            protected void configure() {
+                skip(destination.getContent());
+            }
+        };
+        templateModelMapper.addMappings(propertyMap);
+    }
 
     @Override
     public BaseEntityService<ContentTemplate> getService() {
@@ -152,18 +170,6 @@ public class ContentTemplateController
         if (Objects.isNull(entity)) {
             return null;
         }
-        // 自定义规则
-        PropertyMap<ContentTemplate, ContentTemplateDto> propertyMap = new PropertyMap<ContentTemplate, ContentTemplateDto>() {
-
-            /**
-             * Called by ModelMapper to configure mappings as defined in the PropertyMap.
-             */
-            @Override
-            protected void configure() {
-                skip(destination.getContent());
-            }
-        };
-        modelMapper.addMappings(propertyMap);
-        return modelMapper.map(entity, ContentTemplateDto.class);
+        return templateModelMapper.map(entity, ContentTemplateDto.class);
     }
 }
