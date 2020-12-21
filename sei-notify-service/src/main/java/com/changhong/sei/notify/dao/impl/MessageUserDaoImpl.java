@@ -62,7 +62,9 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         StringBuilder jpql = new StringBuilder();
         jpql.append("select t from Message t ");
 
-        Query query = getUnReadQuery(jpql, userId, targetValues, "", "");
+        // 优先级, 发布时间
+        String order = " order by t.priority desc, t.publishDate desc";
+        Query query = getUnReadQuery(jpql, userId, targetValues, "", order);
 
         query.setFirstResult(0);
         // 设置最大返回未读消息数
