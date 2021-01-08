@@ -1,56 +1,66 @@
+spring:
+  mail:
+    host: 10.3.15.240
+    username: seiadmin@changhong.com
+    password: 1plmjvCR
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          timeout: 5000
+          writetimeout: 5000
+          connectiontimeout: 5000
+  datasource:
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: sei
+  kafka:
+    bootstrap-servers: 10.4.208.131:9092
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+  redis:
+    password: ZmkDbgaua3Rso33T
+    database: 0
+    port: 6379
+    host: 10.4.208.132
 #management:
 #  endpoints:
 #    web:
 #      exposure:
 #        include: '[info, health, refresh]'
-#notify:
-#  mail:
-#    default-sender: SEI绯荤粺绠＄悊鍛�
-#  test-key: test_value_on_configcenter1
-#sei:
-#  mq:
-#    group-id: sei_notify
-#    topic: sei_notify_message
-#  serial:
-#    service:
-#      enable: true
-#      url: http://10.4.208.86:8100/api-gateway/sei-serial
-#
-#spring:
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    password: 123456
-#    url: jdbc:mysql://10.4.208.134:3306/sei_notify?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-#    username: sei
-#  jpa:
-#    hibernate:
-#      ddl-auto: none
-#      namingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL57Dialect
-#    show-sql: false
-#  kafka:
-#    bootstrap-servers: 10.4.208.131:9092
-#  mail:
-#    host: 10.3.15.240
-#    password: 1plmjvCR
-#    port: 25
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          connectiontimeout: 5000
-#          ssl:
-#            trust: 10.3.15.240
-#          starttls:
-#            enable: true
-#          timeout: 5000
-#          writetimeout: 5000
-#    protocol: smtp
-#    username: seiadmin@changhong.com
-#  redis:
-#    database: 0
-#    host: 10.4.208.132
-#    password: ZmkDbgaua3Rso33T
-#    port: 6379
+
+sei:
+  notify:
+    sms:
+      enable: true
+      host: https://ccp-sms-api.changhong.com/v1/sms/
+      appKey: 1659d01555254cd482d3e2a7b1856388
+      secretKey: e2e7edc042cd42cd82dc88fc753a2cb9
+  mq:
+    group-id: sei_notify
+    topic: sei_notify_message
+  serial:
+    service:
+      enable: true
+      url: http://10.4.208.86:8100/api-gateway/sei-serial
+  global:
+    log:
+      elk:
+        enable: true
+  mock: # 本地调试的当前用户配置
+    user:
+      tenant-code: 10044
+      account: admin
+
+notify:
+  mail:
+    default-sender: SEI系统管理员
+  test-key: test_value_on_configcenter1
+
