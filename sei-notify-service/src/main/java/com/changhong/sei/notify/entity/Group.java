@@ -1,10 +1,10 @@
 package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
-import com.changhong.sei.core.entity.BaseAuditableEntity;
 import com.changhong.sei.core.entity.ICodeUnique;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.notify.dto.GroupCategory;
+import com.changhong.sei.notify.entity.cust.GroupCust;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Table(name = "group_info")
 @DynamicInsert
 @DynamicUpdate
-public class Group extends BaseAuditableEntity implements ITenant, ICodeUnique, Serializable {
+public class Group extends GroupCust implements ITenant, ICodeUnique, Serializable {
     private static final long serialVersionUID = 182142067251684618L;
     public static final String FIELD_CODE = "code";
     /**
