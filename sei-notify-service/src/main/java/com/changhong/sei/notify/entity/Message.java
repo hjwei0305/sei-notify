@@ -5,6 +5,7 @@ import com.changhong.sei.core.entity.BaseEntity;
 import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.dto.TargetType;
+import com.changhong.sei.notify.entity.cust.MessageCust;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Table(name = "message")
 @DynamicInsert
 @DynamicUpdate
-public class Message extends BaseEntity {
+public class Message extends MessageCust {
     private static final long serialVersionUID = 8454048674835991508L;
     public static final String FIELD_CATEGORY = "category";
 
