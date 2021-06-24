@@ -1,10 +1,10 @@
 package com.changhong.sei.notify.entity;
 
 import com.changhong.sei.core.dto.serializer.EnumJsonSerializer;
-import com.changhong.sei.core.entity.BaseAuditableEntity;
 import com.changhong.sei.core.entity.ITenant;
 import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.dto.TargetType;
+import com.changhong.sei.notify.entity.cust.BulletinCust;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Entity()
 @Table(name = "bulletin")
 @Access(AccessType.FIELD)
-public class Bulletin extends BaseAuditableEntity implements ITenant {
+public class Bulletin extends BulletinCust implements ITenant {
     private static final long serialVersionUID = 1029465462675785527L;
 
     /**
