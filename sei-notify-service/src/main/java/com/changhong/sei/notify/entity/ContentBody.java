@@ -19,7 +19,7 @@ public class ContentBody extends BaseEntity {
     /**
      * 内容
      */
-    @Lob
+    // @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "content_")
     private String content;

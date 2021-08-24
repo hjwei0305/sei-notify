@@ -34,7 +34,7 @@ public class ContentTemplate extends BaseEntity {
     /**
      * 内容模板
      */
-    @Lob
+    // @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "content", nullable = false)
     private String content;
