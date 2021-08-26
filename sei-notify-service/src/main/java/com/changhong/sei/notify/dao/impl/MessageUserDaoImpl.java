@@ -106,7 +106,7 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
 
         StringBuilder where = new StringBuilder();
         where.append(" from Message b left join MessageUser u on b.id = u.msgId and u.userId = :userId ");
-        where.append(" where b.del = 0 and b.publish = 1  and b.targetValue in :targetValues ");
+        where.append(" where b.del = false and b.publish = true  and b.targetValue in :targetValues ");
         if (StringUtils.isNotBlank(val)) {
             where.append(" and b.subject like :subject ");
         }
@@ -120,7 +120,7 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
                     if (SearchFilter.Operator.EQ == filter.getOperator()) {
                         where.append(" and u.").append(filter.getFieldName()).append(" = ").append(filter.getValue());
                     } else if (SearchFilter.Operator.NU == filter.getOperator()) {
-                        where.append(" and (u.").append(filter.getFieldName()).append(" is null or u.").append(filter.getFieldName()).append(" = 0) ");
+                        where.append(" and (u.").append(filter.getFieldName()).append(" is null or u.").append(filter.getFieldName()).append(" = false) ");
                     }
                     continue;
                 }

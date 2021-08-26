@@ -25,6 +25,6 @@ public interface GroupItemDao extends BaseEntityDao<GroupItem> {
      * @param itemCodes 群组项代码
      * @return 群组集合
      */
-    @Query("select t from Group t join GroupItem u on t.id = u.groupId and u.itemCode in :itemCode where t.frozen = 0")
+    @Query("select t from Group t join GroupItem u on t.id = u.groupId and u.itemCode in :itemCode where t.frozen = false")
     List<Group> findGroups(@Param("itemCode") Set<String> itemCodes);
 }
