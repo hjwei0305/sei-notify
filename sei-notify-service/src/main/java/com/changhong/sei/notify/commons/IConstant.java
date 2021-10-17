@@ -8,4 +8,5 @@ package com.changhong.sei.notify.commons;
  */
 public interface IConstant {
 
+    String CACHE_KEY_UNREAD_COUNT = "sei:notify:unread:";
 }

@@ -10,6 +10,7 @@ import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.core.service.bo.OperateResult;
 import com.changhong.sei.edm.sdk.DocumentManager;
 import com.changhong.sei.enums.UserType;
+import com.changhong.sei.notify.commons.IConstant;
 import com.changhong.sei.notify.dao.MessageDao;
 import com.changhong.sei.notify.dao.MessageUserDao;
 import com.changhong.sei.notify.dto.MessageDto;
@@ -17,7 +18,6 @@ import com.changhong.sei.notify.dto.NotifyType;
 import com.changhong.sei.notify.dto.TargetType;
 import com.changhong.sei.notify.entity.ContentBody;
 import com.changhong.sei.notify.entity.Message;
-import com.changhong.sei.notify.entity.MessageHistory;
 import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
@@ -28,11 +28,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -59,6 +62,8 @@ public class MessageService extends BaseEntityService<Message> {
     private BasicIntegration basicIntegration;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     protected BaseEntityDao<Message> getDao() {
@@ -159,7 +164,8 @@ public class MessageService extends BaseEntityService<Message> {
         if (CollectionUtils.isNotEmpty(docIds) && Objects.nonNull(documentManager)) {
             documentManager.bindBusinessDocuments(contentId, docIds);
         }
-
+        // 清除未读消息数
+        this.clearUnreadCount();
         return ResultData.success("ok");
     }
 
@@ -186,7 +192,19 @@ public class MessageService extends BaseEntityService<Message> {
             }
             dao.save(messages);
         }
+        // 清除未读消息数
+        this.clearUnreadCount();
         return ResultData.success("ok");
+    }
+
+    /**
+     * 清除未读消息数
+     */
+    private void clearUnreadCount() {
+        Set<String> keySet = redisTemplate.keys(IConstant.CACHE_KEY_UNREAD_COUNT.concat("*"));
+        if (CollectionUtils.isNotEmpty(keySet)) {
+            redisTemplate.delete(keySet);
+        }
     }
 
     /**
@@ -253,7 +271,13 @@ public class MessageService extends BaseEntityService<Message> {
      * 获取未读消息数
      */
     public Long getUnreadCount(String userId, Set<String> targetValues) {
-        return messageUserDao.getUnreadCount(userId, targetValues);
+        BoundValueOperations<String, Object> operations = redisTemplate.boundValueOps(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+        Long count = (Long) operations.get();
+        if (Objects.isNull(count)) {
+            count = messageUserDao.getUnreadCount(userId, targetValues);
+            operations.set(count, 10, TimeUnit.HOURS);
+        }
+        return count;
     }
 
     /**
@@ -448,7 +472,7 @@ public class MessageService extends BaseEntityService<Message> {
     /**
      * 获取用户的权限集合{组织机构、岗位}
      */
-    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetValueByUser:'+#userId")
+    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetValueByUser:'+#user.userId")
     public Set<String> getTargetValueByUser(SessionUser user) {
         String userId = user.getUserId();
         Set<String> groupItem = new HashSet<>();

@@ -72,7 +72,6 @@ public class MsgController implements MsgApi {
         try {
             unread = messageService.getUnreadCount(ContextUtil.getSessionUser());
         } catch (Exception e) {
-            e.printStackTrace();
             LogUtil.error("获取未读消息数异常！", e);
             // 获取未读消息数异常！{0}
             return ResultData.fail(ContextUtil.getMessage("00013", e.getMessage()));
