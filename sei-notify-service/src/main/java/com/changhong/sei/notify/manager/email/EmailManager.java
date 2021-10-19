@@ -94,10 +94,12 @@ public class EmailManager implements NotifyManager {
             MimeMessage msg = mailSender.createMimeMessage();
             //设置发件人
             msg.setFrom(new InternetAddress(senderUsername, defaultSender));
-            //设置收件人,为数组,可输入多个地址.
+            // 设置收件人,为数组,可输入多个地址.
             List<InternetAddress> to = new ArrayList<>();
             for (EmailAccount account : message.getReceivers()) {
-                if (Objects.nonNull(account)) {
+                if (Objects.nonNull(account)
+                        && StringUtils.isNotBlank(account.getAddress())
+                        && StringUtils.isNotBlank(account.getName())) {
                     history = new MessageHistory();
                     history.setCategory(NotifyType.EMAIL);
                     history.setSubject(message.getSubject());
