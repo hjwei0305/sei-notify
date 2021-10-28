@@ -378,6 +378,9 @@ public class MessageService extends BaseEntityService<Message> {
             messageUser.setMsgId(msgId);
             builderMessageUser(messageUser, user, Boolean.TRUE);
             messageUserDao.save(messageUser);
+
+            // 清除当前用户的未读消息缓存
+            redisTemplate.delete(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
             return OperateResult.operationSuccess();
         } else {
             return OperateResult.operationFailure("参数不能为空!");
@@ -413,6 +416,8 @@ public class MessageService extends BaseEntityService<Message> {
 
                     messageUserList.add(messageUser);
                 }
+                // 清除当前用户的未读消息缓存
+                redisTemplate.delete(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
             } else {
                 for (String msgId : msgIds) {
                     messageUser = new MessageUser();
