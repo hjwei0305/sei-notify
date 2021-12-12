@@ -31,9 +31,9 @@ dependencies {
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     compile (
             //公众号（包括订阅号和服务号）
-            "com.github.binarywang:weixin-java-mp:3.6.0",
+            "com.github.binarywang:weixin-java-mp:4.2.0",
             //微信小程序
-            "com.github.binarywang:weixin-java-miniapp:3.6.0",
+            "com.github.binarywang:weixin-java-miniapp:4.2.0",
     )
     // 测试依赖包
     testImplementation(

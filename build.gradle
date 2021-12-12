@@ -38,5 +38,11 @@ subprojects {
         mavenLocal()
         maven { url REPOSITORY }
     }
+
+    configurations {
+        //在整个构建过程中排除
+//        all*.exclude group: 'javax.ws.rs', module: 'jsr311-api'
+        all*.exclude group: 'org.apache.logging.log4j'
+    }
 }
 
