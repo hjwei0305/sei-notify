@@ -33,6 +33,6 @@ public interface CorporationClient {
      * @param dto 业务实体DTO
      * @return 操作结果
      */
-    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "save", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<CorporationDto> save(@RequestBody CorporationDto dto);
 }

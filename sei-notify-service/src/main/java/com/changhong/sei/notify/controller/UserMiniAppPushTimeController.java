@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Api(value = "UserMiniAppPushTimeApi", tags = "小程序推送次数的API服务")
-@RequestMapping(path = "userMiniAppPushTime", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "userMiniAppPushTime", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserMiniAppPushTimeController extends BaseEntityController<UserMiniAppPushTime, UserMiniAppPushTimeDto>
         implements UserMiniAppPushTimeApi {
 

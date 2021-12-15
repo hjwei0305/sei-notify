@@ -40,7 +40,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param ids 群组id集合
      * @return 操作结果
      */
-    @PostMapping(path = "frozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "frozen", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "冻结群组", notes = "冻结群组")
     ResultData<String> frozen(@RequestBody List<String> ids);
 
@@ -50,7 +50,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param ids 群组id集合
      * @return 操作结果
      */
-    @PostMapping(path = "unfrozen", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "unfrozen", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "解冻群组", notes = "解冻群组")
     ResultData<String> unfrozen(@RequestBody List<String> ids);
 
@@ -78,7 +78,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupUserDtos 群组用户集合
      * @return 操作结果
      */
-    @PostMapping(path = "addGroupItem", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "addGroupItem", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "添加群组项", notes = "添加群组项")
     ResultData<String> addGroupItem(@RequestBody @Valid List<GroupItemDto> groupUserDtos);
 
@@ -88,7 +88,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupUserIds 群组用户id集合
      * @return 操作结果
      */
-    @PostMapping(path = "removeGroupItem", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "removeGroupItem", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "移除群组项", notes = "移除群组项")
     ResultData<String> removeGroupItem(@RequestBody List<String> groupUserIds);
 
@@ -105,7 +105,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
     /**
      * 获取用户账号分页数据
      */
-    @PostMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "getUserAccounts", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "获取用户账号分页数据", notes = "获取用户账号分页数据")
     ResultData<PageResult<GroupItemDto>> getUserAccounts(@RequestBody Search search);
 
@@ -115,7 +115,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param search 查询参数
      * @return 分页查询结果
      */
-    @PostMapping(path = "findPositionByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "findPositionByPage", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "分页查询岗位实体", notes = "分页查询岗位实体")
     ResultData<PageResult<PositionDto>> findPositionByPage(@RequestBody Search search);
 
@@ -125,7 +125,7 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
      * @param groupCode 群组代码
      * @return 用户id集合
      */
-    @GetMapping(path = "getUserIdsByGroup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "getUserIdsByGroup", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "根据群组获取用户id集合", notes = "根据群组获取用户id集合")
     ResultData<List<String>> getUserIdsByGroup(@RequestParam("groupCode") String groupCode);
 }

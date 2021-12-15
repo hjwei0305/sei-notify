@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RefreshScope
 @Api(value = "HelloApi", tags = "调试你好的API服务")
-@RequestMapping(path = "hello", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "hello", produces = MediaType.APPLICATION_JSON_VALUE)
 public class HelloController implements BaseHelloController, HelloApi {
     @Autowired
     private HelloService service;

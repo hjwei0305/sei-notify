@@ -117,7 +117,7 @@ public interface MsgApi {
      * @param search 查询参数
      * @return 查询结果
      */
-    @PostMapping(path = "findMessageByPage", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "findMessageByPage", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "按类型分页查询消息", notes = "按类型分页查询消息")
     ResultData<PageResult<MessageDto>> findMessageByPage(@RequestBody Search search);
 

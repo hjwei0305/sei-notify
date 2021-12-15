@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 @RestController
 @Api(value = "MessageHistoryApi", tags = "消息历史服务")
-@RequestMapping(path = "messageHistory", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "messageHistory", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MessageHistoryController extends BaseEntityController<MessageHistory, MessageHistoryDto>
         implements MessageHistoryApi {
     /**

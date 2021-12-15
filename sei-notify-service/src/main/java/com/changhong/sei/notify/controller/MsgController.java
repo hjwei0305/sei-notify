@@ -34,7 +34,7 @@ import java.util.*;
  */
 @RestController
 @Api(value = "MsgApi", tags = "站内消息管理API服务")
-@RequestMapping(path = "message", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "message", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MsgController implements MsgApi {
     @Autowired
     private MessageService messageService;

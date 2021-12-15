@@ -39,6 +39,6 @@ public interface ContentTemplateApi extends BaseEntityApi<ContentTemplateDto>
      * @param params 参数
      * @return 模板的内容
      */
-    @PostMapping(path = "getContent", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "getContent", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<String> getContent(@RequestBody @Valid ContentParams params);
 }

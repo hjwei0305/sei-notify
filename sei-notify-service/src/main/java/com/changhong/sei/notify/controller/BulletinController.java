@@ -41,7 +41,7 @@ import java.util.Set;
  */
 @RestController
 @Api(value = "BulletinApi", tags = "维护消息通告的API服务")
-@RequestMapping(path = "bulletin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "bulletin", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BulletinController extends BaseEntityController<Bulletin, BulletinDto>
         implements BulletinApi {
     @Autowired

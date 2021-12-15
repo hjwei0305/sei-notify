@@ -24,7 +24,7 @@ import java.util.Set;
  */
 @RestController
 @Api(value = "NotifyApi", tags = "平台消息通知API服务")
-@RequestMapping(path = "notify", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "notify", produces = MediaType.APPLICATION_JSON_VALUE)
 public class NotifyController implements NotifyApi {
 
     @Autowired

@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Api(value = "ContentTemplateApi", tags = "内容模板API接口")
-@RequestMapping(path = "contentTemplate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(path = "contentTemplate", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ContentTemplateController
         extends BaseEntityController<ContentTemplate, ContentTemplateDto>
         implements ContentTemplateApi {
