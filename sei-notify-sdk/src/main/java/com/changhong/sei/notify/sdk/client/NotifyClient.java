@@ -4,7 +4,6 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.notify.dto.EmailMessage;
 import com.changhong.sei.notify.dto.NotifyMessage;
 import com.changhong.sei.notify.dto.SmsMessage;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,7 @@ import java.util.List;
  * @author 王锦光 wangj
  * @version 1.0.1 2020-01-13 16:31
  */
-@FeignClient(name = "sei-notify", path = "notify")
+@FeignClient(name = "sei-notify")
 public interface NotifyClient {
 
     /**
@@ -30,7 +29,7 @@ public interface NotifyClient {
      *
      * @param message 平台消息
      */
-    @PostMapping(path = "send", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "notify/send", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<String> send(@RequestBody @Valid NotifyMessage message);
 
     /**
@@ -38,7 +37,7 @@ public interface NotifyClient {
      *
      * @param message 短信通知
      */
-    @PostMapping(path = "sendSms", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "notify/sendSms", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<String> sendSms(@RequestBody @Valid SmsMessage message);
 
     /**
@@ -46,7 +45,7 @@ public interface NotifyClient {
      *
      * @param emailMessage 电子邮件消息
      */
-    @PostMapping(path = "sendEmail", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "notify/sendEmail", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<String> sendEmail(@RequestBody EmailMessage emailMessage);
 
     /**
@@ -55,7 +54,7 @@ public interface NotifyClient {
      * @param message 系统提醒消息.消息类型为[SEI_REMIND]可不用再指定
      * @return 成功返回messageId
      */
-    @PostMapping(path = "sendRemind", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "notify/sendRemind", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<String> sendRemind(@RequestBody NotifyMessage message);
 
     /**
@@ -64,6 +63,6 @@ public interface NotifyClient {
      * @param groupCode 群组代码
      * @return 用户id集合
      */
-    @GetMapping(path = "getUserIdsByGroup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "group/getUserIdsByGroup", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResultData<List<String>> getUserIdsByGroup(@RequestParam("groupCode") String groupCode);
 }
