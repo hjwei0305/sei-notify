@@ -1,5 +1,6 @@
 package com.changhong.sei.notify.manager.email;
 
+import com.changhong.sei.core.context.ContextUtil;
 import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.log.LogUtil;
 import com.changhong.sei.edm.dto.DocumentResponse;
@@ -117,9 +118,38 @@ public class EmailManager implements NotifyManager {
                     histories.add(history);
                 }
             }
+            // 设置抄送人,为数组,可输入多个地址.
+            List<InternetAddress> cc = new ArrayList<>();
+            if (CollectionUtils.isNotEmpty(message.getCcList())) {
+                for (EmailAccount account : message.getCcList()) {
+                    if (Objects.nonNull(account)
+                            && StringUtils.isNotBlank(account.getAddress())
+                            && StringUtils.isNotBlank(account.getName())) {
+                        history = new MessageHistory();
+                        history.setCategory(NotifyType.EMAIL);
+                        history.setSubject(ContextUtil.getMessage("00001", message.getSubject()));
+                        history.setTargetType(TargetType.PERSONAL);
+                        history.setTargetValue(account.getAddress());
+                        history.setTargetName(account.getName());
+
+                        try {
+                            cc.add(new InternetAddress(account.getAddress(), account.getName()));
+                        } catch (UnsupportedEncodingException e) {
+                            history.setSendStatus(Boolean.FALSE);
+                            history.setSendLog(e.getMessage());
+                        }
+
+                        histories.add(history);
+                    }
+                }
+            }
             MimeMessageHelper helper = new MimeMessageHelper(msg, true);
             // 设置收件人
             helper.setTo(to.toArray(new InternetAddress[0]));
+            // 设置抄送人
+            if (CollectionUtils.isNotEmpty(cc)) {
+                helper.setCc(cc.toArray(new InternetAddress[0]));
+            }
             //ContentBody.RecipientType==>TO(主要接收人),CC(抄送),BCC(密件抄送);
             //设置邮件主题,如果不是UTF-8就要转换下
             helper.setSubject(message.getSubject());

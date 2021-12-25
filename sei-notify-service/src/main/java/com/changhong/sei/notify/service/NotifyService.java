@@ -183,11 +183,23 @@ public class NotifyService {
                     receivers.add(info);
                 }
             }
+            List<EmailAccount> ccAccounts = emailMessage.getCcList();
+            List<UserNotifyInfo> ccList = new ArrayList<>();
+            if (ccAccounts != null && ccAccounts.size() > 0) {
+                UserNotifyInfo info;
+                for (EmailAccount account : ccAccounts) {
+                    info = UserNotifyInfo.builder()
+                            .setUserName(account.getName())
+                            .setEmail(account.getAddress());
+                    ccList.add(info);
+                }
+            }
 
             SendMessage sendMessage = SendMessage.builder()
                     .setContent(emailMessage.getContent())
                     .setSubject(emailMessage.getSubject())
                     .setReceivers(receivers)
+                    .setCcList(ccList)
                     .setDocIds(emailMessage.getDocIds());
             if (Objects.nonNull(sender)) {
                 sendMessage.setSender(UserNotifyInfo.builder().setUserName(sender.getName()).setEmail(sender.getAddress()));

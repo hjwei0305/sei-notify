@@ -35,6 +35,10 @@ public class EmailMessage implements Serializable {
      */
     private List<EmailAccount> receivers;
     /**
+     * 抄送人清单
+     */
+    private List<EmailAccount> ccList;
+    /**
      * 内容模板代码
      */
     private String contentTemplateCode;
@@ -73,6 +77,14 @@ public class EmailMessage implements Serializable {
 
     public void setReceivers(List<EmailAccount> receivers) {
         this.receivers = receivers;
+    }
+
+    public List<EmailAccount> getCcList() {
+        return ccList;
+    }
+
+    public void setCcList(List<EmailAccount> ccList) {
+        this.ccList = ccList;
     }
 
     public String getContentTemplateCode() {

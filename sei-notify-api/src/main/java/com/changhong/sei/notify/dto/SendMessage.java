@@ -27,6 +27,10 @@ public class SendMessage implements Serializable {
      */
     private List<UserNotifyInfo> receivers;
     /**
+     * 邮件抄送人清单
+     */
+    private List<UserNotifyInfo> ccList;
+    /**
      * 发件人（可以为空）
      */
     private UserNotifyInfo sender;
@@ -68,6 +72,15 @@ public class SendMessage implements Serializable {
 
     public SendMessage setReceivers(List<UserNotifyInfo> receivers) {
         this.receivers = receivers;
+        return this;
+    }
+
+    public List<UserNotifyInfo> getCcList() {
+        return ccList;
+    }
+
+    public SendMessage setCcList(List<UserNotifyInfo> ccList) {
+        this.ccList = ccList;
         return this;
     }
 
