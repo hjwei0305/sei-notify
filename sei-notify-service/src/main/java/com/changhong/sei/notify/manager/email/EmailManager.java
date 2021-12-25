@@ -203,6 +203,7 @@ public class EmailManager implements NotifyManager {
         String content = message.getContent();
         UserNotifyInfo sender = message.getSender();
         List<UserNotifyInfo> receivers = message.getReceivers();
+        List<UserNotifyInfo> ccList = message.getCcList();
         // 构造邮件消息
         EmailMessage emailMsg = new EmailMessage();
         if (Objects.nonNull(sender) && StringUtils.isNotBlank(sender.getEmail())) {
@@ -213,6 +214,9 @@ public class EmailManager implements NotifyManager {
         List<EmailAccount> emailAccounts = new ArrayList<>();
         receivers.forEach((r) -> emailAccounts.add(new EmailAccount(r.getUserName(), r.getEmail())));
         emailMsg.setReceivers(emailAccounts);
+        List<EmailAccount> emailCcAccounts = new ArrayList<>();
+        ccList.forEach((r) -> emailCcAccounts.add(new EmailAccount(r.getUserName(), r.getEmail())));
+        emailMsg.setCcList(emailCcAccounts);
         emailMsg.setDocIds(message.getDocIds());
         // 发送邮件
         send(emailMsg);
