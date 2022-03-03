@@ -66,7 +66,10 @@ public class NotifyControllerTest extends BaseUnitTest {
         List<EmailAccount> receivers = new ArrayList<>();
         receivers.add(new EmailAccount("马超","87540704@qq.com"));
         message.setReceivers(receivers);
-        message.setDocIds(Sets.newHashSet("5f0f15c834c54f00014c8c35"));
+        List<EmailAccount> cc = new ArrayList<>();
+        cc.add(new EmailAccount("马超1","chao2.ma@changhong.com"));
+        message.setCcList(cc);
+        // message.setDocIds(Sets.newHashSet("5f0f15c834c54f00014c8c35"));
         return message;
     }
 

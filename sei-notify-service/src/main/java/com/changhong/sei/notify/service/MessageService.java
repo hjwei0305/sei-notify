@@ -23,7 +23,6 @@ import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.changhong.sei.util.EnumUtils;
-import com.changhong.sei.utils.AsyncRunUtil;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -64,8 +63,8 @@ public class MessageService extends BaseEntityService<Message> {
     private BasicIntegration basicIntegration;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private AsyncRunUtil asyncRunUtil;
+    // @Autowired
+    // private AsyncRunUtil asyncRunUtil;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -147,6 +146,10 @@ public class MessageService extends BaseEntityService<Message> {
         ContentBody body = new ContentBody(content);
         contentBodyService.save(body);
         String contentId = body.getId();
+        //绑定附件  注意:这里是通过内容id关联附件
+        if (CollectionUtils.isNotEmpty(docIds) && Objects.nonNull(documentManager)) {
+            documentManager.bindBusinessDocuments(contentId, docIds);
+        }
 
         LocalDateTime now = LocalDateTime.now();
         SessionUser user = ContextUtil.getSessionUser();
@@ -162,14 +165,10 @@ public class MessageService extends BaseEntityService<Message> {
             }
             // 保存通告
             dao.save(message);
+            if (NotifyType.SEI_REMIND == message.getCategory()) {
+                this.clearUnreadCount(message.getTargetValue());
+            }
         }
-
-        //绑定附件  注意:这里是通过内容id关联附件
-        if (CollectionUtils.isNotEmpty(docIds) && Objects.nonNull(documentManager)) {
-            documentManager.bindBusinessDocuments(contentId, docIds);
-        }
-        // 清除未读消息数
-        this.clearUnreadCount();
         return ResultData.success("ok");
     }
 
@@ -218,6 +217,19 @@ public class MessageService extends BaseEntityService<Message> {
     }
 
     /**
+     * 清除未读消息数
+     */
+    private void clearUnreadCount(String userId) {
+        CompletableFuture.runAsync(() -> {
+            try {
+                redisTemplate.delete(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+            } catch (Exception e) {
+                LogUtil.error("清除未读消息数异常", e);
+            }
+        });
+    }
+
+    /**
      * 撤销发布消息
      *
      * @param ids 撤销发布的消息id
@@ -230,7 +242,7 @@ public class MessageService extends BaseEntityService<Message> {
             return ResultData.fail(ContextUtil.getMessage("00004"));
         }
         List<Message> messages = dao.findAllById(ids);
-        if (!CollectionUtils.isEmpty(messages)) {
+        if (CollectionUtils.isNotEmpty(messages)) {
             for (Message message : messages) {
                 message.setPublish(Boolean.FALSE);
             }
@@ -243,9 +255,9 @@ public class MessageService extends BaseEntityService<Message> {
     }
 
     /**
-     * 发布消息
+     * 删除消息
      *
-     * @param ids 要发布的消息id
+     * @param ids 删除的消息id
      * @return 返回操作结果
      */
     @Transactional(rollbackFor = Exception.class)
@@ -255,7 +267,7 @@ public class MessageService extends BaseEntityService<Message> {
             return ResultData.fail(ContextUtil.getMessage("00004"));
         }
         List<Message> messages = dao.findAllById(ids);
-        if (!CollectionUtils.isEmpty(messages)) {
+        if (CollectionUtils.isNotEmpty(messages)) {
             LocalDateTime date = LocalDateTime.now();
             for (Message message : messages) {
                 message.setDel(Boolean.TRUE);
@@ -283,21 +295,22 @@ public class MessageService extends BaseEntityService<Message> {
     public Long getUnreadCount(String userId, Set<String> targetValues) {
         Long count = (Long) redisTemplate.opsForValue().get(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
         if (Objects.isNull(count)) {
-            count = 0L;
-            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), count, 3, TimeUnit.HOURS);
+            // count = 0L;
+            // redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), count, 3, TimeUnit.HOURS);
 
-            asyncRunUtil.runAsync(() -> {
-                try {
-                    TimeUnit.SECONDS.sleep(2);
+            // asyncRunUtil.runAsync(() -> {
+            //     try {
+            //         TimeUnit.SECONDS.sleep(2);
 
-                    Long sum = messageUserDao.getUnreadCount(userId, targetValues);
-                    if (Objects.nonNull(sum)) {
-                        redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
-                    }
-                } catch (Exception e) {
-                    LogUtil.error("加载维度消息数异常.", e);
-                }
-            });
+            Long sum = messageUserDao.getUnreadCount(userId, targetValues);
+            if (Objects.isNull(sum)) {
+                sum = 0L;
+            }
+            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
+            // } catch (Exception e) {
+            //     LogUtil.error("加载维度消息数异常.", e);
+            // }
+            // });
         }
         return count;
     }
@@ -396,8 +409,8 @@ public class MessageService extends BaseEntityService<Message> {
             MessageUser messageUser = messageUserDao.findByMsgIdAndUserId(msgId, userId);
             if (Objects.isNull(messageUser)) {
                 messageUser = new MessageUser();
+                messageUser.setMsgId(msgId);
             }
-            messageUser.setMsgId(msgId);
             builderMessageUser(messageUser, user, Boolean.TRUE);
             messageUserDao.save(messageUser);
 
@@ -464,7 +477,11 @@ public class MessageService extends BaseEntityService<Message> {
     private void builderMessageUser(MessageUser messageUser, SessionUser user, boolean read) {
         messageUser.setRead(read);
         messageUser.setReadDate(LocalDateTime.now());
-        messageUser.setReadNum(messageUser.getReadNum() + 1);
+        if (read) {
+            messageUser.setReadNum(Objects.nonNull(messageUser.getReadNum()) ? messageUser.getReadNum() + 1 : 1);
+        } else {
+            messageUser.setReadNum(Objects.nonNull(messageUser.getReadNum()) && messageUser.getReadNum() > 0 ? messageUser.getReadNum() - 1 : 0);
+        }
         messageUser.setUserId(user.getUserId());
         messageUser.setUserAccount(user.getAccount());
         messageUser.setUserName(user.getUserName());

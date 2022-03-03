@@ -18,22 +18,22 @@ import java.util.Set;
 public interface MessageUserExtDao {
 
     /**
-     * 获取未读通告数
+     * 获取未读消息数
      */
     Long getUnreadCount(String userId, Set<String> targetCodes);
 
     /**
-     * 获取未读通告
+     * 获取未读消息
      */
     List<Message> getUnreadMessage(String userId, Set<String> targetCodes);
 
     /**
-     * 获取优先级最高的未读通告
+     * 获取优先级最高的未读消息
      */
     Message getFirstUnreadMessage(String userId, Set<String> targetCodes);
 
     /**
-     * 分页获取用户通告
+     * 分页获取用户消息
      */
     PageResult<MessageCompose> findPage4User(Search search, String userId, Set<String> targetCodes);
 }

@@ -28,6 +28,9 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         super(MessageUser.class, entityManager);
     }
 
+    /**
+     * 获取未读通告数
+     */
     @Override
     public Long getUnreadCount(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
@@ -57,6 +60,9 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         return query;
     }
 
+    /**
+     * 获取未读消息
+     */
     @Override
     public List<Message> getUnreadMessage(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
@@ -72,6 +78,9 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         return query.getResultList();
     }
 
+    /**
+     * 获取优先级最高的未读消息
+     */
     @Override
     public Message getFirstUnreadMessage(String userId, Set<String> targetValues) {
         StringBuilder jpql = new StringBuilder();
@@ -92,6 +101,9 @@ public class MessageUserDaoImpl extends BaseEntityDaoImpl<MessageUser> implement
         }
     }
 
+    /**
+     * 分页获取用户消息
+     */
     @Override
     public PageResult<MessageCompose> findPage4User(Search search, String userId, Set<String> targetCodes) {
         PageInfo pageInfo = search.getPageInfo();
