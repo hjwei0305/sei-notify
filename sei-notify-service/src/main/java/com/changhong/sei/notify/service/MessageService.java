@@ -23,6 +23,7 @@ import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
 import com.changhong.sei.notify.service.cust.BasicIntegration;
 import com.changhong.sei.util.EnumUtils;
+import com.changhong.sei.utils.AsyncRunUtil;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -63,8 +64,8 @@ public class MessageService extends BaseEntityService<Message> {
     private BasicIntegration basicIntegration;
     @Autowired
     private ModelMapper modelMapper;
-    // @Autowired
-    // private AsyncRunUtil asyncRunUtil;
+    @Autowired
+    private AsyncRunUtil asyncRunUtil;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -295,22 +296,20 @@ public class MessageService extends BaseEntityService<Message> {
     public Long getUnreadCount(String userId, Set<String> targetValues) {
         Long count = (Long) redisTemplate.opsForValue().get(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
         if (Objects.isNull(count)) {
-            // count = 0L;
-            // redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), count, 3, TimeUnit.HOURS);
+            count = 0L;
+            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), count, 3, TimeUnit.HOURS);
 
-            // asyncRunUtil.runAsync(() -> {
-            //     try {
-            //         TimeUnit.SECONDS.sleep(2);
-
-            Long sum = messageUserDao.getUnreadCount(userId, targetValues);
-            if (Objects.isNull(sum)) {
-                sum = 0L;
-            }
-            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
-            // } catch (Exception e) {
-            //     LogUtil.error("加载维度消息数异常.", e);
-            // }
-            // });
+            asyncRunUtil.runAsync(() -> {
+                try {
+                    Long sum = messageUserDao.getUnreadCount(userId, targetValues);
+                    if (Objects.isNull(sum)) {
+                        sum = 0L;
+                    }
+                    redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
+                } catch (Exception e) {
+                    LogUtil.error("加载维度消息数异常.", e);
+                }
+            });
         }
         return count;
     }
@@ -415,7 +414,9 @@ public class MessageService extends BaseEntityService<Message> {
             messageUserDao.save(messageUser);
 
             // 清除当前用户的未读消息缓存
-            redisTemplate.delete(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+            Long sum = (Long) redisTemplate.opsForValue().get(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+            sum = Objects.nonNull(sum) && sum > 0 ? sum - 1 : 0;
+            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
             return OperateResult.operationSuccess();
         } else {
             return OperateResult.operationFailure("参数不能为空!");
