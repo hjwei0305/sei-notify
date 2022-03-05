@@ -29,7 +29,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -223,11 +222,15 @@ public class MessageService extends BaseEntityService<Message> {
     private void clearUnreadCount(String userId) {
         CompletableFuture.runAsync(() -> {
             try {
-                redisTemplate.delete(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+                redisTemplate.delete(this.getUserCacheKey(userId));
             } catch (Exception e) {
                 LogUtil.error("清除未读消息数异常", e);
             }
         });
+    }
+
+    private String getUserCacheKey(String userId) {
+        return IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId).concat("_");
     }
 
     /**
@@ -285,28 +288,21 @@ public class MessageService extends BaseEntityService<Message> {
      * 获取未读消息数
      */
     public Long getUnreadCount(SessionUser user) {
-        Set<String> targetValues = getTargetValueByUser(user);
-
-        return getUnreadCount(user.getUserId(), targetValues);
-    }
-
-    /**
-     * 获取未读消息数
-     */
-    public Long getUnreadCount(String userId, Set<String> targetValues) {
-        Long count = (Long) redisTemplate.opsForValue().get(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+        String userId = user.getUserId();
+        Long count = (Long) redisTemplate.opsForValue().get(this.getUserCacheKey(userId));
         LogUtil.bizLog("用户[{}]的消息数:{}", userId, count);
         if (Objects.isNull(count)) {
             count = 0L;
-            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), count, 3, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set(this.getUserCacheKey(userId), count, 3, TimeUnit.HOURS);
 
             asyncRunUtil.runAsync(() -> {
+                Set<String> targetValues = this.getTargetValueByUser(user);
                 try {
                     Long sum = messageUserDao.getUnreadCount(userId, targetValues);
                     if (Objects.isNull(sum)) {
                         sum = 0L;
                     }
-                    redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
+                    redisTemplate.opsForValue().set(this.getUserCacheKey(userId), sum, 3, TimeUnit.HOURS);
                 } catch (Exception e) {
                     LogUtil.error("加载维度消息数异常.", e);
                 }
@@ -415,9 +411,9 @@ public class MessageService extends BaseEntityService<Message> {
             messageUserDao.save(messageUser);
 
             // 清除当前用户的未读消息缓存
-            Long sum = (Long) redisTemplate.opsForValue().get(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+            Long sum = (Long) redisTemplate.opsForValue().get(this.getUserCacheKey(userId));
             sum = Objects.nonNull(sum) && sum > 0 ? sum - 1 : 0;
-            redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), sum, 3, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set(this.getUserCacheKey(userId), sum, 3, TimeUnit.HOURS);
             return OperateResult.operationSuccess();
         } else {
             return OperateResult.operationFailure("参数不能为空!");
@@ -468,7 +464,7 @@ public class MessageService extends BaseEntityService<Message> {
             }
 
             // 清除当前用户的未读消息缓存
-            redisTemplate.delete(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+            redisTemplate.delete(this.getUserCacheKey(userId));
 
             return ResultData.success("OK");
         } else {
@@ -520,37 +516,39 @@ public class MessageService extends BaseEntityService<Message> {
     /**
      * 获取用户的权限集合{组织机构、岗位}
      */
-    @Cacheable(value = "UserAuthorizedFeaturesCache", key = "'TargetValueByUser:'+#user.userId")
     public Set<String> getTargetValueByUser(SessionUser user) {
         String userId = user.getUserId();
-        Set<String> groupItem = new HashSet<>();
-        if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
-            // 获取用户的组织代码清单
-            ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
-            if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
-                groupItem.addAll(orgCodesResult.getData());
+        String key = IConstant.CACHE_KEY_TARGET_VALUE.concat(userId);
+        Set<String> targetValues = (Set<String>) redisTemplate.opsForValue().get(key);
+        if (CollectionUtils.isEmpty(targetValues)) {
+            Set<String> groupItem = new HashSet<>();
+            if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
+                // 获取用户的组织代码清单
+                ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
+                if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
+                    groupItem.addAll(orgCodesResult.getData());
+                }
+                // 获取用户岗位代码清单
+                ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
+                if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
+                    groupItem.addAll(positionCodesResult.getData());
+                }
             }
-            // 获取用户岗位代码清单
-            ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
-            if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-                groupItem.addAll(positionCodesResult.getData());
+
+            groupItem.add(user.getAccount());
+
+            targetValues = Sets.newHashSet();
+            // 添加群组
+            ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
+            if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
+                targetValues.addAll(groupCodeResult.getData());
             }
+
+            // 添加用户id,获取个人点对点消息
+            targetValues.add(userId);
+            // 添加系统消息
+            targetValues.add(TargetType.SYSTEM.name());
         }
-
-        groupItem.add(user.getAccount());
-
-        Set<String> targetValues = Sets.newHashSet();
-        // 添加群组
-        ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
-        if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
-            targetValues.addAll(groupCodeResult.getData());
-        }
-
-        // 添加用户id,获取个人点对点消息
-        targetValues.add(userId);
-        // 添加系统消息
-        targetValues.add(TargetType.SYSTEM.name());
-
         return targetValues;
     }
 }
