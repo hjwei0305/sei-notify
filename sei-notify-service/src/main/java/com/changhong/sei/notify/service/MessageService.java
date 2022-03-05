@@ -230,6 +230,7 @@ public class MessageService extends BaseEntityService<Message> {
     }
 
     private String getUserCacheKey(String userId) {
+        // 用户退出或权限更新时,有按用户id为后缀匹配删除缓存的情况,故追加一个下划线避免删除消息数缓存
         return IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId).concat("_");
     }
 
