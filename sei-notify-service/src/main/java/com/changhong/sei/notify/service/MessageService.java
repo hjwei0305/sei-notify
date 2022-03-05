@@ -295,6 +295,7 @@ public class MessageService extends BaseEntityService<Message> {
      */
     public Long getUnreadCount(String userId, Set<String> targetValues) {
         Long count = (Long) redisTemplate.opsForValue().get(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId));
+        LogUtil.bizLog("用户[{}]的消息数:{}", userId, count);
         if (Objects.isNull(count)) {
             count = 0L;
             redisTemplate.opsForValue().set(IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId), count, 3, TimeUnit.HOURS);
