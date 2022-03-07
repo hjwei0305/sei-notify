@@ -203,7 +203,7 @@ public class MessageService extends BaseEntityService<Message> {
     /**
      * 清除未读消息数
      */
-    private void clearUnreadCount() {
+    public void clearUnreadCount() {
         CompletableFuture.runAsync(() -> {
             try {
                 Set<String> keySet = redisTemplate.keys(IConstant.CACHE_KEY_UNREAD_COUNT.concat("*"));
@@ -219,7 +219,7 @@ public class MessageService extends BaseEntityService<Message> {
     /**
      * 清除未读消息数
      */
-    private void clearUnreadCount(String userId) {
+    public void clearUnreadCount(String userId) {
         CompletableFuture.runAsync(() -> {
             try {
                 redisTemplate.delete(this.getUserCacheKey(userId));
@@ -229,7 +229,7 @@ public class MessageService extends BaseEntityService<Message> {
         });
     }
 
-    private String getUserCacheKey(String userId) {
+    public String getUserCacheKey(String userId) {
         // 用户退出或权限更新时,有按用户id为后缀匹配删除缓存的情况,故追加一个下划线避免删除消息数缓存
         return IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId).concat("_");
     }
