@@ -313,10 +313,21 @@ public class MessageService extends BaseEntityService<Message> {
     }
 
     /**
+     * 获取未读消息数
+     */
+    public Long getUnreadCount(String userId, Set<String> targetValues) {
+        Long sum = messageUserDao.getUnreadCount(userId, targetValues);
+        if (Objects.isNull(sum)) {
+            sum = 0L;
+        }
+        return sum;
+    }
+
+    /**
      * 获取未读消息
      */
     public Map<String, List<MessageDto>> getUnreadMessage(SessionUser user) {
-        Set<String> targetValues = getTargetValueByUser(user);
+        Set<String> targetValues = this.getTargetValueByUser(user);
 
         return getUnreadMessage(user.getUserId(), targetValues);
     }
@@ -351,7 +362,7 @@ public class MessageService extends BaseEntityService<Message> {
      * 获取优先级最高的未读消息
      */
     public Message getFirstUnreadMessage(SessionUser user) {
-        Set<String> targetValues = getTargetValueByUser(user);
+        Set<String> targetValues = this.getTargetValueByUser(user);
 
         return getFirstUnreadMessage(user.getUserId(), targetValues);
     }
@@ -380,7 +391,7 @@ public class MessageService extends BaseEntityService<Message> {
      * 分页获取用户消息
      */
     public PageResult<MessageCompose> findPage4User(Search search, SessionUser user) {
-        Set<String> targetValues = getTargetValueByUser(user);
+        Set<String> targetValues = this.getTargetValueByUser(user);
 
         return findPage4User(search, user.getUserId(), targetValues);
     }
@@ -549,6 +560,7 @@ public class MessageService extends BaseEntityService<Message> {
             targetValues.add(userId);
             // 添加系统消息
             targetValues.add(TargetType.SYSTEM.name());
+            redisTemplate.opsForValue().set(key, targetValues, 1, TimeUnit.DAYS);
         }
         return targetValues;
     }
