@@ -231,7 +231,8 @@ public class MessageService extends BaseEntityService<Message> {
 
     public String getUserCacheKey(String userId) {
         // 用户退出或权限更新时,有按用户id为后缀匹配删除缓存的情况,故追加一个下划线避免删除消息数缓存
-        return IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId).concat("_");
+        // return IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId).concat("_");
+        return IConstant.CACHE_KEY_UNREAD_COUNT.concat(userId);
     }
 
     /**
@@ -533,34 +534,37 @@ public class MessageService extends BaseEntityService<Message> {
         String key = IConstant.CACHE_KEY_TARGET_VALUE.concat(userId);
         Set<String> targetValues = (Set<String>) redisTemplate.opsForValue().get(key);
         if (CollectionUtils.isEmpty(targetValues)) {
-            Set<String> groupItem = new HashSet<>();
-            if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
-                // 获取用户的组织代码清单
-                ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
-                if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
-                    groupItem.addAll(orgCodesResult.getData());
-                }
-                // 获取用户岗位代码清单
-                ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
-                if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-                    groupItem.addAll(positionCodesResult.getData());
-                }
-            }
-
-            groupItem.add(user.getAccount());
-
             targetValues = Sets.newHashSet();
-            // 添加群组
-            ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
-            if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
-                targetValues.addAll(groupCodeResult.getData());
-            }
-
             // 添加用户id,获取个人点对点消息
             targetValues.add(userId);
             // 添加系统消息
             targetValues.add(TargetType.SYSTEM.name());
-            redisTemplate.opsForValue().set(key, targetValues, 1, TimeUnit.DAYS);
+
+            Set<String> values = Sets.newHashSet(targetValues);
+            asyncRunUtil.runAsync(() -> {
+                Set<String> groupItem = new HashSet<>();
+                if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
+                    // 获取用户的组织代码清单
+                    ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
+                    if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
+                        groupItem.addAll(orgCodesResult.getData());
+                    }
+                    // 获取用户岗位代码清单
+                    ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
+                    if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
+                        groupItem.addAll(positionCodesResult.getData());
+                    }
+                }
+
+                groupItem.add(user.getAccount());
+
+                // 添加群组
+                ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
+                if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
+                    values.addAll(groupCodeResult.getData());
+                }
+                redisTemplate.opsForValue().set(key, values, 1, TimeUnit.DAYS);
+            });
         }
         return targetValues;
     }
