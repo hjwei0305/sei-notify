@@ -15,7 +15,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.Set;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-05-24 23:37
  */
-@Component("SEI_REMIND")
 public class RemindManager implements NotifyManager {
     private static final Logger LOG = LoggerFactory.getLogger(RemindManager.class);
     @Autowired

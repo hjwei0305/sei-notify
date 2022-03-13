@@ -35,6 +35,12 @@ dependencies {
             //微信小程序
             "com.github.binarywang:weixin-java-miniapp:4.2.0",
     )
+
+    compile(
+            // 阿里云短消息
+            "com.aliyun:dysmsapi20170525:2.0.9"
+    )
+
     // 测试依赖包
     testImplementation(
             "com.changhong.sei:sei-test-starter:$sei_version"

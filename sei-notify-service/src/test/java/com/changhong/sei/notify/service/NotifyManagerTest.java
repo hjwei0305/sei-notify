@@ -19,9 +19,9 @@ public class NotifyManagerTest extends BaseUnitTest {
 
     @Test
     public void send(){
-        String notifyType = "SMS";
-        SendMessage message = new SendMessage();
-        message.setContent("测试一个短信");
-        context.send(notifyType, message);
+        // String notifyType = "SMS";
+        // SendMessage message = new SendMessage();
+        // message.setContent("测试一个短信");
+        // context.send(notifyType, message);
     }
 }

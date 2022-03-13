@@ -40,9 +40,14 @@ sei:
   notify:
     sms:
       enable: true
+      provider: matrix
       host: https://ccp-sms-api.changhong.com/v1/sms/
       appKey: 1659d01555254cd482d3e2a7b1856388
       secretKey: e2e7edc042cd42cd82dc88fc753a2cb9
+#      provider: aliyun
+#      host: dysmsapi.aliyuncs.com
+#      appKey: LTAI5tB2945UkZ3yguYYPP38
+#      secretKey: S5bGvxP4EmvyHIdaVGd6pvId2mHVBr
   mq:
     group-id: sei_notify
     topic: sei_notify_message

@@ -40,8 +40,7 @@ public class EmailManagerTest extends BaseUnitTest {
         params.put("password","123456");
         // message.setContentTemplateParams(params);
         List<EmailAccount> receivers = new ArrayList<>();
-        receivers.add(new EmailAccount("王锦光","elegancelight@qq.com"));
-        receivers.add(new EmailAccount("冯华","hua.feng@changhong.com"));
+        receivers.add(new EmailAccount("MAC","87540704@qq.com"));
         message.setReceivers(receivers);
         // 设置消息内容;
         // contentBuilder.build(message);

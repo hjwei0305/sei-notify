@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.Objects;
  * @author 马超(Vision.Mac)
  * @version 1.0.00  2020-05-24 23:37
  */
-@Component("MiniApp")
 public class MiniAppManager implements NotifyManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(MiniAppManager.class);
@@ -62,11 +60,11 @@ public class MiniAppManager implements NotifyManager {
         List<UserNotifyInfo> receivers = message.getReceivers();
         try {
             //格式化模板内容
-            MiniAppTemplate template = JsonUtils.fromJson(content,MiniAppTemplate.class);
+            MiniAppTemplate template = JsonUtils.fromJson(content, MiniAppTemplate.class);
             message.setSubject(template.getTitle());
             List<MiniAppTemplateParam> params = template.getData();
-            StringBuilder sb  = new StringBuilder();
-            for (MiniAppTemplateParam param : params){
+            StringBuilder sb = new StringBuilder();
+            for (MiniAppTemplateParam param : params) {
                 sb.append(param.getDesc()).append(":").append(param.getValue()).append("<br>");
             }
             content = sb.toString();

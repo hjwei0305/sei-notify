@@ -11,6 +11,7 @@ import com.changhong.sei.notify.entity.MessageHistory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ import java.util.Set;
  * @author sei
  * @since 2020-06-11 14:36:17
  */
-@Service("messageHistoryService")
+@Service
 public class MessageHistoryService extends BaseEntityService<MessageHistory> {
     @Autowired
     private MessageHistoryDao dao;
@@ -40,9 +41,14 @@ public class MessageHistoryService extends BaseEntityService<MessageHistory> {
         return dao;
     }
 
-    @Transactional
+    @Async
+    @Transactional(rollbackFor = Exception.class)
     public ResultData<String> recordHistory(List<MessageHistory> histories, String content, boolean success, String log, Set<String> docIds) {
         LogUtil.debug("记录消息历史内容:{0}", content);
+        if (CollectionUtils.isEmpty(histories)) {
+            // 消息发送历史记录失败,历史记录不能为空
+            return ResultData.fail("00021");
+        }
         String contentId;
         if (StringUtils.isNotBlank(content)) {
             ContentBody contentBody = new ContentBody(content);
