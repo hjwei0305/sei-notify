@@ -21,7 +21,7 @@ public class EmployeeClientTest extends BaseUnitTest {
     @Test
     public void getEmployeeOrgCodes(){
         String userId = "B54E8964-D14D-11E8-A64B-0242C0A8441B";
-        ResultData resultData = integration.getEmployeeOrgCodes(userId);
+        ResultData resultData = integration.getEmployeeOrgIds(userId);
         System.out.println(JsonUtils.toJson(resultData));
         Assert.assertTrue(resultData.successful());
     }

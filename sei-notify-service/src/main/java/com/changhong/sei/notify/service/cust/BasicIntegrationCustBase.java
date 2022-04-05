@@ -5,15 +5,9 @@ import com.changhong.sei.core.dto.ResultData;
 import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.notify.dto.*;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,31 +44,31 @@ public class BasicIntegrationCustBase implements BasicIntegration {
     }
 
     /**
-     * 获取用户的组织机构代码清单
+     * 获取用户的组织机构Id清单
      *
      * @param userId 用户Id
-     * @return 组织机构代码清单
+     * @return 组织机构Id清单
      */
     @Override
-    public ResultData<List<String>> getEmployeeOrgCodes(String userId) {
+    public ResultData<List<String>> getEmployeeOrgIds(String userId) {
         Map<String, String> params = new HashMap<>();
         params.put("userId", userId);
-        return apiTemplate.getByAppModuleCode(basicServiceName, "/employee/getEmployeeOrgCodes", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByAppModuleCode(basicServiceName, "/employee/getEmployeeOrgIds", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
 //        return employeeClient.getEmployeeOrgCodes(userId);
     }
 
     /**
-     * 获取用户的岗位代码清单
+     * 获取用户的岗位Id清单
      *
      * @param userId 用户Id
-     * @return 岗位代码清单
+     * @return 岗位Id清单
      */
     @Override
-    public ResultData<List<String>> getEmployeePositionCodes(String userId) {
+    public ResultData<List<String>> getEmployeePositionIds(String userId) {
         Map<String, String> params = new HashMap<>();
         params.put("userId", userId);
-        return apiTemplate.getByAppModuleCode(basicServiceName, "/employee/getEmployeePositionCodes", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.getByAppModuleCode(basicServiceName, "/employee/getEmployeePositionIds", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, params);
 //        return employeeClient.getEmployeePositionCodes(userId);
     }
@@ -112,7 +106,7 @@ public class BasicIntegrationCustBase implements BasicIntegration {
      */
     @Override
     public ResultData<List<String>> getUserIdsByPosition(Set<String> positionCodes) {
-        return apiTemplate.postByAppModuleCode("sei-basic", "/position/getUserIdsByPositionCode", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.postByAppModuleCode(basicServiceName, "/position/getUserIdsByPositionCode", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, positionCodes);
     }
 
@@ -129,12 +123,35 @@ public class BasicIntegrationCustBase implements BasicIntegration {
     }
 
     /**
-     * 按岗位获取接收者
+     * 分页查询角色实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    @Override
+    public ResultData<PageResult<RoleDto>> findRoleByPage(Search search) {
+        return apiTemplate.postByAppModuleCode(basicServiceName, "/featureRole/findByPage", new ParameterizedTypeReference<ResultData<PageResult<RoleDto>>>() {
+        }, search);
+    }
+
+    /**
+     * 按角色获取接收者
      */
     @Override
     public ResultData<List<String>> getUserIdsByRole(Set<String> featureRoleCodes) {
-        return apiTemplate.postByAppModuleCode("sei-basic", "/featureRole/getUserIdsByFeatureRole", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        return apiTemplate.postByAppModuleCode(basicServiceName, "/featureRole/getUserIdsByFeatureRole", new ParameterizedTypeReference<ResultData<List<String>>>() {
         }, featureRoleCodes);
     }
 
+    /**
+     * 获取用户的角色id清单
+     *
+     * @param userId 用户Id
+     * @return 角色id清单
+     */
+    @Override
+    public ResultData<List<String>> getRoleIds(String userId) {
+        return apiTemplate.postByAppModuleCode(basicServiceName, "/userFeatureRole/getRoleIdsByUserId", new ParameterizedTypeReference<ResultData<List<String>>>() {
+        }, userId);
+    }
 }

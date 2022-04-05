@@ -99,12 +99,12 @@ public class GroupService extends BaseEntityService<Group> {
     /**
      * 获取指定用户拥有的群组
      *
-     * @param itemCodes 群组项code
+     * @param itemIds 群组项id
      * @return 返回指定用户拥有的群组
      */
-    public ResultData<Set<String>> getGroupCodes(Set<String> itemCodes) {
+    public ResultData<Set<String>> getGroupCodeByItemIds(Set<String> itemIds) {
         Set<String> result = Sets.newHashSet();
-        List<Group> groups = groupUserDao.findGroups(itemCodes);
+        List<Group> groups = groupUserDao.findGroups(itemIds);
         if (CollectionUtils.isNotEmpty(groups)) {
             result = groups.stream().map(Group::getId).collect(Collectors.toSet());
         }
@@ -138,6 +138,15 @@ public class GroupService extends BaseEntityService<Group> {
                     case POS:
                         codeSet = items.stream().map(GroupItem::getItemCode).collect(Collectors.toSet());
                         resultData = integration.getUserIdsByPosition(codeSet);
+                        if (resultData.successful()) {
+                            result = resultData.getData();
+                        } else {
+                            LogUtil.error(resultData.getMessage());
+                        }
+                        break;
+                    case ROLE:
+                        codeSet = items.stream().map(GroupItem::getItemCode).collect(Collectors.toSet());
+                        resultData = integration.getUserIdsByRole(codeSet);
                         if (resultData.successful()) {
                             result = resultData.getData();
                         } else {

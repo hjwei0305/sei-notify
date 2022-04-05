@@ -21,29 +21,6 @@ import java.util.Set;
  * @version 1.0.00  2020-05-25 06:37
  */
 public interface BasicIntegration {
-    /**
-     * 分页查询业务实体
-     *
-     * @param search 查询参数
-     * @return 分页查询结果
-     */
-    ResultData<PageResult<AccountResponse>> findAccountByPage(Search search);
-
-    /**
-     * 获取用户的组织机构代码清单
-     *
-     * @param userId 用户Id
-     * @return 组织机构代码清单
-     */
-    ResultData<List<String>> getEmployeeOrgCodes(String userId);
-
-    /**
-     * 获取用户的岗位代码清单
-     *
-     * @param userId 用户Id
-     * @return 岗位代码清单
-     */
-    ResultData<List<String>> getEmployeePositionCodes(String userId);
 
     /**
      * 获取当前用户有权限的树形组织实体清单
@@ -61,10 +38,22 @@ public interface BasicIntegration {
      */
     ResultData<List<UserNotifyInfo>> findNotifyInfoByUserIds(List<String> userIds);
 
+
     /**
-     * 按岗位获取接收者
+     * 分页查询业务实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
      */
-    ResultData<List<String>> getUserIdsByPosition(Set<String> positionCode);
+    ResultData<PageResult<AccountResponse>> findAccountByPage(Search search);
+
+    /**
+     * 获取用户的组织机构Id清单
+     *
+     * @param userId 用户Id
+     * @return 组织机构Id清单
+     */
+    ResultData<List<String>> getEmployeeOrgIds(String userId);
 
     /**
      * 分页查询岗位实体
@@ -77,6 +66,35 @@ public interface BasicIntegration {
     /**
      * 按岗位获取接收者
      */
+    ResultData<List<String>> getUserIdsByPosition(Set<String> positionCode);
+
+    /**
+     * 获取用户的岗位Id清单
+     *
+     * @param userId 用户Id
+     * @return 岗位Id清单
+     */
+    ResultData<List<String>> getEmployeePositionIds(String userId);
+
+    /**
+     * 分页查询角色实体
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    ResultData<PageResult<RoleDto>> findRoleByPage(Search search);
+
+    /**
+     * 按岗位获取接收者
+     */
     ResultData<List<String>> getUserIdsByRole(Set<String> featureRoleCode);
+
+    /**
+     * 获取用户的角色id清单
+     *
+     * @param userId 用户Id
+     * @return 角色id清单
+     */
+    ResultData<List<String>> getRoleIds(String userId);
 
 }

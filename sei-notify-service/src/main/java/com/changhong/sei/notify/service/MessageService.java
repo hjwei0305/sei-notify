@@ -542,24 +542,29 @@ public class MessageService extends BaseEntityService<Message> {
 
             Set<String> values = Sets.newHashSet(targetValues);
             asyncRunUtil.runAsync(() -> {
-                Set<String> groupItem = new HashSet<>();
+                Set<String> groupItemIds = new HashSet<>();
                 if (!user.isAnonymous() && UserType.Employee == user.getUserType()) {
-                    // 获取用户的组织代码清单
-                    ResultData<List<String>> orgCodesResult = basicIntegration.getEmployeeOrgCodes(userId);
-                    if (orgCodesResult.successful() && CollectionUtils.isNotEmpty(orgCodesResult.getData())) {
-                        groupItem.addAll(orgCodesResult.getData());
+                    // 获取用户的组织清单
+                    ResultData<List<String>> orgIdsResult = basicIntegration.getEmployeeOrgIds(userId);
+                    if (orgIdsResult.successful() && CollectionUtils.isNotEmpty(orgIdsResult.getData())) {
+                        groupItemIds.addAll(orgIdsResult.getData());
                     }
-                    // 获取用户岗位代码清单
-                    ResultData<List<String>> positionCodesResult = basicIntegration.getEmployeePositionCodes(userId);
-                    if (positionCodesResult.successful() && CollectionUtils.isNotEmpty(positionCodesResult.getData())) {
-                        groupItem.addAll(positionCodesResult.getData());
+                    // 获取用户岗位清单
+                    ResultData<List<String>> positionIdsResult = basicIntegration.getEmployeePositionIds(userId);
+                    if (positionIdsResult.successful() && CollectionUtils.isNotEmpty(positionIdsResult.getData())) {
+                        groupItemIds.addAll(positionIdsResult.getData());
+                    }
+                    // 获取用户角色清单
+                    ResultData<List<String>> roleIdsResult = basicIntegration.getRoleIds(userId);
+                    if (roleIdsResult.successful() && CollectionUtils.isNotEmpty(roleIdsResult.getData())) {
+                        groupItemIds.addAll(roleIdsResult.getData());
                     }
                 }
 
-                groupItem.add(user.getAccount());
+                groupItemIds.add(userId);
 
                 // 添加群组
-                ResultData<Set<String>> groupCodeResult = groupService.getGroupCodes(groupItem);
+                ResultData<Set<String>> groupCodeResult = groupService.getGroupCodeByItemIds(groupItemIds);
                 if (groupCodeResult.successful() && CollectionUtils.isNotEmpty(groupCodeResult.getData())) {
                     values.addAll(groupCodeResult.getData());
                 }

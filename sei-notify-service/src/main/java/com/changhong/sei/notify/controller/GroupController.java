@@ -6,10 +6,7 @@ import com.changhong.sei.core.dto.serach.PageResult;
 import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.core.service.BaseEntityService;
 import com.changhong.sei.notify.api.GroupApi;
-import com.changhong.sei.notify.dto.AccountResponse;
-import com.changhong.sei.notify.dto.GroupDto;
-import com.changhong.sei.notify.dto.GroupItemDto;
-import com.changhong.sei.notify.dto.PositionDto;
+import com.changhong.sei.notify.dto.*;
 import com.changhong.sei.notify.entity.Group;
 import com.changhong.sei.notify.entity.GroupItem;
 import com.changhong.sei.notify.service.GroupService;
@@ -64,7 +61,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 操作结果
      */
     @Override
-    public ResultData<String> delete(@PathVariable("id") String id) {
+    public ResultData<String> delete(String id) {
         // 屏蔽delete,使用冻结
         return ResultData.fail("接口不可用");
     }
@@ -118,7 +115,7 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
      * @return 操作结果
      */
     @Override
-    public ResultData<String> addGroupItem(@Valid List<GroupItemDto> groupUserDtos) {
+    public ResultData<String> addGroupItem(List<GroupItemDto> groupUserDtos) {
         if (CollectionUtils.isNotEmpty(groupUserDtos)) {
             List<GroupItem> groupUsers = groupUserDtos.stream().map(
                     v -> itemModelMapper.map(v, GroupItem.class)
@@ -199,6 +196,17 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
     @Override
     public ResultData<PageResult<PositionDto>> findPositionByPage(Search search) {
         return basicIntegration.findPositionByPage(search);
+    }
+
+    /**
+     * 分页查询功能角色
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    @Override
+    public ResultData<PageResult<RoleDto>> findRoleByPage(Search search) {
+        return basicIntegration.findRoleByPage(search);
     }
 
     /**

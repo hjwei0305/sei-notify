@@ -7,13 +7,11 @@ import com.changhong.sei.core.dto.serach.Search;
 import com.changhong.sei.notify.dto.GroupDto;
 import com.changhong.sei.notify.dto.GroupItemDto;
 import com.changhong.sei.notify.dto.PositionDto;
+import com.changhong.sei.notify.dto.RoleDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -118,6 +116,16 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
     @PostMapping(path = "findPositionByPage", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "分页查询岗位实体", notes = "分页查询岗位实体")
     ResultData<PageResult<PositionDto>> findPositionByPage(@RequestBody Search search);
+
+    /**
+     * 分页查询功能角色
+     *
+     * @param search 查询参数
+     * @return 分页查询结果
+     */
+    @PostMapping(path = "findRoleByPage", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "分页查询功能角色", notes = "分页查询功能角色")
+    ResultData<PageResult<RoleDto>> findRoleByPage(@RequestBody Search search);
 
     /**
      * 根据群组获取用户id集合
