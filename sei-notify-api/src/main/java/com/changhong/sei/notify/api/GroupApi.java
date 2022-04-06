@@ -127,13 +127,4 @@ public interface GroupApi extends BaseEntityApi<GroupDto> {
     @ApiOperation(value = "分页查询功能角色", notes = "分页查询功能角色")
     ResultData<PageResult<RoleDto>> findRoleByPage(@RequestBody Search search);
 
-    /**
-     * 根据群组获取用户id集合
-     *
-     * @param groupCode 群组代码
-     * @return 用户id集合
-     */
-    @GetMapping(path = "getUserIdsByGroup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "根据群组获取用户id集合", notes = "根据群组获取用户id集合")
-    ResultData<List<String>> getUserIdsByGroup(@RequestParam("groupCode") String groupCode);
 }

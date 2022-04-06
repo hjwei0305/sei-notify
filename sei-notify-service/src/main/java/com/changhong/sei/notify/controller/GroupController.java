@@ -18,11 +18,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -209,14 +207,4 @@ public class GroupController extends BaseEntityController<Group, GroupDto> imple
         return basicIntegration.findRoleByPage(search);
     }
 
-    /**
-     * 根据群组获取用户id集合
-     *
-     * @param groupCode 群组代码
-     * @return 用户id集合
-     */
-    @Override
-    public ResultData<List<String>> getUserIdsByGroup(String groupCode) {
-        return service.getUserIdsByGroup(groupCode);
-    }
 }
