@@ -82,12 +82,12 @@ public class SmsManager implements NotifyManager {
             if (success) {
                 String[] phoneNums = phoneNumSet.toArray(new String[0]);
 
-                String provider = properties.getProvider();
-                if (StringUtils.isBlank(provider)) {
-                    provider = DEFAULT_HANDLER_KEY;
-                }
+                //String provider = properties.getProvider();
+                //if (StringUtils.isBlank(provider)) {
+                //    provider = DEFAULT_HANDLER_KEY;
+                //}
 
-                AbstractSmsHandler smsHandler = SMS_HANDLER_MAP.get(provider);
+                AbstractSmsHandler smsHandler = SMS_HANDLER_MAP.get(DEFAULT_HANDLER_KEY);
                 ResultData<Void> resultData = smsHandler.send(properties, phoneNums, message.getContent());
                 if (resultData.failed()) {
                     success = Boolean.FALSE;
