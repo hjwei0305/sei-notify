@@ -14,6 +14,7 @@ import com.changhong.sei.notify.dto.Priority;
 import com.changhong.sei.notify.entity.Message;
 import com.changhong.sei.notify.entity.MessageUser;
 import com.changhong.sei.notify.entity.compose.MessageCompose;
+import com.changhong.sei.notify.manager.sms.XbSmsHandler;
 import com.changhong.sei.notify.service.MessageService;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
@@ -222,6 +223,16 @@ public class MsgController implements MsgApi {
         composes.clear();
 
         return ResultData.success(result);
+    }
+
+    @Override
+    public ResultData<String> send(String mobile, String msg) {
+       XbSmsHandler xbSmsHandler=new XbSmsHandler();
+        if(xbSmsHandler.sendSms(mobile,msg)){
+           return ResultData.success();
+        }else{
+            return ResultData.fail("发送失败");
+        }
     }
 
 }

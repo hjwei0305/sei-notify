@@ -61,9 +61,8 @@ public class SmsManager implements NotifyManager {
     public ResultData<String> send(SendMessage message) {
        // boolean success = properties.getEnable();
         boolean success = true;
-        LogUtil.bizLog("短信开启："+properties.getEnable());
         String log = "success";
-        String content = message.getContent();
+       String content = message.getContent();
 
         List<MessageHistory> histories = new ArrayList<>();
         Set<String> phoneNumSet = new HashSet<>();
@@ -90,7 +89,7 @@ public class SmsManager implements NotifyManager {
                 //}
 
                 AbstractSmsHandler smsHandler = SMS_HANDLER_MAP.get(DEFAULT_HANDLER_KEY);
-                ResultData<Void> resultData = smsHandler.send(properties, phoneNums, message.getContent());
+                ResultData<Void> resultData = smsHandler.send(properties, phoneNums, content);
                 if (resultData.failed()) {
                     success = Boolean.FALSE;
                     log = resultData.getMessage();

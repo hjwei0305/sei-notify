@@ -121,4 +121,13 @@ public interface MsgApi {
     @ApiOperation(value = "按类型分页查询消息", notes = "按类型分页查询消息")
     ResultData<PageResult<MessageDto>> findMessageByPage(@RequestBody Search search);
 
+    /**
+     * 发送验证码
+     * @param mobile 手机号
+     * @param msg 消息
+     * @return
+     */
+    @PostMapping(path = "send")
+    @ApiOperation(value = "发送信息", notes = "发送信息")
+    ResultData<String> send(@RequestParam("mobile") String mobile,@RequestParam("msg") String msg);
 }
