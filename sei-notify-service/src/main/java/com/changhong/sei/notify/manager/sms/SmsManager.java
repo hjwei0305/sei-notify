@@ -60,7 +60,7 @@ public class SmsManager implements NotifyManager {
     @Override
     public ResultData<String> send(SendMessage message) {
         boolean success = properties.getEnable();
-        LogUtil.bizLog("短信properties.getEnable()"+properties.getEnable());
+        LogUtil.bizLog("短信开启："+properties.getEnable());
         String log = "success";
         String content = message.getContent();
 
