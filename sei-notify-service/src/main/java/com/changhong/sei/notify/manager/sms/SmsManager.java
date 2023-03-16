@@ -38,12 +38,14 @@ public class SmsManager implements NotifyManager {
 
     static {
         SMS_HANDLER_MAP = new HashMap<>();
-        MatrixSmsHandler matrixSmsHandler = new MatrixSmsHandler();
-        SMS_HANDLER_MAP.put(DEFAULT_HANDLER_KEY, matrixSmsHandler);
+        //MatrixSmsHandler matrixSmsHandler = new MatrixSmsHandler();
+        //新宝短信平台
+        SMS_HANDLER_MAP.put(DEFAULT_HANDLER_KEY, new XbSmsHandler());
         // 软服Matrix短信网关
-        SMS_HANDLER_MAP.put(MATRIX_HANDLER_KEY, matrixSmsHandler);
+       // SMS_HANDLER_MAP.put(MATRIX_HANDLER_KEY, matrixSmsHandler);
         // 阿里云短消息服务
-        SMS_HANDLER_MAP.put(ALI_HANDLER_KEY, new AliSmsHandler());
+      //  SMS_HANDLER_MAP.put(ALI_HANDLER_KEY, new AliSmsHandler());
+
     }
 
     public SmsManager(SmsProperties properties) {
