@@ -40,8 +40,7 @@ public class XbSmsHandler implements AbstractSmsHandler {
      * @return
      */
     public boolean sendSms(String mobile, String msg) {
-        LogUtil.bizLog("短信"+mobile+msg);
-        String xbtitle = "【广东新宝电器】";
+        String xbtitle = "【广东新宝电器】验证码:";
         String appid = "0K17l8KNYUCreuFprhoidt3odEGlHu4Y";//该值由电信提供
         String appkey = "vFh2qPZg0qUO7xP1mhL09ZvbskZLWNOr";//由电信提供(可登录系统重置)
         msg = xbtitle + msg;//取短信内容
