@@ -127,7 +127,7 @@ public interface MsgApi {
      * @param msg 消息
      * @return
      */
-    @PostMapping(path = "send")
+    @GetMapping(path = "send")
     @ApiOperation(value = "发送信息", notes = "发送信息")
     ResultData<String> send(@RequestParam("mobile") String mobile,@RequestParam("msg") String msg);
 }
