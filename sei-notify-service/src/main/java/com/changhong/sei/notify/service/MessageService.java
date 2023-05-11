@@ -555,10 +555,15 @@ public class MessageService extends BaseEntityService<Message> {
                         groupItemIds.addAll(positionIdsResult.getData());
                     }
                     // 获取用户角色清单
-                    ResultData<List<String>> roleIdsResult = basicIntegration.getRoleIds(userId);
-                    if (roleIdsResult.successful() && CollectionUtils.isNotEmpty(roleIdsResult.getData())) {
-                        groupItemIds.addAll(roleIdsResult.getData());
+                    if(StringUtils.isNotEmpty(userId)){
+                        ResultData<List<String>> roleIdsResult = basicIntegration.getRoleIds(userId);
+                        if (roleIdsResult.successful() && CollectionUtils.isNotEmpty(roleIdsResult.getData())) {
+                            groupItemIds.addAll(roleIdsResult.getData());
+                        }
+                    }else{
+                        LogUtil.error("出错："+user.toString());
                     }
+
                 }
 
                 groupItemIds.add(userId);
